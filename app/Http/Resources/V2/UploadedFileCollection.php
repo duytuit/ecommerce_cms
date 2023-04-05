@@ -15,10 +15,9 @@ class UploadedFileCollection extends ResourceCollection
                     'file_original_name' =>$data->file_original_name,
                     'file_name' => $data->file_name,
                     'url' => uploaded_asset($data->id),
-                    'user_id' => $data->user_id,
                     'file_size' => $data->file_size,
                     'extension' => $data->extension,
-                    'type' => (double) $data->rating
+                    'type' => $data->type
                 ];
             })
         ];
@@ -27,7 +26,7 @@ class UploadedFileCollection extends ResourceCollection
     public function with($request)
     {
         return [
-            'success' => true,
+            'result' => true,
             'status' => 200
         ];
     }

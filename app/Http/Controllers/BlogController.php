@@ -164,13 +164,47 @@ class BlogController extends Controller
     }
 
 
-    public function all_blog() {
-        $blogs = Blog::where('status', 1)->orderBy('created_at', 'desc')->paginate(12);
-        return view("frontend.blog.listing", compact('blogs'));
+    public function all_blog(Request $request) {
+        $selected_categories = array();
+        $search = null;
+        $blogs = Blog::query();
+
+        if ($request->has('search')) {
+            $search = $request->search;;
+            $blogs->where(function ($q) use ($search) {
+                foreach (explode(' ', trim($search)) as $word) {
+                    $q->where('title', 'like', '%' . $word . '%')
+                        ->orWhere('short_description', 'like', '%' . $word . '%');
+                }
+            });
+
+            $case1 = $search . '%';
+            $case2 = '%' . $search . '%';
+
+            $blogs->orderByRaw("CASE 
+                WHEN title LIKE '$case1' THEN 1 
+                WHEN title LIKE '$case2' THEN 2 
+                ELSE 3 
+                END");
+        }
+        
+        if ($request->has('selected_categories')) {
+            $selected_categories = $request->selected_categories;
+            $blog_categories = BlogCategory::whereIn('slug', $selected_categories)->pluck('id')->toArray();
+
+            $blogs->whereIn('category_id', $blog_categories);
+        }
+        
+        $blogs = $blogs->where('status', 1)->orderBy('created_at', 'desc')->paginate(12);
+
+        $recent_blogs = Blog::where('status', 1)->orderBy('created_at', 'desc')->limit(9)->get();
+
+        return view("frontend.blog.listing", compact('blogs', 'selected_categories', 'search', 'recent_blogs'));
     }
     
     public function blog_details($slug) {
         $blog = Blog::where('slug', $slug)->first();
-        return view("frontend.blog.details", compact('blog'));
+        $recent_blogs = Blog::where('status', 1)->orderBy('created_at', 'desc')->limit(9)->get();
+        return view("frontend.blog.details", compact('blog', 'recent_blogs'));
     }
 }

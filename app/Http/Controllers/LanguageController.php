@@ -6,6 +6,7 @@ use App\Models\AppTranslation;
 use Illuminate\Http\Request;
 use App\Models\Language;
 use App\Models\Translation;
+use App\Models\User;
 use Cache;
 use Storage;
 use Session;
@@ -227,5 +228,9 @@ class LanguageController extends Controller
         } catch (\Exception $e) {
             dd($e);
         }
+    }
+
+    public function get_translation($unique_identifier)
+    {
     }
 }

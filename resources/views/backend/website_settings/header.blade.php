@@ -64,7 +64,7 @@
 					</div>
 					<div class="border-top pt-3">
 						<div class="form-group row">
-		                    <label class="col-md-3 col-from-label">{{ translate('Topbar Banner') }}</label>
+		                    <label class="col-md-3 col-from-label">{{ translate('Topbar Banner Large') }}</label>
 							<div class="col-md-8">
 			                    <div class=" input-group " data-toggle="aizuploader" data-type="image">
 			                        <div class="input-group-prepend">
@@ -73,6 +73,34 @@
 			                        <div class="form-control file-amount">{{ translate('Choose File') }}</div>
 									<input type="hidden" name="types[]" value="topbar_banner">
 			                        <input type="hidden" name="topbar_banner" class="selected-files" value="{{ get_setting('topbar_banner') }}">
+			                    </div>
+			                    <div class="file-preview"></div>
+							</div>
+		                </div>
+						<div class="form-group row">
+		                    <label class="col-md-3 col-from-label">{{ translate('Topbar Banner Medium') }}</label>
+							<div class="col-md-8">
+			                    <div class=" input-group " data-toggle="aizuploader" data-type="image">
+			                        <div class="input-group-prepend">
+			                            <div class="input-group-text bg-soft-secondary font-weight-medium">{{ translate('Browse') }}</div>
+			                        </div>
+			                        <div class="form-control file-amount">{{ translate('Choose File') }}</div>
+									<input type="hidden" name="types[]" value="topbar_banner_medium">
+			                        <input type="hidden" name="topbar_banner_medium" class="selected-files" value="{{ get_setting('topbar_banner_medium') }}">
+			                    </div>
+			                    <div class="file-preview"></div>
+							</div>
+		                </div>
+						<div class="form-group row">
+		                    <label class="col-md-3 col-from-label">{{ translate('Topbar Banner Small') }}</label>
+							<div class="col-md-8">
+			                    <div class=" input-group " data-toggle="aizuploader" data-type="image">
+			                        <div class="input-group-prepend">
+			                            <div class="input-group-text bg-soft-secondary font-weight-medium">{{ translate('Browse') }}</div>
+			                        </div>
+			                        <div class="form-control file-amount">{{ translate('Choose File') }}</div>
+									<input type="hidden" name="types[]" value="topbar_banner_small">
+			                        <input type="hidden" name="topbar_banner_small" class="selected-files" value="{{ get_setting('topbar_banner_small') }}">
 			                    </div>
 			                    <div class="file-preview"></div>
 							</div>

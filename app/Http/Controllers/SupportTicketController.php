@@ -24,7 +24,7 @@ class SupportTicketController extends Controller
      */
     public function index()
     {
-        $tickets = Ticket::where('user_id', Auth::user()->id)->orderBy('created_at', 'desc')->paginate(9);
+        $tickets = Ticket::where('user_id', Auth::user()->id)->orderBy('created_at', 'desc')->paginate(10);
         return view('frontend.user.support_ticket.index', compact('tickets'));
     }
 
@@ -80,9 +80,9 @@ class SupportTicketController extends Controller
 
     public function send_support_mail_to_admin($ticket){
         $array['view'] = 'emails.support';
-        $array['subject'] = 'Support ticket Code is:- '.$ticket->code;
+        $array['subject'] = translate('Support ticket Code is').':- '.$ticket->code;
         $array['from'] = env('MAIL_FROM_ADDRESS');
-        $array['content'] = 'Hi. A ticket has been created. Please check the ticket.';
+        $array['content'] = translate('Hi. A ticket has been created. Please check the ticket.');
         $array['link'] = route('support_ticket.admin_show', encrypt($ticket->id));
         $array['sender'] = $ticket->user->name;
         $array['details'] = $ticket->details;
@@ -98,9 +98,9 @@ class SupportTicketController extends Controller
 
     public function send_support_reply_email_to_user($ticket, $tkt_reply){
         $array['view'] = 'emails.support';
-        $array['subject'] = 'Support ticket Code is:- '.$ticket->code;
+        $array['subject'] = translate('Support ticket Code is').':- '.$ticket->code;
         $array['from'] = env('MAIL_FROM_ADDRESS');
-        $array['content'] = 'Hi. A ticket has been created. Please check the ticket.';
+        $array['content'] = translate('Hi. A ticket has been created. Please check the ticket.');
         $array['link'] = route('support_ticket.show', encrypt($ticket->id));
         $array['sender'] = $tkt_reply->user->name;
         $array['details'] = $tkt_reply->reply;

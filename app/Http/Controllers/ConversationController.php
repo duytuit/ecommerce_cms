@@ -28,7 +28,7 @@ class ConversationController extends Controller
     public function index()
     {
         if (BusinessSetting::where('type', 'conversation_system')->first()->value == 1) {
-            $conversations = Conversation::where('sender_id', Auth::user()->id)->orWhere('receiver_id', Auth::user()->id)->orderBy('created_at', 'desc')->paginate(5);
+            $conversations = Conversation::where('sender_id', Auth::user()->id)->orWhere('receiver_id', Auth::user()->id)->orderBy('created_at', 'desc')->paginate(8);
             return view('frontend.user.conversations.index', compact('conversations'));
         } else {
             flash(translate('Conversation is disabled at this moment'))->warning();
@@ -95,9 +95,9 @@ class ConversationController extends Controller
     public function send_message_to_seller($conversation, $message, $user_type)
     {
         $array['view'] = 'emails.conversation';
-        $array['subject'] = 'Sender:- ' . Auth::user()->name;
+        $array['subject'] = translate('Sender').':- '. Auth::user()->name;
         $array['from'] = env('MAIL_FROM_ADDRESS');
-        $array['content'] = 'Hi! You recieved a message from ' . Auth::user()->name . '.';
+        $array['content'] = translate('Hi! You recieved a message from ') . Auth::user()->name . '.';
         $array['sender'] = Auth::user()->name;
 
         if ($user_type == 'admin') {

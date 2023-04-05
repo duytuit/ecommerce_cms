@@ -48,7 +48,9 @@
     <link rel="icon" href="{{ uploaded_asset(get_setting('site_icon')) }}">
 
     <!-- Google Fonts -->
-    <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i,800,800i&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Public+Sans:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
 
     <!-- CSS Files -->
     <link rel="stylesheet" href="{{ static_asset('assets/css/vendors.css') }}">
@@ -86,14 +88,59 @@
     </script>
 
     <style>
+        :root{
+            --blue: #3490f3;
+            --gray: #9d9da6;
+            --gray-dark: #8d8d8d;
+            --secondary: #919199;
+            --soft-secondary: rgba(145, 145, 153, 0.15);
+            --success: #85b567;
+            --soft-success: rgba(133, 181, 103, 0.15);
+            --warning: #f3af3d;
+            --soft-warning: rgba(243, 175, 61, 0.15);
+            --light: #f5f5f5;
+            --soft-light: #dfdfe6;
+            --soft-white: #b5b5bf;
+            --dark: #292933;
+            --soft-dark: #1b1b28;
+            --primary: {{ get_setting('base_color', '#d43533') }};
+            --hov-primary: {{ get_setting('base_hov_color', '#9d1b1a') }};
+            --soft-primary: {{ hex2rgba(get_setting('base_color','#d43533'),.15) }};
+        }
         body{
-            font-family: 'Open Sans', sans-serif;
+            font-family: 'Public Sans', sans-serif;
             font-weight: 400;
         }
-        :root{
-            --primary: {{ get_setting('base_color', '#e62d04') }};
-            --hov-primary: {{ get_setting('base_hov_color', '#c52907') }};
-            --soft-primary: {{ hex2rgba(get_setting('base_color','#e62d04'),.15) }};
+        
+        .pagination .page-link,
+        .page-item.disabled .page-link {
+            min-width: 32px;
+            min-height: 32px;
+            line-height: 32px;
+            text-align: center;
+            padding: 0;
+            border: 1px solid var(--soft-light);
+            font-size: 0.875rem;
+            border-radius: 0 !important;
+            color: var(--dark);
+        }
+        .pagination .page-item {
+            margin: 0 5px;
+        }
+
+        .aiz-carousel.coupon-slider .slick-track{
+            margin-left: 0;
+        }
+
+        .form-control:focus {
+            border-width: 2px !important;
+        }
+        .iti__flag-container {
+            padding: 2px;
+        }
+        .modal-content {
+            border: 0 !important;
+            border-radius: 0 !important;
         }
 
         #map{
@@ -147,7 +194,7 @@
 </head>
 <body>
     <!-- aiz-main-wrapper -->
-    <div class="aiz-main-wrapper d-flex flex-column">
+    <div class="aiz-main-wrapper d-flex flex-column bg-white">
 
         <!-- Header -->
         @include('frontend.inc.nav')
@@ -158,6 +205,7 @@
 
     </div>
 
+    <!-- cookies agreement -->
     @if (get_setting('show_cookies_agreement') == 'on')
         <div class="aiz-cookie-alert shadow-xl">
             <div class="p-3 bg-dark rounded">
@@ -173,16 +221,17 @@
         </div>
     @endif
 
+    <!-- website popup -->
     @if (get_setting('show_website_popup') == 'on')
         <div class="modal website-popup removable-session d-none" data-key="website-popup" data-value="removed">
             <div class="absolute-full bg-black opacity-60"></div>
-            <div class="modal-dialog modal-dialog-centered modal-dialog-zoom modal-md">
+            <div class="modal-dialog modal-dialog-centered modal-dialog-zoom modal-md mx-4 mx-md-auto">
                 <div class="modal-content position-relative border-0 rounded-0">
                     <div class="aiz-editor-data">
                         {!! get_setting('website_popup_content') !!}
                     </div>
                     @if (get_setting('show_subscribe_form') == 'on')
-                        <div class="pb-5 pt-4 px-5">
+                        <div class="pb-5 pt-4 px-3 px-md-5">
                             <form class="" method="POST" action="{{ route('subscribers.store') }}">
                                 @csrf
                                 <div class="form-group mb-0">
@@ -212,8 +261,8 @@
                 <div class="c-preloader text-center p-3">
                     <i class="las la-spinner la-spin la-3x"></i>
                 </div>
-                <button type="button" class="close absolute-top-right btn-icon close z-1" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true" class="la-2x">&times;</span>
+                <button type="button" class="close absolute-top-right btn-icon close z-1 btn-circle bg-gray mr-2 mt-2 d-flex justify-content-center align-items-center" data-dismiss="modal" aria-label="Close" style="background: #ededf2; width: calc(2rem + 2px); height: calc(2rem + 2px);">
+                    <span aria-hidden="true" class="fs-24 fw-700" style="margin-left: 2px;">&times;</span>
                 </button>
                 <div id="addToCart-modal-body">
 
@@ -262,7 +311,6 @@
     </script>
 
     <script>
-
         $(document).ready(function() {
             $('.category-nav-element').each(function(i, el) {
                 $(el).on('mouseover', function(){
@@ -273,6 +321,7 @@
                     }
                 });
             });
+
             if ($('#lang-change').length > 0) {
                 $('#lang-change .dropdown-menu a').each(function() {
                     $(this).on('click', function(e){
@@ -337,6 +386,21 @@
                 $('body').removeClass("typed-search-box-shown");
             }
         }
+
+        $(".aiz-user-top-menu").on("mouseover", function (event) {
+            $(".hover-user-top-menu").addClass('active');
+        })
+        .on("mouseout", function (event) {
+            $(".hover-user-top-menu").removeClass('active');
+        });
+
+        $(document).on("click", function(event){
+            var $trigger = $("#category-menu-bar");
+            if($trigger !== event.target && !$trigger.has(event.target).length){
+                $("#click-category-menu").slideUp("fast");;
+                $("#category-menu-bar-icon").removeClass('show');
+            }   
+        });
 
         function updateNavCart(view,count){
             $('.cart-count').html(count);
@@ -405,11 +469,10 @@
         function getVariantPrice(){
             if($('#option-choice-form input[name=quantity]').val() > 0 && checkAddToCartValidity()){
                 $.ajax({
-                   type:"POST",
-                   url: '{{ route('products.variant_price') }}',
-                   data: $('#option-choice-form').serializeArray(),
-                   success: function(data){
-
+                    type:"POST",
+                    url: '{{ route('products.variant_price') }}',
+                    data: $('#option-choice-form').serializeArray(),
+                    success: function(data){
                         $('.product-gallery-thumb .carousel-box').each(function (i) {
                             if($(this).data('variation') && data.variation == $(this).data('variation')){
                                 $('.product-gallery-thumb').slick('slickGoTo', i);
@@ -432,8 +495,8 @@
                         }
 
                         AIZ.extra.plusMinus();
-                   }
-               });
+                    }
+                });
             }
         }
 
@@ -468,7 +531,6 @@
                     url: '{{ route('cart.addToCart') }}',
                     data: $('#option-choice-form').serializeArray(),
                     success: function(data){
-
                        $('#addToCart-modal-body').html(null);
                        $('.c-preloader').hide();
                        $('#modal-size').removeClass('modal-lg');
@@ -495,24 +557,22 @@
                 $('#addToCart').modal();
                 $('.c-preloader').show();
                 $.ajax({
-                   type:"POST",
-                   url: '{{ route('cart.addToCart') }}',
-                   data: $('#option-choice-form').serializeArray(),
-                   success: function(data){
-                       if(data.status == 1){
-
+                    type:"POST",
+                    url: '{{ route('cart.addToCart') }}',
+                    data: $('#option-choice-form').serializeArray(),
+                    success: function(data){
+                        if(data.status == 1){
                             $('#addToCart-modal-body').html(data.modal_view);
                             updateNavCart(data.nav_cart_view,data.cart_count);
-
                             window.location.replace("{{ route('cart') }}");
-                       }
-                       else{
+                        }
+                        else{
                             $('#addToCart-modal-body').html(null);
                             $('.c-preloader').hide();
                             $('#modal-size').removeClass('modal-lg');
                             $('#addToCart-modal-body').html(data.modal_view);
-                       }
-                   }
+                        }
+                    }
                });
             }
             else{
@@ -520,6 +580,123 @@
             }
         }
 
+        function bid_single_modal(bid_product_id, min_bid_amount){
+            @if (Auth::check() && (isCustomer() || isSeller()))
+                var min_bid_amount_text = "({{ translate('Min Bid Amount: ')}}"+min_bid_amount+")";
+                $('#min_bid_amount').text(min_bid_amount_text);
+                $('#bid_product_id').val(bid_product_id);
+                $('#bid_amount').attr('min', min_bid_amount);
+                $('#bid_for_product').modal('show');
+            @elseif (Auth::check() && isAdmin())
+                AIZ.plugins.notify('warning', '{{ translate("Sorry, Only customers & Sellers can Bid.") }}');
+            @else
+                $('#login_modal').modal('show');
+            @endif
+        }
+        
+        function clickToSlide(btn,id){
+            $('#'+id+' .aiz-carousel').find('.'+btn).trigger('click');
+            $('#'+id+' .slide-arrow').removeClass('link-disable');
+            var arrow = btn=='slick-prev' ? 'arrow-prev' : 'arrow-next';
+            if ($('#'+id+' .aiz-carousel').find('.'+btn).hasClass('slick-disabled')) {
+                $('#'+id).find('.'+arrow).addClass('link-disable');
+            }
+        }
+
+        function goToView(params) {
+            document.getElementById(params).scrollIntoView({behavior: "smooth", block: "center"});
+        }
+
+        function copyCouponCode(code){
+            navigator.clipboard.writeText(code);
+            AIZ.plugins.notify('success', "{{ translate('Coupon Code Copied') }}");
+        }
+
+        $(document).ready(function(){
+            $('.cart-animate').animate({margin : 0}, "slow");
+
+            $({deg: 0}).animate({deg: 360}, {
+                duration: 2000,
+                step: function(now) {
+                    $('.cart-rotate').css({
+                        transform: 'rotate(' + now + 'deg)'
+                    });
+                }
+            });
+
+            setTimeout(function(){
+                $('.cart-ok').css({ fill: '#d43533' });
+            }, 2000);
+            
+        });
+    </script>
+
+    <script type="text/javascript">
+        // Country Code
+        var isPhoneShown = true,
+            countryData = window.intlTelInputGlobals.getCountryData(),
+            input = document.querySelector("#phone-code");
+
+        for (var i = 0; i < countryData.length; i++) {
+            var country = countryData[i];
+            if (country.iso2 == 'bd') {
+                country.dialCode = '88';
+            }
+        }
+
+        var iti = intlTelInput(input, {
+            separateDialCode: true,
+            utilsScript: "{{ static_asset('assets/js/intlTelutils.js') }}?1590403638580",
+            onlyCountries: @php echo json_encode(\App\Models\Country::where('status', 1)->pluck('code')->toArray()) @endphp,
+            customPlaceholder: function(selectedCountryPlaceholder, selectedCountryData) {
+                if (selectedCountryData.iso2 == 'bd') {
+                    return "01xxxxxxxxx";
+                }
+                return selectedCountryPlaceholder;
+            }
+        });
+
+        var country = iti.getSelectedCountryData();
+        $('input[name=country_code]').val(country.dialCode);
+
+        input.addEventListener("countrychange", function(e) {
+            // var currentMask = e.currentTarget.placeholder;
+            var country = iti.getSelectedCountryData();
+            $('input[name=country_code]').val(country.dialCode);
+
+        });
+
+        function toggleEmailPhone(el) {
+            if (isPhoneShown) {
+                $('.phone-form-group').addClass('d-none');
+                $('.email-form-group').removeClass('d-none');
+                $('input[name=phone]').val(null);
+                isPhoneShown = false;
+                $(el).html('*{{ translate('Use Phone Instead') }}');
+            } else {
+                $('.phone-form-group').removeClass('d-none');
+                $('.email-form-group').addClass('d-none');
+                $('input[name=email]').val(null);
+                isPhoneShown = true;
+                $(el).html('<i>*{{ translate('Use Email Instead') }}</i>');
+            }
+        }
+    </script>
+
+    <script>
+        var acc = document.getElementsByClassName("aiz-accordion-heading");
+        var i;
+        for (i = 0; i < acc.length; i++) {
+            acc[i].addEventListener("click", function() {
+                this.classList.toggle("active");
+                var panel = this.nextElementSibling;
+                if (panel.style.maxHeight) {
+                    panel.style.maxHeight = null;
+                } else {
+                    panel.style.maxHeight = panel.scrollHeight + "px";
+                } 
+            });
+        }
     </script>
 
     @yield('script')

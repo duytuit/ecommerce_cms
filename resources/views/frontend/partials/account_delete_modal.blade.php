@@ -42,14 +42,14 @@
                         <img src="{{ static_asset('assets/img/warning.png') }}" class="h-20px">
                     </div>
                     <div class="col">
-                        <p class="fw-600 mb-0">{{ translate('After deleting your account, wallet balance no longer in our system') }}</p>
+                        <p class="fw-600 mb-0">{{ translate('After deleting your account, wallet balance will no longer in our system') }}</p>
                     </div>
                 </div>
             </div>
 
             <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">{{ translate('Cancel')}}</button>
-                <a id="account_delete_link" class="btn btn-danger btn-rounded btn-ok">{{ translate('Delete Account')}}</a>
+                <button type="button" class="btn btn-secondary rounded-0 w-150px" data-dismiss="modal">{{ translate('Cancel')}}</button>
+                <a id="account_delete_link" class="btn btn-danger rounded-0 w-150px">{{ translate('Delete Account')}}</a>
             </div>
         </div>
     </div>

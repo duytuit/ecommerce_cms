@@ -1,9 +1,10 @@
 <?php
 // @formatter:off
+// phpcs:ignoreFile
 
 /**
  * A helper file for Laravel, to provide autocomplete information to your IDE
- * Generated for Laravel 8.75.0.
+ * Generated for Laravel 8.83.26.
  *
  * This file should not be included in your code, only analyzed by your IDE!
  *
@@ -2168,6 +2169,17 @@
                         return $instance->setRequest($request);
         }
                     /**
+         * Get the timebox instance used by the guard.
+         *
+         * @return \Illuminate\Support\Timebox 
+         * @static 
+         */ 
+        public static function getTimebox()
+        {
+                        /** @var \Illuminate\Auth\SessionGuard $instance */
+                        return $instance->getTimebox();
+        }
+                    /**
          * Determine if the current user is authenticated. If not, throw an exception.
          *
          * @return \App\Models\User 
@@ -2335,6 +2347,30 @@
         {
                         /** @var \Illuminate\View\Compilers\BladeCompiler $instance */
                         return $instance->compileString($value);
+        }
+                    /**
+         * Evaluate and render a Blade string to HTML.
+         *
+         * @param string $string
+         * @param array $data
+         * @param bool $deleteCachedView
+         * @return string 
+         * @static 
+         */ 
+        public static function render($string, $data = [], $deleteCachedView = false)
+        {
+                        return \Illuminate\View\Compilers\BladeCompiler::render($string, $data, $deleteCachedView);
+        }
+                    /**
+         * Render a component instance to HTML.
+         *
+         * @param \Illuminate\View\Component $component
+         * @return string 
+         * @static 
+         */ 
+        public static function renderComponent($component)
+        {
+                        return \Illuminate\View\Compilers\BladeCompiler::renderComponent($component);
         }
                     /**
          * Strip the parentheses from the given expression.
@@ -3185,6 +3221,18 @@
         {
                         /** @var \Illuminate\Support\Testing\Fakes\BusFake $instance */
                         $instance->assertBatched($callback);
+        }
+                    /**
+         * Assert the number of batches that have been dispatched.
+         *
+         * @param int $count
+         * @return void 
+         * @static 
+         */ 
+        public static function assertBatchCount($count)
+        {
+                        /** @var \Illuminate\Support\Testing\Fakes\BusFake $instance */
+                        $instance->assertBatchCount($count);
         }
                     /**
          * Get all of the jobs matching a truth-test callback.
@@ -4426,6 +4474,22 @@
         {
                         /** @var \Illuminate\Database\DatabaseManager $instance */
                         return $instance->connection($name);
+        }
+                    /**
+         * Register a custom Doctrine type.
+         *
+         * @param string $class
+         * @param string $name
+         * @param string $type
+         * @return void 
+         * @throws \Doctrine\DBAL\DBALException
+         * @throws \RuntimeException
+         * @static 
+         */ 
+        public static function registerDoctrineType($class, $name, $type)
+        {
+                        /** @var \Illuminate\Database\DatabaseManager $instance */
+                        $instance->registerDoctrineType($class, $name, $type);
         }
                     /**
          * Disconnect from the given database and remove from local cache.
@@ -7224,17 +7288,6 @@
                         return $instance->driver($driver);
         }
                     /**
-         * 
-         *
-         * @return array 
-         * @static 
-         */ 
-        public static function getChannels()
-        {
-                        /** @var \Illuminate\Log\LogManager $instance */
-                        return $instance->getChannels();
-        }
-                    /**
          * Get the default log driver name.
          *
          * @return string|null 
@@ -7281,6 +7334,17 @@
         {
                         /** @var \Illuminate\Log\LogManager $instance */
                         return $instance->forgetChannel($driver);
+        }
+                    /**
+         * Get all of the resolved log channels.
+         *
+         * @return array 
+         * @static 
+         */ 
+        public static function getChannels()
+        {
+                        /** @var \Illuminate\Log\LogManager $instance */
+                        return $instance->getChannels();
         }
                     /**
          * System is unusable.
@@ -7416,6 +7480,10 @@
             /**
      * 
      *
+     * @method static void alwaysFrom(string $address, string|null $name = null)
+     * @method static void alwaysReplyTo(string $address, string|null $name = null)
+     * @method static void alwaysReturnPath(string $address)
+     * @method static void alwaysTo(string $address, string|null $name = null)
      * @method static mixed laterOn(string $queue, \DateTimeInterface|\DateInterval|int $delay, \Illuminate\Contracts\Mail\Mailable|string|array $view)
      * @method static mixed queueOn(string $queue, \Illuminate\Contracts\Mail\Mailable|string|array $view)
      * @method static void plain(string $view, array $data, $callback)
@@ -8483,7 +8551,7 @@
                     /**
          * Push a new job onto the queue.
          *
-         * @param string $job
+         * @param string|object $job
          * @param mixed $data
          * @param string|null $queue
          * @return mixed 
@@ -8512,7 +8580,7 @@
          * Push a new job onto the queue after a delay.
          *
          * @param \DateTimeInterface|\DateInterval|int $delay
-         * @param string $job
+         * @param string|object $job
          * @param mixed $data
          * @param string|null $queue
          * @return mixed 
@@ -8527,7 +8595,7 @@
          * Push a new job onto the queue.
          *
          * @param string $queue
-         * @param string $job
+         * @param string|object $job
          * @param mixed $data
          * @return mixed 
          * @static 
@@ -8542,7 +8610,7 @@
          *
          * @param string $queue
          * @param \DateTimeInterface|\DateInterval|int $delay
-         * @param string $job
+         * @param string|object $job
          * @param mixed $data
          * @return mixed 
          * @static 
@@ -9307,6 +9375,18 @@
         {
                         /** @var \Illuminate\Http\Request $instance */
                         return $instance->merge($input);
+        }
+                    /**
+         * Merge new input into the request's input, but only when that key is missing from the request.
+         *
+         * @param array $input
+         * @return \Illuminate\Http\Request 
+         * @static 
+         */ 
+        public static function mergeIfMissing($input)
+        {
+                        /** @var \Illuminate\Http\Request $instance */
+                        return $instance->mergeIfMissing($input);
         }
                     /**
          * Replace the input for the current request.
@@ -10858,6 +10938,20 @@
                         return $instance->boolean($key, $default);
         }
                     /**
+         * Retrieve input from the request as a Carbon instance.
+         *
+         * @param string $key
+         * @param string|null $format
+         * @param string|null $tz
+         * @return \Illuminate\Support\Carbon|null 
+         * @static 
+         */ 
+        public static function date($key, $format = null, $tz = null)
+        {
+                        /** @var \Illuminate\Http\Request $instance */
+                        return $instance->date($key, $format, $tz);
+        }
+                    /**
          * Retrieve input from the request as a collection.
          *
          * @param array|string|null $key
@@ -10983,7 +11077,7 @@
                     /**
          * Dump the request items and end the script.
          *
-         * @param array|mixed $keys
+         * @param mixed $keys
          * @return void 
          * @static 
          */ 
@@ -10995,7 +11089,7 @@
                     /**
          * Dump the items.
          *
-         * @param array $keys
+         * @param mixed $keys
          * @return \Illuminate\Http\Request 
          * @static 
          */ 
@@ -11361,6 +11455,7 @@
      * 
      *
      * @method static \Illuminate\Routing\RouteRegistrar as(string $value)
+     * @method static \Illuminate\Routing\RouteRegistrar controller(string $controller)
      * @method static \Illuminate\Routing\RouteRegistrar domain(string $value)
      * @method static \Illuminate\Routing\RouteRegistrar middleware(array|string|null $middleware)
      * @method static \Illuminate\Routing\RouteRegistrar name(string $value)
@@ -11368,6 +11463,7 @@
      * @method static \Illuminate\Routing\RouteRegistrar prefix(string $prefix)
      * @method static \Illuminate\Routing\RouteRegistrar scopeBindings()
      * @method static \Illuminate\Routing\RouteRegistrar where(array $where)
+     * @method static \Illuminate\Routing\RouteRegistrar withoutMiddleware(array|string $middleware)
      * @see \Illuminate\Routing\Router
      */ 
         class Route {
@@ -12571,8 +12667,6 @@
          * @param string $name
          * @param string $type
          * @return void 
-         * @throws \Doctrine\DBAL\DBALException
-         * @throws \RuntimeException
          * @static 
          */ 
         public static function registerCustomDoctrineType($class, $name, $type)
@@ -13449,6 +13543,18 @@
                         return $instance->extend($driver, $callback);
         }
                     /**
+         * Set the application instance used by the manager.
+         *
+         * @param \Illuminate\Contracts\Foundation\Application $app
+         * @return \Illuminate\Filesystem\FilesystemManager 
+         * @static 
+         */ 
+        public static function setApplication($app)
+        {
+                        /** @var \Illuminate\Filesystem\FilesystemManager $instance */
+                        return $instance->setApplication($app);
+        }
+                    /**
          * Assert that the given file exists.
          *
          * @param string|array $path
@@ -13890,6 +13996,18 @@
         {
                         /** @var \Illuminate\Filesystem\FilesystemAdapter $instance */
                         return $instance->getDriver();
+        }
+                    /**
+         * Define a custom temporary URL builder callback.
+         *
+         * @param \Closure $callback
+         * @return void 
+         * @static 
+         */ 
+        public static function buildTemporaryUrlsUsing($callback)
+        {
+                        /** @var \Illuminate\Filesystem\FilesystemAdapter $instance */
+                        $instance->buildTemporaryUrlsUsing($callback);
         }
                     /**
          * Register a custom macro.
@@ -14686,6 +14804,21 @@
         {
                         /** @var \Illuminate\View\Factory $instance */
                         return $instance->renderWhen($condition, $view, $data, $mergeData);
+        }
+                    /**
+         * Get the rendered content of the view based on the negation of a given condition.
+         *
+         * @param bool $condition
+         * @param string $view
+         * @param \Illuminate\Contracts\Support\Arrayable|array $data
+         * @param array $mergeData
+         * @return string 
+         * @static 
+         */ 
+        public static function renderUnless($condition, $view, $data = [], $mergeData = [])
+        {
+                        /** @var \Illuminate\View\Factory $instance */
+                        return $instance->renderUnless($condition, $view, $data, $mergeData);
         }
                     /**
          * Get the rendered contents of a partial from a loop.
@@ -15722,10 +15855,10 @@
          * @return \Paystack 
          * @static 
          */ 
-        public static function getAuthorizationUrl()
+        public static function getAuthorizationUrl($data = null)
         {
                         /** @var \Unicodeveloper\Paystack\Paystack $instance */
-                        return $instance->getAuthorizationUrl();
+                        return $instance->getAuthorizationUrl($data);
         }
                     /**
          * Get the authorization callback response
@@ -15746,10 +15879,10 @@
          * @return boolean 
          * @static 
          */ 
-        public static function isTransactionVerificationValid()
+        public static function isTransactionVerificationValid($transaction_id = null)
         {
                         /** @var \Unicodeveloper\Paystack\Paystack $instance */
-                        return $instance->isTransactionVerificationValid();
+                        return $instance->isTransactionVerificationValid($transaction_id);
         }
                     /**
          * Get Payment details if the transaction was verified successfully
@@ -16030,6 +16163,16 @@
         {
                         /** @var \Unicodeveloper\Paystack\Paystack $instance */
                         return $instance->updatePage($page_id);
+        }
+                    /**
+         * 
+         *
+         * @static 
+         */ 
+        public static function getCallbackData()
+        {
+                        /** @var \Unicodeveloper\Paystack\Paystack $instance */
+                        return $instance->getCallbackData();
         }
                     /**
          * Creates a subaccount to be used for split payments . Required    params are business_name , settlement_bank , account_number ,   percentage_charge
@@ -16470,11 +16613,12 @@
          * @param string $fileName
          * @param string|null $writerType
          * @param mixed $withHeadings
+         * @param array $responseHeaders
          * @static 
          */ 
-        public static function downloadExcel($fileName, $writerType = null, $withHeadings = false)
+        public static function downloadExcel($fileName, $writerType = null, $withHeadings = false, $responseHeaders = [])
         {
-                        return \Illuminate\Support\Collection::downloadExcel($fileName, $writerType, $withHeadings);
+                        return \Illuminate\Support\Collection::downloadExcel($fileName, $writerType, $withHeadings, $responseHeaders);
         }
                     /**
          * 
@@ -16978,7 +17122,7 @@
      
 }
 
-    namespace Barryvdh\Debugbar { 
+    namespace Barryvdh\Debugbar\Facades { 
             /**
      * 
      *
@@ -16993,7 +17137,7 @@
      * @method static void warning(mixed $message)
      * @see \Barryvdh\Debugbar\LaravelDebugbar
      */ 
-        class Facade {
+        class Debugbar {
                     /**
          * Enable the Debugbar and boot, if not already booted.
          *
@@ -17564,6 +17708,16 @@
                     /**
          * 
          *
+         * @static 
+         */ 
+        public static function filterReportsUsing($filterReportsCallable)
+        {
+                        /** @var \Facade\FlareClient\Flare $instance */
+                        return $instance->filterReportsUsing($filterReportsCallable);
+        }
+                    /**
+         * 
+         *
          * @return null|string 
          * @static 
          */ 
@@ -17801,6 +17955,76 @@
         {
                         /** @var \Facade\FlareClient\Flare $instance */
                         return $instance->group($groupName, $properties);
+        }
+         
+    }
+     
+}
+
+    namespace GeneaLabs\LaravelSocialiter\Facades { 
+            /**
+     * 
+     *
+     */ 
+        class Socialiter {
+                    /**
+         * 
+         *
+         * @static 
+         */ 
+        public static function ignoreMigrations()
+        {
+                        return \GeneaLabs\LaravelSocialiter\Socialiter::ignoreMigrations();
+        }
+                    /**
+         * 
+         *
+         * @static 
+         */ 
+        public static function driver($driver)
+        {
+                        /** @var \GeneaLabs\LaravelSocialiter\Socialiter $instance */
+                        return $instance->driver($driver);
+        }
+                    /**
+         * 
+         *
+         * @static 
+         */ 
+        public static function login()
+        {
+                        /** @var \GeneaLabs\LaravelSocialiter\Socialiter $instance */
+                        return $instance->login();
+        }
+                    /**
+         * 
+         *
+         * @static 
+         */ 
+        public static function apiLogin($socialiteUser, $apiToken)
+        {
+                        /** @var \GeneaLabs\LaravelSocialiter\Socialiter $instance */
+                        return $instance->apiLogin($socialiteUser, $apiToken);
+        }
+                    /**
+         * 
+         *
+         * @static 
+         */ 
+        public static function setConfig($config)
+        {
+                        /** @var \GeneaLabs\LaravelSocialiter\Socialiter $instance */
+                        return $instance->setConfig($config);
+        }
+                    /**
+         * 
+         *
+         * @static 
+         */ 
+        public static function stateless()
+        {
+                        /** @var \GeneaLabs\LaravelSocialiter\Socialiter $instance */
+                        return $instance->stateless();
         }
          
     }
@@ -18062,177 +18286,6 @@
      
 }
 
-    namespace SebaCarrasco93\LaravelPayku\Facades { 
-            /**
-     * 
-     *
-     */ 
-        class LaravelPayku {
-                    /**
-         * 
-         *
-         * @static 
-         */ 
-        public static function apiRoute()
-        {
-                        /** @var \SebaCarrasco93\LaravelPayku\LaravelPayku $instance */
-                        return $instance->apiRoute();
-        }
-                    /**
-         * 
-         *
-         * @static 
-         */ 
-        public static function findApiKeys()
-        {
-                        /** @var \SebaCarrasco93\LaravelPayku\LaravelPayku $instance */
-                        return $instance->findApiKeys();
-        }
-                    /**
-         * 
-         *
-         * @static 
-         */ 
-        public static function hasValidConfig()
-        {
-                        /** @var \SebaCarrasco93\LaravelPayku\LaravelPayku $instance */
-                        return $instance->hasValidConfig();
-        }
-                    /**
-         * 
-         *
-         * @static 
-         */ 
-        public static function postApi($transaction_id, $subject, $amountCLP, $email)
-        {
-                        /** @var \SebaCarrasco93\LaravelPayku\LaravelPayku $instance */
-                        return $instance->postApi($transaction_id, $subject, $amountCLP, $email);
-        }
-                    /**
-         * 
-         *
-         * @static 
-         */ 
-        public static function getApi($transaction)
-        {
-                        /** @var \SebaCarrasco93\LaravelPayku\LaravelPayku $instance */
-                        return $instance->getApi($transaction);
-        }
-                    /**
-         * 
-         *
-         * @static 
-         */ 
-        public static function handleAPIResponse($response)
-        {
-                        /** @var \SebaCarrasco93\LaravelPayku\LaravelPayku $instance */
-                        return $instance->handleAPIResponse($response);
-        }
-                    /**
-         * 
-         *
-         * @static 
-         */ 
-        public static function saveAPIResponse($response, $transaction_id = null)
-        {
-                        /** @var \SebaCarrasco93\LaravelPayku\LaravelPayku $instance */
-                        return $instance->saveAPIResponse($response, $transaction_id);
-        }
-                    /**
-         * 
-         *
-         * @static 
-         */ 
-        public static function create($transaction_id, $subject, $amountCLP, $email)
-        {
-                        /** @var \SebaCarrasco93\LaravelPayku\LaravelPayku $instance */
-                        return $instance->create($transaction_id, $subject, $amountCLP, $email);
-        }
-                    /**
-         * 
-         *
-         * @static 
-         */ 
-        public static function return($order)
-        {
-                        /** @var \SebaCarrasco93\LaravelPayku\LaravelPayku $instance */
-                        return $instance->return($order);
-        }
-                    /**
-         * 
-         *
-         * @static 
-         */ 
-        public static function notify($order)
-        {
-                        /** @var \SebaCarrasco93\LaravelPayku\LaravelPayku $instance */
-                        return $instance->notify($order);
-        }
-                    /**
-         * 
-         *
-         * @static 
-         */ 
-        public static function findById($id)
-        {
-                        /** @var \SebaCarrasco93\LaravelPayku\LaravelPayku $instance */
-                        return $instance->findById($id);
-        }
-                    /**
-         * 
-         *
-         * @static 
-         */ 
-        public static function hasStatusSuccess($id)
-        {
-                        /** @var \SebaCarrasco93\LaravelPayku\LaravelPayku $instance */
-                        return $instance->hasStatusSuccess($id);
-        }
-                    /**
-         * 
-         *
-         * @static 
-         */ 
-        public static function hasStatusPending($id)
-        {
-                        /** @var \SebaCarrasco93\LaravelPayku\LaravelPayku $instance */
-                        return $instance->hasStatusPending($id);
-        }
-                    /**
-         * 
-         *
-         * @static 
-         */ 
-        public static function completeTransaction($order_id, $response)
-        {
-                        /** @var \SebaCarrasco93\LaravelPayku\LaravelPayku $instance */
-                        return $instance->completeTransaction($order_id, $response);
-        }
-                    /**
-         * 
-         *
-         * @static 
-         */ 
-        public static function storePayment($response)
-        {
-                        /** @var \SebaCarrasco93\LaravelPayku\LaravelPayku $instance */
-                        return $instance->storePayment($response);
-        }
-                    /**
-         * 
-         *
-         * @static 
-         */ 
-        public static function prepareOrder($order, $subject, $amountCLP, $email, $paymentId = 1)
-        {
-                        /** @var \SebaCarrasco93\LaravelPayku\LaravelPayku $instance */
-                        return $instance->prepareOrder($order, $subject, $amountCLP, $email, $paymentId);
-        }
-         
-    }
-     
-}
-
     namespace Illuminate\Http { 
             /**
      * 
@@ -18337,6 +18390,35 @@
         public static function emailVerification()
         {
                         return \Illuminate\Routing\Router::emailVerification();
+        }
+         
+    }
+            /**
+     * 
+     *
+     */ 
+        class Route {
+                    /**
+         * 
+         *
+         * @see \Spatie\Permission\PermissionServiceProvider::registerMacroHelpers()
+         * @param mixed $roles
+         * @static 
+         */ 
+        public static function role($roles = [])
+        {
+                        return \Illuminate\Routing\Route::role($roles);
+        }
+                    /**
+         * 
+         *
+         * @see \Spatie\Permission\PermissionServiceProvider::registerMacroHelpers()
+         * @param mixed $permissions
+         * @static 
+         */ 
+        public static function permission($permissions = [])
+        {
+                        return \Illuminate\Routing\Route::permission($permissions);
         }
          
     }
@@ -19596,18 +19678,6 @@ namespace  {
             }
              
                 /**
-             * Explains the query.
-             *
-             * @return \Illuminate\Support\Collection 
-             * @static 
-             */ 
-            public static function explain()
-            {
-                                /** @var \Illuminate\Database\Eloquent\Builder $instance */
-                                return $instance->explain();
-            }
-             
-                /**
              * Chunk the results of the query.
              *
              * @param int $count
@@ -19699,7 +19769,7 @@ namespace  {
                 /**
              * Query lazily, by chunking the results of a query by comparing IDs.
              *
-             * @param int $count
+             * @param int $chunkSize
              * @param string|null $column
              * @param string|null $alias
              * @return \Illuminate\Support\LazyCollection 
@@ -19715,7 +19785,7 @@ namespace  {
                 /**
              * Query lazily, by chunking the results of a query by comparing IDs in descending order.
              *
-             * @param int $count
+             * @param int $chunkSize
              * @param string|null $column
              * @param string|null $alias
              * @return \Illuminate\Support\LazyCollection 
@@ -20877,6 +20947,35 @@ namespace  {
             }
              
                 /**
+             * Add a "where fulltext" clause to the query.
+             *
+             * @param string|string[] $columns
+             * @param string $value
+             * @param string $boolean
+             * @return \Illuminate\Database\Query\Builder 
+             * @static 
+             */ 
+            public static function whereFullText($columns, $value, $options = [], $boolean = 'and')
+            {
+                                /** @var \Illuminate\Database\Query\Builder $instance */
+                                return $instance->whereFullText($columns, $value, $options, $boolean);
+            }
+             
+                /**
+             * Add a "or where fulltext" clause to the query.
+             *
+             * @param string|string[] $columns
+             * @param string $value
+             * @return \Illuminate\Database\Query\Builder 
+             * @static 
+             */ 
+            public static function orWhereFullText($columns, $value, $options = [])
+            {
+                                /** @var \Illuminate\Database\Query\Builder $instance */
+                                return $instance->orWhereFullText($columns, $value, $options);
+            }
+             
+                /**
              * Add a "group by" clause to the query.
              *
              * @param array|string $groups
@@ -21714,6 +21813,18 @@ namespace  {
             }
              
                 /**
+             * Explains the query.
+             *
+             * @return \Illuminate\Support\Collection 
+             * @static 
+             */ 
+            public static function explain()
+            {
+                                /** @var \Illuminate\Database\Query\Builder $instance */
+                                return $instance->explain();
+            }
+             
+                /**
              * Register a custom macro.
              *
              * @param string $name
@@ -21796,14 +21907,14 @@ namespace  {
             class Rave extends \KingFlamez\Rave\Facades\Rave {}
             class Image extends \Intervention\Image\Facades\Image {}
             class QrCode extends \SimpleSoftwareIO\QrCode\Facades\QrCode {}
-            class Debugbar extends \Barryvdh\Debugbar\Facade {}
+            class Debugbar extends \Barryvdh\Debugbar\Facades\Debugbar {}
             class Flare extends \Facade\Ignition\Facades\Flare {}
+            class Socialiter extends \GeneaLabs\LaravelSocialiter\Facades\Socialiter {}
             class Flash extends \Laracasts\Flash\Flash {}
             class Colorcodeconverter extends \Laracon21\Colorcodeconverter\ColorcodeconverterFacade {}
             class Combinations extends \Laracon21\Combinations\CombinationsFacade {}
             class Timezones extends \Laracon21\Timezones\TimezonesFacade {}
             class CoreComponentRepository extends \MehediIitdu\CoreComponentRepository\CoreComponentRepositoryFacade {}
-            class LaravelPayku extends \SebaCarrasco93\LaravelPayku\Facades\LaravelPayku {}
      
 }
 

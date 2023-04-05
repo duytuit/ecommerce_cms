@@ -58,6 +58,14 @@ class ShopController extends Controller
      */
     public function store(Request $request)
     {
+        $request->validate([
+            'name'      => 'required|string|max:255',
+            'email'     => 'required|email|unique:users|max:255',
+            'password'  => 'required|string|min:6|confirmed',
+            'shop_name' => 'required|max:255',
+            'address'   => 'required',
+        ]);
+
         $user = null;
         if (!Auth::check()) {
             if (User::where('email', $request->email)->first() != null) {
@@ -89,7 +97,7 @@ class ShopController extends Controller
             $shop->user_id = $user->id;
             $shop->name = $request->shop_name;
             $shop->address = $request->address;
-            $shop->slug = preg_replace('/\s+/', '-', $request->shop_name);
+            $shop->slug = preg_replace('/\s+/', '-', str_replace("/"," ", $request->shop_name));
 
             if ($shop->save()) {
                 auth()->login($user, false);
@@ -101,7 +109,7 @@ class ShopController extends Controller
                 }
 
                 flash(translate('Your Shop has been created successfully!'))->success();
-                return redirect()->route('shops.index');
+                return redirect()->route('seller.shop.index');
             } else {
                 $user->user_type == 'customer';
                 $user->save();

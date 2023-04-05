@@ -55,6 +55,7 @@ class AddressController extends Controller
         $address->phone         = $request->phone;
         $address->save();
 
+        flash(translate('Address info Stored successfully'))->success();
         return back();
     }
 

@@ -8,6 +8,7 @@ use Response;
 use Auth;
 use Storage;
 use Image;
+use enshrined\svgSanitize\Sanitizer;
 
 class AizUploadController extends Controller
 {
@@ -122,6 +123,18 @@ class AizUploadController extends Controller
                     } else {
                         $upload->file_original_name .= "." . $arr[$i];
                     }
+                }
+
+                if($extension == 'svg') {
+                    $sanitizer = new Sanitizer();
+                    // Load the dirty svg
+                    $dirtySVG = file_get_contents($request->file('aiz_file'));
+
+                    // Pass it to the sanitizer and get it back clean
+                    $cleanSVG = $sanitizer->sanitize($dirtySVG);
+
+                    // Load the clean svg
+                    file_put_contents($request->file('aiz_file'), $cleanSVG);
                 }
 
                 $path = $request->file('aiz_file')->store('uploads/all', 'local');

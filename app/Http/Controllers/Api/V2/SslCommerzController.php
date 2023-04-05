@@ -11,7 +11,7 @@ use App\Models\User;
 use App\Models\Wallet;
 use Illuminate\Http\Request;
 # IF BROWSE FROM LOCAL HOST, KEEP true
-if(!defined("SSLCZ_IS_LOCAL_HOST")){
+if (!defined("SSLCZ_IS_LOCAL_HOST")) {
     define("SSLCZ_IS_LOCAL_HOST", true);
 }
 
@@ -56,18 +56,14 @@ class SslCommerzController extends Controller
         if ($request->payment_type == "cart_payment") {
             $post_data['tran_id'] = 'AIZ-' . $request->combined_order_id . '-' . date('Ymd'); // tran_id must be unique
 
-        } else if ($request->payment_type == "wallet_payment" ||
-        $request->payment_type ==  "seller_package_payment" ||
-        $request->payment_type ==  "customer_package_payment" 
+        } else if (
+            $request->payment_type == "wallet_payment" ||
+            $request->payment_type ==  "seller_package_payment" ||
+            $request->payment_type ==  "customer_package_payment"
 
         ) {
             $post_data['tran_id'] = 'AIZ-' . $request->user_id . '-' . date('Ymd');
-         }
-        //  else if ($request->payment_type == "seller_package_payment") {
-        //     $post_data['tran_id'] = 'AIZ-' . $request->user_id . '-' . date('Ymd');
-        // }
-
-        $post_data['value_a'] = $post_data['tran_id'];
+        }
 
         $post_data['value_a'] = $request->user_id;
         $post_data['value_b'] = $request->combined_order_id;
@@ -99,7 +95,6 @@ class SslCommerzController extends Controller
         $post_data['cancel_url'] = url("api/v2/sslcommerz/cancel");
 
         return $this->initiate($post_data);
-
     }
 
     public function payment_success(Request $request)
@@ -116,27 +111,20 @@ class SslCommerzController extends Controller
                 if ($request->value_c == 'cart_payment') {
 
                     checkout_done($request->value_b, $payment);
-
-
                 } elseif ($request->value_c == 'wallet_payment') {
 
                     wallet_payment_done($request->value_a, $request->value_d, 'SslCommerz', $payment);
-
                 } elseif ($request->value_c == 'seller_package_payment') {
 
                     seller_purchase_payment_done($request->value_a, $request->value_b, $request->value_d, 'SslCommerz', $payment);
-
-                }
-                if ($$request->value_c == 'customer_package_payment') {
-                    customer_purchase_payment_done($request->user_id, $request->package_id);
+                } else if ($request->value_c == 'customer_package_payment') {
+                    customer_purchase_payment_done($request->value_a, $request->value_b);
                 }
 
                 return response()->json(['result' => true, 'message' => translate("Payment is successful")]);
             } catch (\Exception $e) {
                 return response()->json(['result' => false, 'message' => $e->getMessage()]);
             }
-
-
         }
 
         return response()->json([
@@ -153,7 +141,6 @@ class SslCommerzController extends Controller
 
     public function payment_process(Request $request)
     {
-
     }
 
     public function payment_fail(Request $request)
@@ -205,7 +192,6 @@ class SslCommerzController extends Controller
                             'message' => 'No redirect URL found!'
                         ]);
                     }
-
                 } else {
 
                     return response()->json([
@@ -214,7 +200,6 @@ class SslCommerzController extends Controller
                         'message' => "Invalid Credential!",
                     ]);
                 }
-
             } else {
 
                 return response()->json([
@@ -231,7 +216,6 @@ class SslCommerzController extends Controller
                 'message' => "Please provide a valid information list about transaction with transaction id, amount, success url, fail url, cancel url, store id and pass at least",
             ]);
         }
-
     }
 
 
@@ -310,7 +294,7 @@ class SslCommerzController extends Controller
                     curl_setopt($handle, CURLOPT_SSL_VERIFYHOST, false);
                     curl_setopt($handle, CURLOPT_SSL_VERIFYPEER, false);
                 } else {
-                    curl_setopt($handle, CURLOPT_SSL_VERIFYHOST, 2);// Its default value is now 2
+                    curl_setopt($handle, CURLOPT_SSL_VERIFYHOST, 2); // Its default value is now 2
                     curl_setopt($handle, CURLOPT_SSL_VERIFYPEER, true);
                 }
 
@@ -426,7 +410,6 @@ class SslCommerzController extends Controller
             if (md5($hash_string) == $post_data['verify_sign']) {
 
                 return true;
-
             } else {
                 $this->error = "Verification signature not matched";
                 return false;

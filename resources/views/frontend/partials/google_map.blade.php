@@ -1,6 +1,10 @@
 <script>
-    let default_longtitude = "{{ get_setting('google_map_longtitude') }}";
-    let default_latitude = "{{ get_setting('google_map_latitude') }}";
+    let default_longtitude = '';
+    let default_latitude = '';
+    @if (get_setting('google_map_longtitude') != '' && get_setting('google_map_longtitude') != '')
+        default_longtitude = {{ get_setting('google_map_longtitude') }};
+        default_latitude = {{ get_setting('google_map_latitude') }};
+    @endif
 
     function initialize(lat = -33.8688, lang = 151.2195, id_format = '') {
         var long = lang;
@@ -17,11 +21,11 @@
             },
             zoom: 13
         });
-        
+
         var myLatlng = new google.maps.LatLng(lat, long);
 
         var input = document.getElementById(id_format + 'searchInput');
-//                console.log(input);
+        //                console.log(input);
         map.controls[google.maps.ControlPosition.TOP_LEFT].push(input);
 
         var autocomplete = new google.maps.places.Autocomplete(input);
@@ -30,25 +34,25 @@
 
         var infowindow = new google.maps.InfoWindow();
         var marker = new google.maps.Marker({
-                        map: map,
-                        position: myLatlng,
-                        anchorPoint: new google.maps.Point(0, -29),
-                        draggable:true,
-                    });
-
-        map.addListener('click',function(event) {
-            marker.setPosition(event.latLng);
-            document.getElementById(id_format + 'latitude').value = event.latLng.lat();
-            document.getElementById(id_format+ 'longitude').value = event.latLng.lng();
-            infowindow.setContent('Latitude: ' + event.latLng.lat() + '<br>Longitude: ' + event.latLng.lng());
-            infowindow.open(map,marker);
+            map: map,
+            position: myLatlng,
+            anchorPoint: new google.maps.Point(0, -29),
+            draggable: true,
         });
 
-        google.maps.event.addListener(marker,'dragend',function(event) {
+        map.addListener('click', function(event) {
+            marker.setPosition(event.latLng);
             document.getElementById(id_format + 'latitude').value = event.latLng.lat();
             document.getElementById(id_format + 'longitude').value = event.latLng.lng();
             infowindow.setContent('Latitude: ' + event.latLng.lat() + '<br>Longitude: ' + event.latLng.lng());
-            infowindow.open(map,marker);
+            infowindow.open(map, marker);
+        });
+
+        google.maps.event.addListener(marker, 'dragend', function(event) {
+            document.getElementById(id_format + 'latitude').value = event.latLng.lat();
+            document.getElementById(id_format + 'longitude').value = event.latLng.lng();
+            infowindow.setContent('Latitude: ' + event.latLng.lat() + '<br>Longitude: ' + event.latLng.lng());
+            infowindow.open(map, marker);
         });
 
         autocomplete.addListener('place_changed', function() {
@@ -94,10 +98,10 @@
 
             //Location details
             for (var i = 0; i < place.address_components.length; i++) {
-                if(place.address_components[i].types[0] == 'postal_code'){
+                if (place.address_components[i].types[0] == 'postal_code') {
                     document.getElementById('postal_code').innerHTML = place.address_components[i].long_name;
                 }
-                if(place.address_components[i].types[0] == 'country'){
+                if (place.address_components[i].types[0] == 'country') {
                     document.getElementById('country').innerHTML = place.address_components[i].long_name;
                 }
             }
@@ -109,4 +113,6 @@
     }
 </script>
 
-<script src="https://maps.googleapis.com/maps/api/js?key={{ env('MAP_API_KEY') }}&libraries=places&language=en&callback=initialize" async defer></script>
+<script
+    src="https://maps.googleapis.com/maps/api/js?key={{ env('MAP_API_KEY') }}&libraries=places&language=en&callback=initialize"
+    async defer></script>

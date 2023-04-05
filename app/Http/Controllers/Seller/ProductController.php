@@ -43,7 +43,7 @@ class ProductController extends Controller
     public function index(Request $request)
     {
         $search = null;
-        $products = Product::where('user_id', Auth::user()->id)->where('digital', 0)->orderBy('created_at', 'desc');
+        $products = Product::where('user_id', Auth::user()->id)->where('digital', 0)->where('auction_product', 0)->where('wholesale_product', 0)->orderBy('created_at', 'desc');
         if ($request->has('search')) {
             $search = $request->search;
             $products = $products->where('name', 'like', '%' . $search . '%');
@@ -54,6 +54,7 @@ class ProductController extends Controller
 
     public function create(Request $request)
     {
+
         if (addon_is_activated('seller_subscription')) {
             if (seller_package_validity_check()) {
                 $categories = Category::where('parent_id', 0)
@@ -86,9 +87,9 @@ class ProductController extends Controller
             '_token', 'sku', 'choice', 'tax_id', 'tax', 'tax_type', 'flash_deal_id', 'flash_discount', 'flash_discount_type'
         ]));
         $request->merge(['product_id' => $product->id]);
-        
+
         //VAT & Tax
-        if($request->tax_id) {
+        if ($request->tax_id) {
             $this->productTaxService->store($request->only([
                 'tax_id', 'tax', 'tax_type', 'product_id'
             ]));
@@ -157,11 +158,15 @@ class ProductController extends Controller
         }
 
         // Product Translations
-        ProductTranslation::where('lang', $request->lang)
-            ->where('product_id', $request->product_id)
-            ->update($request->only([
-            'lang', 'name', 'unit', 'description', 'product_id'
-        ]));
+        ProductTranslation::updateOrCreate(
+            $request->only([
+                'lang', 'product_id'
+            ]),
+            $request->only([
+                'name', 'unit', 'description'
+            ])
+        );
+
 
         flash(translate('Product has been updated successfully'))->success();
 

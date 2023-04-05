@@ -210,4 +210,8 @@ class AuthorizenetController extends Controller
         flash(translate($message_text))->success();
         return redirect()->route('home');
     }
+
+    public function cardType(){
+        return (new AnetAPI\CreditCardType())->cardType();
+    }
 }

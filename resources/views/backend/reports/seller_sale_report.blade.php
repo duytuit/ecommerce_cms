@@ -16,6 +16,7 @@
                         <label class="col-md-3 col-form-label">{{translate('Sort by verificarion status')}} :</label>
                         <div class="col-md-5">
                             <select class="from-control aiz-selectpicker" name="verification_status" required>
+                               <option value="">{{ translate('Select') }}</option>
                                <option value="1" @if($sort_by == '1') selected @endif>{{ translate('Approved') }}</option>
                                <option value="0" @if($sort_by == '0') selected @endif>{{ translate('Non Approved') }}</option>
                             </select>

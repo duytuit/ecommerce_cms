@@ -53,6 +53,7 @@ class ReviewController extends Controller
         $review->user_id = Auth::user()->id;
         $review->rating = $request->rating;
         $review->comment = $request->comment;
+        $review->photos = implode(',', $request->photos);
         $review->viewed = '0';
         $review->save();
         $product = Product::findOrFail($request->product_id);

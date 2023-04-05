@@ -10,6 +10,7 @@
         "authorizenet/authorizenet": "^2.0",
         "barryvdh/laravel-ide-helper": "^2.10",
         "cinetpay/cinetpay-php": "^1.9",
+        "enshrined/svg-sanitize": "^0.15.4",
         "fideloper/proxy": "^4.0",
         "genealabs/laravel-sign-in-with-apple": "*",
         "genealabs/laravel-socialiter": "*",
@@ -30,7 +31,7 @@
         "lcobucci/jwt": "^3.4.5",
         "league/flysystem-aws-s3-v3": "^1.0",
         "maatwebsite/excel": "^3.1",
-        "mehedi-iitdu/core-component-repository": "1.8",
+        "mehedi-iitdu/core-component-repository": "2.0",
         "mercadopago/dx-php": "^2.4",
         "myfatoorah/laravel-package": "^2.0",
         "niklasravnsborg/laravel-pdf": "^4.0",
@@ -38,14 +39,14 @@
         "paypal/paypal-checkout-sdk": "dev-master",
         "predis/predis": "^1.1",
         "razorpay/razorpay": "^2.0",
+        "rmccue/requests": "^1.8",
         "sebacarrasco93/laravel-payku": "^1.0",
         "simplesoftwareio/simple-qrcode": "^4.2",
         "spatie/db-dumper": "2.21.1",
         "spatie/laravel-permission": "^5.5",
         "stripe/stripe-php": "^7.95",
         "twilio/sdk": "^6.1",
-        "unicodeveloper/laravel-paystack": "^1.0",
-        "rmccue/requests": "^1.8"
+        "unicodeveloper/laravel-paystack": "^1.0"
     },
     "require-dev": {
         "barryvdh/laravel-debugbar": "^3.6",

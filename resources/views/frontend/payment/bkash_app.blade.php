@@ -11,7 +11,9 @@
 <body>
     <section class="py-4 mb-4 bg-light">
         <div class="container text-center">
-          <button id="bKash_button" class="d-none">Pay With bKash</button>            
+          <form action="{{route('api.bkash.checkout',['token'=>$token,'amount'=>$amount])}}" method="get">
+          <button id="bKash_button" class="d-none">Pay With bKash</button>         
+        </form>   
         </div>
     </section>
 
@@ -30,7 +32,9 @@
             $('#bKash_button').trigger('click');
         });
 
-        var paymentID = '';
+
+
+       /* var paymentID = '';
         bKash.init({
         paymentMode: 'checkout', //fixed value ‘checkout’
         //paymentRequest format: {amount: AMOUNT, intent: INTENT}
@@ -47,9 +51,7 @@
           type: 'POST',
           contentType: 'application/json',
           success: function(data) {
-            console.log('checkout  s');
-            console.log(data);
-            console.log('checkout  en');
+
             data = JSON.parse(data);
             if (data && data.paymentID != null) {
                 paymentID = data.paymentID;
@@ -90,7 +92,8 @@
           }
         });
         }
-        });
+        });*/
+
     </script>
 </body>
 </html>

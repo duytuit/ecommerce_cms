@@ -1,8 +1,10 @@
 <?php
 
-use App\Http\Controllers\Api\V2\CustomerPackageController;
+namespace App\Http\Controllers\Api\V2;
 
-Route::group(['prefix' => 'v2/auth', 'middleware' => ['app_language']], function() {
+use Illuminate\Support\Facades\Route;
+
+Route::group(['prefix' => 'v2/auth', 'middleware' => ['app_language']], function () {
     Route::post('login', 'App\Http\Controllers\Api\V2\AuthController@login');
     Route::post('signup', 'App\Http\Controllers\Api\V2\AuthController@signup');
     Route::post('social-login', 'App\Http\Controllers\Api\V2\AuthController@socialLogin');
@@ -18,7 +20,18 @@ Route::group(['prefix' => 'v2/auth', 'middleware' => ['app_language']], function
     Route::post('confirm_code', 'App\Http\Controllers\Api\V2\AuthController@confirmCode');
 });
 
-Route::group(['prefix' => 'v2', 'middleware' => ['app_language']], function() {
+
+Route::group(['prefix' => 'v2', 'middleware' => ['app_language']], function () {
+
+
+
+
+
+    // auction products routes
+    Route::get('auction/products', [AuctionProductController::class, 'index']);
+    Route::get('auction/products/{id}', [AuctionProductController::class, 'details_auction_product']);
+    Route::post('auction/place-bid', [AuctionProductBidController::class, 'store'])->middleware('auth:sanctum');
+
 
     Route::prefix('delivery-boy')->group(function () {
         Route::get('dashboard-summary/{id}', 'App\Http\Controllers\Api\V2\DeliveryBoyController@dashboard_summary')->middleware('auth:sanctum');
@@ -38,9 +51,9 @@ Route::group(['prefix' => 'v2', 'middleware' => ['app_language']], function() {
         Route::get('purchase-history-items/{id}', 'App\Http\Controllers\Api\V2\DeliveryBoyController@items')->middleware('auth:sanctum');
     });
 
-    Route::group(['middleware' => ['app_user_unbanned']], function() {
-            // customer downloadable product list
-        Route::get('/digital/purchased-list','App\Http\Controllers\Api\V2\PurchaseHistoryController@digital_purchased_list')->middleware('auth:sanctum');
+    Route::group(['middleware' => ['app_user_unbanned']], function () {
+        // customer downloadable product list
+        Route::get('/digital/purchased-list', 'App\Http\Controllers\Api\V2\PurchaseHistoryController@digital_purchased_list')->middleware('auth:sanctum');
         Route::get('/purchased-products/download/{id}', 'App\Http\Controllers\Api\V2\DigitalProductController@download')->middleware('auth:sanctum');
 
         Route::get('wallet/history', 'App\Http\Controllers\Api\V2\WalletController@walletRechargeHistory')->middleware('auth:sanctum');
@@ -57,8 +70,10 @@ Route::group(['prefix' => 'v2', 'middleware' => ['app_language']], function() {
             Route::get('/own-products', 'App\Http\Controllers\Api\V2\CustomerProductController@ownProducts')->middleware('auth:sanctum');
             Route::delete('/delete/{id}', 'App\Http\Controllers\Api\V2\CustomerProductController@delete')->middleware('auth:sanctum');
             Route::post('/change-status/{id}', 'App\Http\Controllers\Api\V2\CustomerProductController@changeStatus')->middleware('auth:sanctum');
-
         });
+
+
+
 
         Route::get('customer/info', 'App\Http\Controllers\Api\V2\CustomerController@show')->middleware('auth:sanctum');
 
@@ -129,10 +144,19 @@ Route::group(['prefix' => 'v2', 'middleware' => ['app_language']], function() {
 
         Route::post('file/image-upload', 'App\Http\Controllers\Api\V2\FileController@imageUpload')->middleware('auth:sanctum');
         Route::get('file-all', 'App\Http\Controllers\Api\V2\FileController@index')->middleware('auth:sanctum');
-
+        Route::post('file/upload', 'App\Http\Controllers\Api\V2\AizUploadController@upload')->middleware('auth:sanctum');
+        
         Route::get('wallet/balance', 'App\Http\Controllers\Api\V2\WalletController@balance')->middleware('auth:sanctum');
         Route::post('wallet/offline-recharge', 'App\Http\Controllers\Api\V2\WalletController@offline_recharge')->middleware('auth:sanctum');
+ 
 
+        Route::get('payment-types', 'App\Http\Controllers\Api\V2\PaymentTypesController@getList')->middleware('auth:sanctum');
+
+
+        Route::controller(CustomerPackageController::class)->group(function(){
+            Route::post('offline/packages-payment', 'purchase_package_offline')->middleware('auth:sanctum');
+            Route::post('free/packages-payment', 'purchase_package_free')->middleware('auth:sanctum');
+        });
 
     });
 
@@ -145,7 +169,7 @@ Route::group(['prefix' => 'v2', 'middleware' => ['app_language']], function() {
     Route::get('classified/related-products/{id}', 'App\Http\Controllers\Api\V2\CustomerProductController@relatedProducts');
     Route::get('classified/product-details/{id}', 'App\Http\Controllers\Api\V2\CustomerProductController@productDetails');
 
-    Route::get('payment-types', 'App\Http\Controllers\Api\V2\PaymentTypesController@getList');
+
 
 
     Route::apiResource('banners', 'App\Http\Controllers\Api\V2\BannerController')->only('index');
@@ -198,13 +222,12 @@ Route::group(['prefix' => 'v2', 'middleware' => ['app_language']], function() {
     Route::apiResource('products', 'App\Http\Controllers\Api\V2\ProductController')->except(['store', 'update', 'destroy']);
 
 
-
-
-
-    Route::controller(CustomerPackageController::class)->group(function(){
-        Route::get("customer-packages","customer_packages_list");
+    //Use this route outside of auth because initialy we created outside of auth we do not need auth initialy
+    //We can't change it now because we didn't send token in header from mobile app.
+    //We need the upload update Flutter app then we will write it in auth middleware. 
+    Route::controller(CustomerPackageController::class)->group(function () {
+        Route::get("customer-packages", "customer_packages_list");
     });
-
 
 
     Route::get('reviews/product/{id}', 'App\Http\Controllers\Api\V2\ReviewController@index')->name('api.reviews.index');
@@ -246,10 +269,10 @@ Route::group(['prefix' => 'v2', 'middleware' => ['app_language']], function() {
 
 
     Route::any('stripe', 'App\Http\Controllers\Api\V2\StripeController@stripe');
-    Route::any('/stripe/create-checkout-session', 'App\Http\Controllers\Api\V2\StripeController@create_checkout_session')->name('api.stripe.get_token');
-    Route::any('/stripe/payment/callback', 'App\Http\Controllers\Api\V2\StripeController@callback')->name('api.stripe.callback');
-    Route::any('/stripe/success', 'App\Http\Controllers\Api\V2\StripeController@success')->name('api.stripe.success');
-    Route::any('/stripe/cancel', 'App\Http\Controllers\Api\V2\StripeController@cancel')->name('api.stripe.cancel');
+    Route::any('stripe/create-checkout-session', 'App\Http\Controllers\Api\V2\StripeController@create_checkout_session')->name('api.stripe.get_token');
+    Route::any('stripe/payment/callback', 'App\Http\Controllers\Api\V2\StripeController@callback')->name('api.stripe.callback');
+    Route::get('stripe/success', 'App\Http\Controllers\Api\V2\StripeController@payment_success');
+    Route::any('stripe/cancel', 'App\Http\Controllers\Api\V2\StripeController@cancel')->name('api.stripe.cancel');
 
     Route::any('paypal/payment/url', 'App\Http\Controllers\Api\V2\PaypalController@getUrl')->name('api.paypal.url');
     Route::any('paypal/payment/done', 'App\Http\Controllers\Api\V2\PaypalController@getDone')->name('api.paypal.done');
@@ -257,21 +280,23 @@ Route::group(['prefix' => 'v2', 'middleware' => ['app_language']], function() {
 
     Route::any('razorpay/pay-with-razorpay', 'App\Http\Controllers\Api\V2\RazorpayController@payWithRazorpay')->name('api.razorpay.payment');
     Route::any('razorpay/payment', 'App\Http\Controllers\Api\V2\RazorpayController@payment')->name('api.razorpay.payment');
-    Route::post('razorpay/success', 'App\Http\Controllers\Api\V2\RazorpayController@success')->name('api.razorpay.success');
+    Route::post('razorpay/success', 'App\Http\Controllers\Api\V2\RazorpayController@payment_success')->name('api.razorpay.success');
 
     Route::any('paystack/init', 'App\Http\Controllers\Api\V2\PaystackController@init')->name('api.paystack.init');
-    Route::post('paystack/success', 'App\Http\Controllers\Api\V2\PaystackController@success')->name('api.paystack.success');
+    Route::post('paystack/success', 'App\Http\Controllers\Api\V2\PaystackController@payment_success')->name('api.paystack.success');
 
     Route::any('iyzico/init', 'App\Http\Controllers\Api\V2\IyzicoController@init')->name('api.iyzico.init');
     Route::any('iyzico/callback', 'App\Http\Controllers\Api\V2\IyzicoController@callback')->name('api.iyzico.callback');
-    Route::post('iyzico/success', 'App\Http\Controllers\Api\V2\IyzicoController@success')->name('api.iyzico.success');
+    Route::post('iyzico/success', 'App\Http\Controllers\Api\V2\IyzicoController@payment_success')->name('api.iyzico.success');
 
 
     Route::get('bkash/api/webpage/{token}/{amount}', 'App\Http\Controllers\Api\V2\BkashController@webpage')->name('api.bkash.webpage');
     Route::any('bkash/api/checkout/{token}/{amount}', 'App\Http\Controllers\Api\V2\BkashController@checkout')->name('api.bkash.checkout');
+    Route::any('bkash/api/callback', 'App\Http\Controllers\Api\V2\BkashController@callback')->name('api.bkash.callback');
+    
     Route::any('bkash/api/execute/{token}', 'App\Http\Controllers\Api\V2\BkashController@execute')->name('api.bkash.execute');
     Route::any('bkash/api/fail', 'App\Http\Controllers\Api\V2\BkashController@fail')->name('api.bkash.fail');
-    Route::any('bkash/api/success', 'App\Http\Controllers\Api\V2\BkashController@success')->name('api.bkash.success');
+    Route::post('bkash/api/success', 'App\Http\Controllers\Api\V2\BkashController@payment_success')->name('api.bkash.success');
     Route::post('bkash/api/process', 'App\Http\Controllers\Api\V2\BkashController@process')->name('api.bkash.process');
 
 
@@ -279,9 +304,9 @@ Route::group(['prefix' => 'v2', 'middleware' => ['app_language']], function() {
     Route::post('nagad/process', 'App\Http\Controllers\Api\V2\NagadController@process');
 
     Route::get('sslcommerz/begin', 'App\Http\Controllers\Api\V2\SslCommerzController@begin');
-    Route::post('sslcommerz/success', 'App\Http\Controllers\Api\V2\SslCommerzController@payment_success');
-    Route::post('sslcommerz/fail', 'App\Http\Controllers\Api\V2\SslCommerzController@payment_fail');
-    Route::post('sslcommerz/cancel', 'App\Http\Controllers\Api\V2\SslCommerzController@payment_cancel');
+    Route::any('sslcommerz/success', 'App\Http\Controllers\Api\V2\SslCommerzController@payment_success');
+    Route::any('sslcommerz/fail', 'App\Http\Controllers\Api\V2\SslCommerzController@payment_fail');
+    Route::any('sslcommerz/cancel', 'App\Http\Controllers\Api\V2\SslCommerzController@payment_cancel');
 
     Route::any('flutterwave/payment/url', 'App\Http\Controllers\Api\V2\FlutterwaveController@getUrl')->name('api.flutterwave.url');
     Route::any('flutterwave/payment/callback', 'App\Http\Controllers\Api\V2\FlutterwaveController@callback')->name('api.flutterwave.callback');
@@ -307,25 +332,8 @@ Route::group(['prefix' => 'v2', 'middleware' => ['app_language']], function() {
     //Pickup Point list
     Route::get('pickup-list', 'App\Http\Controllers\Api\V2\ShippingController@pickup_list');
 });
-Route::get('dev/test',function (){
-    $user = DB::table('users')->insert([
-        'user_type' => 'admin',
-        'name' => 'Mr.Admin',
-        'email' => 'duytu89@gmail.com',
-        'email_verified_at' => now(),
-        'password' => bcrypt('123qwe4'),
-        'remember_token' => Str::random(10),
-    ]);
 
-    for ($i = 1; $i < 215; $i++) {
-        $user = DB::table('role_has_permissions')->insert([
-            'permission_id' => $i,
-            'role_id' => 1
-        ]);
-    }
-    dd($user);
-});
-Route::fallback(function() {
+Route::fallback(function () {
     return response()->json([
         'data' => [],
         'success' => false,

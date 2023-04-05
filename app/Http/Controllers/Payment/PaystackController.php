@@ -91,7 +91,7 @@ class PaystackController extends Controller
         // you can then redirect or do whatever you want
         $payment = Paystack::getPaymentData();
 
-        if ($payment['data']['metadata']['custom_fields']) {
+        if ($payment['data']['metadata'] && $payment['data']['metadata']['custom_fields']) {
             $payment_type = $payment['data']['metadata']['custom_fields']['payment_type'];
             if ($payment_type == 'cart_payment') {
                 $payment_detalis = json_encode($payment);
@@ -105,7 +105,7 @@ class PaystackController extends Controller
             } elseif ($payment_type == 'wallet_payment') {
                 $payment_detalis = json_encode($payment);
                 if (!empty($payment['data']) && $payment['data']['status'] == 'success') {
-                    $payment_data['amount'] = $payment['data']['amount'];
+                    $payment_data['amount'] = $payment['data']['amount']/100;
                     $payment_data['payment_method'] = $payment['data']['metadata']['custom_fields']['payment_method'];
                     Auth::login(User::where('email', $payment['data']['customer']['email'])->first());
                     return (new WalletController)->wallet_payment_done($payment_data, $payment_detalis);
@@ -138,11 +138,10 @@ class PaystackController extends Controller
         }
         // for mobile app
         else {
-            $payment_details = json_encode($payment);
             if (!empty($payment['data']) && $payment['data']['status'] == 'success') {
-                return response()->json(['result' => true, 'message' => "Payment is successful", 'payment_details' => $payment_details]);
+                return response()->json(['result' => true, 'message' => "Payment is successful", 'payment_details' => $payment]);
             } else {
-                return response()->json(['result' => false, 'message' => "Payment unsuccessful", 'payment_details' => $payment_details]);
+                return response()->json(['result' => false, 'message' => "Payment unsuccessful", 'payment_details' => $payment]);
             }
 
         }

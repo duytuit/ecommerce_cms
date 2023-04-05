@@ -52,7 +52,7 @@
                 <tr>
                     <th width="10%">#</th>
                     <th>{{translate('Name')}}</th>
-                    <th width="10%">{{translate('Options')}}</th>
+                    <th class="text-right" width="10%">{{translate('Options')}}</th>
                 </tr>
             </thead>
             <tbody>

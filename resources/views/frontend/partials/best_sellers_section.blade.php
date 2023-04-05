@@ -21,12 +21,10 @@
                                 <div class="row no-gutters box-3 align-items-center border border-light rounded hov-shadow-md my-2 has-transition">
                                     <div class="col-4">
                                         <a href="{{ route('shop.visit', $seller->slug) }}" class="d-block p-3">
-                                            <img
-                                                src="{{ static_asset('assets/img/placeholder.jpg') }}"
+                                            <img src="{{ static_asset('assets/img/placeholder.jpg') }}"
                                                 data-src="@if ($seller->logo !== null) {{ uploaded_asset($seller->logo) }} @else {{ static_asset('assets/img/placeholder.jpg') }} @endif"
                                                 alt="{{ $seller->name }}"
-                                                class="img-fluid lazyload"
-                                            >
+                                                class="img-fluid lazyload">
                                         </a>
                                     </div>
                                     <div class="col-8 border-left border-light">

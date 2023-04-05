@@ -8,6 +8,7 @@ use App\Http\Controllers\Api\V2\Seller\ShopController;
 use App\Http\Controllers\Api\V2\Seller\RefundController;
 use App\Http\Controllers\Api\V2\Seller\SellerPackageController;
 use App\Http\Controllers\Api\V2\Seller\WithdrawRequestController;
+use App\Http\Controllers\Api\V2\Seller\SellerFileUploadController;
 
 Route::group(['prefix' => 'v2/seller', 'middleware' => ['app_language', 'auth:sanctum']], function () {
     //Order Section
@@ -50,6 +51,14 @@ Route::group(['prefix' => 'v2/seller', 'middleware' => ['app_language', 'auth:sa
      //Product Section
     Route::controller(ProductController::class)->group(function () {
         Route::get('products/all', 'index');
+        Route::get('products/categories', 'getCategory');
+        Route::get('products/brands', 'getBrands');
+        Route::get('products/taxes', 'getTaxes');
+        Route::get('products/attributes', 'getAttributes');
+        Route::get('products/colors', 'getColors');
+        Route::post('products/add', 'store');
+        Route::get('products/edit/{id}', 'edit');
+        Route::post('products/update/{product}', 'update');
         Route::post('product/change-featured', 'change_featured_status');
         Route::post('product/change-status', 'change_status');
         Route::get('product/duplicate/{id}', 'duplicate');
@@ -83,6 +92,13 @@ Route::group(['prefix' => 'v2/seller', 'middleware' => ['app_language', 'auth:sa
         Route::get('seller-packages-list', 'seller_packages_list');
         Route::post('seller-package/offline-payment', 'purchase_package_offline');
         Route::post('seller-package/free-package', 'purchase_free_package');
+    });
+
+    //Seller File Upload 
+    Route::controller(SellerFileUploadController::class)->group(function () {
+        Route::post('file/upload', 'upload');
+        Route::get('file/all', 'index');
+        Route::get('file/delete/{id}', 'destroy');
     });
 
 });

@@ -1182,6 +1182,60 @@ $.fn.toggleAttr = function (attr, attr1, attr2) {
                 });
             }
         },
+        countDownCircle: function () {
+            let html =  '<div id="time"><div class="circle"><svg><circle cx="30" cy="30" r="30"></circle><circle cx="30" cy="30" r="30" id="dd"></circle></svg><div id="days">00 <br><span>Days</span></div></div>' +
+                        '<div class="circle"><svg><circle cx="30" cy="30" r="30"></circle><circle cx="30" cy="30" r="30" id="hh"></circle></svg><div id="hours">00 <br><span>Hrs</span></div></div>' +
+                        '<div class="circle"><svg><circle cx="30" cy="30" r="30"></circle><circle cx="30" cy="30" r="30" id="mm"></circle></svg><div id="minutes">00 <br><span>Min</span></div></div>' +
+                        '<div class="circle"><svg><circle cx="30" cy="30" r="30"></circle><circle cx="30" cy="30" r="30" id="ss"></circle></svg><div id="seconds">00 <br><span>Sec</span></div></div></div>';
+            
+            if ($(".aiz-count-down-circle").length > 0) {
+                $('.aiz-count-down-circle').each(function(){
+                    var $this = $(this);
+                    $this.html(html);
+
+                    let days =  $this.find("#days" );
+                    let hours =  $this.find("#hours" );
+                    let minutes =  $this.find("#minutes" );
+                    let seconds =  $this.find("#seconds" );
+
+                    let dd = $this.find("#dd" );
+                    let hh = $this.find("#hh" );
+                    let mm = $this.find("#mm" );
+                    let ss = $this.find("#ss" );
+
+                    // Date Format mm/dd/yyyy
+                    var endDate = $this.attr("end-date");
+                    let now = new Date(endDate).getTime();
+                    let x = setInterval(function(){
+                        let CountDown = new Date().getTime();
+                        let distance = now - CountDown;
+                        if(distance > 0){
+
+                            // Time calculation for days, hours, minutes & seconds
+                            let d = Math.floor(distance / (1000 * 60 * 60 * 24));
+                            let h = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                            let m = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+                            let s = Math.floor((distance % (1000 * 60)) / (1000));
+                            
+                            // Output the results in elements with id
+                            days.html(d + '<br><span>Days</span>');
+                            hours.html(h + '<br><span>Hrs</span>');
+                            minutes.html(m + '<br><span>Min</span>');
+                            seconds.html(s + '<br><span>Sec</span>');
+
+                            // Animate stroke
+                            dd.css('strokeDashoffset', (190 - (190 * d) / 365)); // 365 days in a year
+                            hh.css('strokeDashoffset', (190 - (190 * h) / 24)); // 24 hours in a day
+                            mm.css('strokeDashoffset', (190 - (190 * m) / 60)); // 60 minutes in an hour
+                            ss.css('strokeDashoffset', (190 - (190 * s) / 60)); // 60 seconds in a minute
+                        }else{
+                            // If Countdown is over
+                            clearInterval(x);
+                        }
+                    });
+                });
+            }
+        },
         slickCarousel: function () {
             $(".aiz-carousel").not(".slick-initialized").each(function () {
                 var $this = $(this);
@@ -1390,6 +1444,126 @@ $.fn.toggleAttr = function (attr, attr1, attr2) {
                     ]
                 });
             }
+        },
+        particles: function(){
+            particlesJS('particles-js',
+  
+            {
+                "particles": {
+                    "number": {
+                        "value": 80,
+                        "density": {
+                            "enable": true,
+                            "value_area": 800
+                        }
+                    },
+                    "color": {
+                        "value": "#dfdfe6"
+                    },
+                    "shape": {
+                        "type": "circle",
+                        "stroke": {
+                            "width": 0,
+                            "color": "#000000"
+                        },
+                        "polygon": {
+                            "nb_sides": 5
+                        },
+                        "image": {
+                            "src": "img/github.svg",
+                            "width": 100,
+                            "height": 100
+                        }
+                    },
+                    "opacity": {
+                        "value": 0.5,
+                        "random": false,
+                        "anim": {
+                            "enable": false,
+                            "speed": 1,
+                            "opacity_min": 0.1,
+                            "sync": false
+                        }
+                    },
+                    "size": {
+                        "value": 5,
+                        "random": true,
+                        "anim": {
+                            "enable": false,
+                            "speed": 40,
+                            "size_min": 0.1,
+                            "sync": false
+                        }
+                    },
+                    "line_linked": {
+                        "enable": true,
+                        "distance": 150,
+                        "color": "#dfdfe6",
+                        "opacity": 0.4,
+                        "width": 1
+                    },
+                    "move": {
+                        "enable": true,
+                        "speed": 6,
+                        "direction": "none",
+                        "random": false,
+                        "straight": false,
+                        "out_mode": "out",
+                        "attract": {
+                            "enable": false,
+                            "rotateX": 600,
+                            "rotateY": 1200
+                        }
+                    }
+                },
+                "interactivity": {
+                    "detect_on": "canvas",
+                    "events": {
+                        "onhover": {
+                            "enable": true,
+                            "mode": "repulse"
+                        },
+                        "onclick": {
+                            "enable": true,
+                            "mode": "push"
+                        },
+                        "resize": true
+                    },
+                    "modes": {
+                        "grab": {
+                            "distance": 400,
+                            "line_linked": {
+                                "opacity": 1
+                            }
+                        },
+                        "bubble": {
+                            "distance": 400,
+                            "size": 40,
+                            "duration": 2,
+                            "opacity": 8,
+                            "speed": 3
+                        },
+                        "repulse": {
+                            "distance": 200
+                        },
+                        "push": {
+                            "particles_nb": 4
+                        },
+                        "remove": {
+                            "particles_nb": 2
+                        }
+                    }
+                },
+                "retina_detect": true,
+                "config_demo": {
+                    "hide_card": false,
+                    "background_color": "#b61924",
+                    "background_image": "",
+                    "background_position": "50% 50%",
+                    "background_repeat": "no-repeat",
+                    "background_size": "cover"
+                }
+            });
         }
     };
     AIZ.extra = {
@@ -1768,6 +1942,29 @@ $.fn.toggleAttr = function (attr, attr1, attr2) {
                     $("#hover-category-menu").addClass('d-none').removeClass('active');
                 });
         },
+        clickCategoryMenu: function(){
+            var menu = $("#click-category-menu");
+            menu.hide();
+            menu.removeClass('d-none');
+            $("#category-menu-bar")
+                .on("click", function (event) {
+                    menu.slideToggle(500);
+                    if ($("#category-menu-bar-icon").hasClass('show')) {
+                        $("#category-menu-bar-icon").removeClass('show');
+                    }else{
+                        $("#category-menu-bar-icon").addClass('show');
+                    }
+                });
+        },
+        hovUserTopMenu: function(){
+            $("#nav-user-info")
+                .on("mouseover", function (event) {
+                    $(".hover-user-top-menu").addClass('active');
+                })
+                .on("mouseout", function (event) {
+                    $(".hover-user-top-menu").removeClass('active');
+                });
+        },
         trimAppUrl: function(){
             if(AIZ.data.appUrl.slice(-1) == '/'){
                 AIZ.data.appUrl = AIZ.data.appUrl.slice(0, AIZ.data.appUrl.length -1);
@@ -1861,6 +2058,8 @@ $.fn.toggleAttr = function (attr, attr1, attr2) {
     AIZ.extra.selectHideShow();
     AIZ.extra.plusMinus();
     AIZ.extra.hovCategoryMenu();
+    AIZ.extra.clickCategoryMenu();
+    AIZ.extra.hovUserTopMenu();
     AIZ.extra.trimAppUrl();
     AIZ.extra.acceptCookie();
     AIZ.extra.setSession();
@@ -1872,6 +2071,7 @@ $.fn.toggleAttr = function (attr, attr1, attr2) {
     AIZ.plugins.textEditor();
     AIZ.plugins.tooltip();
     AIZ.plugins.countDown();
+    AIZ.plugins.countDownCircle();
     AIZ.plugins.dateRange();
     AIZ.plugins.timePicker();
     AIZ.plugins.fooTable();

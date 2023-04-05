@@ -30,7 +30,7 @@
                     <th data-breakpoints="lg">{{translate('Email')}}</th>
                     <th data-breakpoints="lg">{{translate('Phone')}}</th>
                     <th data-breakpoints="lg">{{translate('Role')}}</th>
-                    <th width="10%">{{translate('Options')}}</th>
+                    <th width="10%" class="text-right">{{translate('Options')}}</th>
                 </tr>
             </thead>
             <tbody>

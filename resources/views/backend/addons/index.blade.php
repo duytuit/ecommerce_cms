@@ -10,14 +10,6 @@
                     <a class="p-3 fs-16 text-reset" data-toggle="tab" href="#available">{{ translate('Available Addon')}}</a>
                 </div>
             </div>
-			<div class="col mt-3 mt-sm-0 text-center text-md-right">
-{{--                <a href="https://activeitzone.com/activation/addon" class="btn btn-primary" target="_blank">--}}
-{{--					{{ translate('Activate Addon Link') }}--}}
-{{--				</a>  --}}
-                <a href="#" class="btn btn-primary" target="_blank">
-					{{ translate('Activate Addon Link') }}
-				</a>
-            </div>
             <div class="col-auto mt-3 mt-sm-0 text-center text-md-right">
                 <a href="{{ route('addons.create')}}" class="btn btn-primary">{{ translate('Install/Update Addon')}}</a>
             </div>
@@ -100,6 +92,7 @@
         }
 
         $(document).ready(function(){
+
         })
     </script>
 @endsection

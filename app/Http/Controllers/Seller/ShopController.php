@@ -49,8 +49,18 @@ class ShopController extends Controller
             $shop->google = $request->google;
             $shop->twitter = $request->twitter;
             $shop->youtube = $request->youtube;
-        } elseif ($request->has('sliders')) {
+        } elseif (
+            $request->has('top_banner') ||
+            $request->has('sliders') || 
+            $request->has('banner_full_width_1') || 
+            $request->has('banners_half_width') || 
+            $request->has('banner_full_width_2')
+        ) {
+            $shop->top_banner = $request->top_banner;
             $shop->sliders = $request->sliders;
+            $shop->banner_full_width_1 = $request->banner_full_width_1;
+            $shop->banners_half_width = $request->banners_half_width;
+            $shop->banner_full_width_2 = $request->banner_full_width_2;
         }
 
         if ($shop->save()) {

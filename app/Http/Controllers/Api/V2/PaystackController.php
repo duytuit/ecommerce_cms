@@ -34,7 +34,7 @@ class PaystackController extends Controller
 
     // the callback function is in the main controller of web | paystackcontroller
 
-    public function success(Request $request)
+    public function payment_success(Request $request)
     {
         try {
 

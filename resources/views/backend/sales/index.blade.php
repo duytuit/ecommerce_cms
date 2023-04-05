@@ -9,14 +9,16 @@
                 <h5 class="mb-md-0 h6">{{ translate('All Orders') }}</h5>
             </div>
 
-            <div class="dropdown mb-2 mb-md-0">
-                <button class="btn border dropdown-toggle" type="button" data-toggle="dropdown">
-                    {{translate('Bulk Action')}}
-                </button>
-                <div class="dropdown-menu dropdown-menu-right">
-                    <a class="dropdown-item" href="#" onclick="bulk_delete()"> {{translate('Delete selection')}}</a>
+            @can('delete_order')
+                <div class="dropdown mb-2 mb-md-0">
+                    <button class="btn border dropdown-toggle" type="button" data-toggle="dropdown">
+                        {{translate('Bulk Action')}}
+                    </button>
+                    <div class="dropdown-menu dropdown-menu-right">
+                        <a class="dropdown-item" href="#" onclick="bulk_delete()"> {{translate('Delete selection')}}</a>
+                    </div>
                 </div>
-            </div>
+            @endcan
 
             <div class="col-lg-2 ml-auto">
                 <select class="form-control aiz-selectpicker" name="delivery_status" id="delivery_status">
@@ -58,16 +60,21 @@
                 <thead>
                     <tr>
                         <!--<th>#</th>-->
-                        <th>
-                            <div class="form-group">
-                                <div class="aiz-checkbox-inline">
-                                    <label class="aiz-checkbox">
-                                        <input type="checkbox" class="check-all">
-                                        <span class="aiz-square-check"></span>
-                                    </label>
+                        @if(auth()->user()->can('delete_order'))
+                            <th>
+                                <div class="form-group">
+                                    <div class="aiz-checkbox-inline">
+                                        <label class="aiz-checkbox">
+                                            <input type="checkbox" class="check-all">
+                                            <span class="aiz-square-check"></span>
+                                        </label>
+                                    </div>
                                 </div>
-                            </div>
-                        </th>
+                            </th>
+                        @else
+                            <th data-breakpoints="lg">#</th>
+                        @endif
+                        
                         <th>{{ translate('Order Code') }}</th>
                         <th data-breakpoints="md">{{ translate('Num. of Products') }}</th>
                         <th data-breakpoints="md">{{ translate('Customer') }}</th>
@@ -85,16 +92,20 @@
                 <tbody>
                     @foreach ($orders as $key => $order)
                     <tr>
-                        <td>
-                            <div class="form-group">
-                                <div class="aiz-checkbox-inline">
-                                    <label class="aiz-checkbox">
-                                        <input type="checkbox" class="check-one" name="id[]" value="{{$order->id}}">
-                                        <span class="aiz-square-check"></span>
-                                    </label>
+                        @if(auth()->user()->can('delete_order'))
+                            <td>
+                                <div class="form-group">
+                                    <div class="aiz-checkbox-inline">
+                                        <label class="aiz-checkbox">
+                                            <input type="checkbox" class="check-one" name="id[]" value="{{$order->id}}">
+                                            <span class="aiz-square-check"></span>
+                                        </label>
+                                    </div>
                                 </div>
-                            </div>
-                        </td>
+                            </td>
+                        @else
+                            <td>{{ ($key+1) + ($orders->currentPage() - 1)*$orders->perPage() }}</td>
+                        @endif
                         <td>
                             {{ $order->code }}@if($order->viewed == 0) <span class="badge badge-inline badge-info">{{translate('New')}}</span>@endif
                         </td>

@@ -1,9 +1,9 @@
 <?php
-
 namespace App\Http\Controllers\Api\V2;
-
 use App\Http\Resources\V2\CustomerPackageResource;
 use App\Models\CustomerPackage;
+use App\Models\CustomerPackagePayment;
+use App\Models\User;
 use Illuminate\Http\Request;
 
 
@@ -14,48 +14,48 @@ class CustomerPackageController extends Controller
             $customer_packages = CustomerPackage::all();
             return CustomerPackageResource::collection($customer_packages);
     }
-/*
-    public function purchase_free_package(Request $request)
+
+public function purchase_package_free(Request $request)
     {
-        $data['seller_package_id'] = $request->package_id;
-        $data['payment_method'] = $request->payment_option;
+        $data['customer_package_id'] = $request->package_id;
+        
 
+        $customer_package = CustomerPackage::findOrFail($data['customer_package_id']);
 
-        $seller_package = SellerPackage::findOrFail($request->seller_package_id);
+        if ($customer_package->amount == 0) {
+            $user = User::findOrFail(auth()->user()->id);
+            if ($user->customer_package_id != $customer_package->id) {
 
-        if ($seller_package->amount == 0) {
-            seller_purchase_payment_done(auth()->user()->id, $request->package_id, $request->amount, 'Free Package', null);
-            return $this->success(translate('Package purchasing successful'));
-        } elseif (
-            auth()->user()->shop->seller_package != null &&
-            $seller_package->product_upload_limit < auth()->user()->shop->seller_package->product_upload_limit
-        ) {
-            return $this->failed(translate('You have more uploaded products than this package limit. You need to remove excessive products to downgrade.'));
+                $user->customer_package_id = $data['customer_package_id'];
+                $customer_package = CustomerPackage::findOrFail($data['customer_package_id']);
+                $user->remaining_uploads += $customer_package->product_upload;
+                $user->save();
+                return $this->success(translate('Package purchasing successful'));
+            } else {
+               return $this->failed(translate('You can not purchase this package anymore.'));
+                
+            }
         }
+        return $this->failed(translate('Invalid input'));
+
     }
+
+
+
+
 
     public function purchase_package_offline(Request $request)
     {
-        $seller_package = SellerPackage::findOrFail($request->package_id);
-
-        if (
-           auth()->user()->shop->seller_package != null &&
-            $seller_package->product_upload_limit < auth()->user()->shop->seller_package->product_upload_limit
-        ) {
-            return $this->failed(translate('You have more uploaded products than this package limit. You need to remove excessive products to downgrade.'));
-        }
-
-        $seller_package = new SellerPackagePayment;
-        $seller_package->user_id = auth()->user()->id;
-        $seller_package->seller_package_id = $request->package_id;
-        $seller_package->payment_method = $request->payment_option;
-        $seller_package->payment_details = $request->trx_id;
-        $seller_package->approval = 0;
-        $seller_package->offline_payment = 1;
-        $seller_package->reciept = $request->photo;
-
-        $seller_package->save();
-
-        return $this->success(translate('Offline payment has been done. Please wait for response.'));
-    }*/
+        $customer_package = new CustomerPackagePayment();
+        $customer_package->user_id = auth()->user()->id;
+        $customer_package->customer_package_id = $request->package_id;
+        $customer_package->payment_method = $request->payment_option;
+        $customer_package->payment_details = $request->trx_id;
+        $customer_package->approval = 0;
+        $customer_package->offline_payment = 1;
+        $customer_package->reciept = ($request->photo == null) ? '' : $request->photo;
+        $customer_package->save();
+        
+        return $this->success(translate("Submitted Successfully"));
+    }
 }

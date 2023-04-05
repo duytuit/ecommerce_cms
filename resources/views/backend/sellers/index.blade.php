@@ -31,8 +31,8 @@
             <div class="col-md-3 ml-auto">
                 <select class="form-control aiz-selectpicker" name="approved_status" id="approved_status" onchange="sort_sellers()">
                     <option value="">{{translate('Filter by Approval')}}</option>
-                    <option value="1"  @isset($approved) @if($approved == 'paid') selected @endif @endisset>{{translate('Approved')}}</option>
-                    <option value="0"  @isset($approved) @if($approved == 'unpaid') selected @endif @endisset>{{translate('Non-Approved')}}</option>
+                    <option value="1"  @isset($approved) @if($approved == '1') selected @endif @endisset>{{translate('Approved')}}</option>
+                    <option value="0"  @isset($approved) @if($approved == '0') selected @endif @endisset>{{translate('Non-Approved')}}</option>
                 </select>
             </div>
             <div class="col-md-3">
@@ -92,7 +92,7 @@
                         <td>{{$shop->user->phone}}</td>
                         <td>{{$shop->user->email}}</td>
                         <td>
-                            @if ($shop->verification_info != null)
+                            @if ($shop->verification_status != 1 && $shop->verification_info != null)
                                 <a href="{{ route('sellers.show_verification_request', $shop->id) }}">
                                     <span class="badge badge-inline badge-info">{{translate('Show')}}</span>
                                 </a>

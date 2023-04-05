@@ -27,6 +27,9 @@ class CustomerProductController extends Controller
      */
     public function index()
     {
+        if(get_setting('classified_product') != 1){
+            return redirect()->route('dashboard');
+        }
         $products = CustomerProduct::where('user_id', Auth::user()->id)->orderBy('created_at', 'desc')->paginate(10);
         return view('frontend.user.customer.products', compact('products'));
     }
@@ -257,6 +260,9 @@ class CustomerProductController extends Controller
 
     public function customer_product($slug)
     {
+        if(get_setting('classified_product') != 1){
+            return redirect('/');
+        }
         $customer_product  = CustomerProduct::where('slug', $slug)->first();
         if($customer_product!=null){
             return view('frontend.customer_product_details', compact('customer_product'));
@@ -266,6 +272,10 @@ class CustomerProductController extends Controller
 
     public function search(Request $request)
     {
+        if(get_setting('classified_product') != 1){
+            return redirect('/');
+        }
+
         $brand_id = (Brand::where('slug', $request->brand)->first() != null) ? Brand::where('slug', $request->brand)->first()->id : null;
         $category_id = (Category::where('slug', $request->category)->first() != null) ? Category::where('slug', $request->category)->first()->id : null;
         $sort_by = $request->sort_by;

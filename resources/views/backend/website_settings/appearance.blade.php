@@ -56,6 +56,94 @@
         						<small class="text-muted">{{ translate('Hex Color Code') }}</small>
                             </div>
     	                </div>
+    					<div class="form-group row">
+    						<label class="col-md-3 col-from-label">{{ translate('Customer Login page Image') }}</label>
+                            <div class="col-md-8">
+        						<div class="input-group " data-toggle="aizuploader" data-type="image">
+        							<div class="input-group-prepend">
+        								<div class="input-group-text bg-soft-secondary">{{ translate('Browse') }}</div>
+        							</div>
+        							<div class="form-control file-amount">{{ translate('Choose File') }}</div>
+                                    <input type="hidden" name="types[]" value="login_page_image">
+        							<input type="hidden" name="login_page_image" value="{{ get_setting('login_page_image') }}" class="selected-files">
+        						</div>
+        						<div class="file-preview box"></div>
+                            </div>
+    					</div>
+    					<div class="form-group row">
+    						<label class="col-md-3 col-from-label">{{ translate('Customer Register page Image') }}</label>
+                            <div class="col-md-8">
+        						<div class="input-group " data-toggle="aizuploader" data-type="image">
+        							<div class="input-group-prepend">
+        								<div class="input-group-text bg-soft-secondary">{{ translate('Browse') }}</div>
+        							</div>
+        							<div class="form-control file-amount">{{ translate('Choose File') }}</div>
+                                    <input type="hidden" name="types[]" value="register_page_image">
+        							<input type="hidden" name="register_page_image" value="{{ get_setting('register_page_image') }}" class="selected-files">
+        						</div>
+        						<div class="file-preview box"></div>
+                            </div>
+    					</div>
+						@if (get_setting('vendor_system_activation') == 1)
+							<div class="form-group row">
+								<label class="col-md-3 col-from-label">{{ translate('Seller Login page Background') }}</label>
+								<div class="col-md-8">
+									<div class="input-group " data-toggle="aizuploader" data-type="image">
+										<div class="input-group-prepend">
+											<div class="input-group-text bg-soft-secondary">{{ translate('Browse') }}</div>
+										</div>
+										<div class="form-control file-amount">{{ translate('Choose File') }}</div>
+										<input type="hidden" name="types[]" value="seller_login_page_bg">
+										<input type="hidden" name="seller_login_page_bg" value="{{ get_setting('seller_login_page_bg') }}" class="selected-files">
+									</div>
+									<div class="file-preview box"></div>
+								</div>
+							</div>
+						@endif
+						@if (addon_is_activated('delivery_boy'))
+							<div class="form-group row">
+								<label class="col-md-3 col-from-label">{{ translate('Delivery Boy Login page Background') }}</label>
+								<div class="col-md-8">
+									<div class="input-group " data-toggle="aizuploader" data-type="image">
+										<div class="input-group-prepend">
+											<div class="input-group-text bg-soft-secondary">{{ translate('Browse') }}</div>
+										</div>
+										<div class="form-control file-amount">{{ translate('Choose File') }}</div>
+										<input type="hidden" name="types[]" value="delivery_boy_login_page_bg">
+										<input type="hidden" name="delivery_boy_login_page_bg" value="{{ get_setting('delivery_boy_login_page_bg') }}" class="selected-files">
+									</div>
+									<div class="file-preview box"></div>
+								</div>
+							</div>
+						@endif
+    					<div class="form-group row">
+    						<label class="col-md-3 col-from-label">{{ translate('Flash Deal Banner large') }}</label>
+                            <div class="col-md-8">
+        						<div class="input-group " data-toggle="aizuploader" data-type="image">
+        							<div class="input-group-prepend">
+        								<div class="input-group-text bg-soft-secondary">{{ translate('Browse') }}</div>
+        							</div>
+        							<div class="form-control file-amount">{{ translate('Choose File') }}</div>
+                                    <input type="hidden" name="types[]" value="flash_deal_banner">
+        							<input type="hidden" name="flash_deal_banner" value="{{ get_setting('flash_deal_banner') }}" class="selected-files">
+        						</div>
+        						<div class="file-preview box"></div>
+                            </div>
+    					</div>
+    					<div class="form-group row">
+    						<label class="col-md-3 col-from-label">{{ translate('Flash Deal Banner Small') }}</label>
+                            <div class="col-md-8">
+        						<div class="input-group " data-toggle="aizuploader" data-type="image">
+        							<div class="input-group-prepend">
+        								<div class="input-group-text bg-soft-secondary">{{ translate('Browse') }}</div>
+        							</div>
+        							<div class="form-control file-amount">{{ translate('Choose File') }}</div>
+                                    <input type="hidden" name="types[]" value="flash_deal_banner_small">
+        							<input type="hidden" name="flash_deal_banner_small" value="{{ get_setting('flash_deal_banner_small') }}" class="selected-files">
+        						</div>
+        						<div class="file-preview box"></div>
+                            </div>
+    					</div>
     					<div class="text-right">
     						<button type="submit" class="btn btn-primary">{{ translate('Update') }}</button>
     					</div>

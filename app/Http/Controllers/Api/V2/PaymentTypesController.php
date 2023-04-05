@@ -207,19 +207,22 @@ class PaymentTypesController
             }
 
             $haveDigitalProduct = false;
+            $cash_on_delivery = false;
 
             if ($mode == "order") {
                 $carts = auth()->user()->carts;
 
                 foreach ($carts as $key => $cart) {
                     $haveDigitalProduct =  $cart->product->digital == 1;
-                    if ($haveDigitalProduct) {
+                    $cash_on_delivery =  $cart->product->cash_on_delivery == 0;
+                    if ($haveDigitalProduct || $cash_on_delivery) {
                         break;
                     }
+                    
                 }
             } 
 
-            if (get_setting('cash_payment') == 1  && !$haveDigitalProduct) {
+            if (get_setting('cash_payment') == 1  && !$haveDigitalProduct && !$cash_on_delivery) {
                 $payment_type = array();
                 $payment_type['payment_type'] = 'cash_payment';
                 $payment_type['payment_type_key'] = 'cash_on_delivery';

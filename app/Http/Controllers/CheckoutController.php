@@ -92,7 +92,7 @@ class CheckoutController extends Controller
             $order->payment_details = $payment;
             $order->save();
 
-            // calculateCommissionAffilationClubPoint($order);
+            calculateCommissionAffilationClubPoint($order);
         }
         Session::put('combined_order_id', $combined_order_id);
         return redirect()->route('order_confirmed');
@@ -339,9 +339,9 @@ class CheckoutController extends Controller
         //Session::forget('club_point');
         //Session::forget('combined_order_id');
         
-        foreach($combined_order->orders as $order){
-            NotificationUtility::sendOrderPlacedNotification($order);
-        }
+        // foreach($combined_order->orders as $order){
+        //     NotificationUtility::sendOrderPlacedNotification($order);
+        // }
 
         return view('frontend.order_confirmed', compact('combined_order'));
     }

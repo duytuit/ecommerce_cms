@@ -68,6 +68,7 @@ class CategoryController extends Controller
         $category->digital = $request->digital;
         $category->banner = $request->banner;
         $category->icon = $request->icon;
+        $category->cover_image = $request->cover_image;
         $category->meta_title = $request->meta_title;
         $category->meta_description = $request->meta_description;
 
@@ -149,6 +150,7 @@ class CategoryController extends Controller
         $category->digital = $request->digital;
         $category->banner = $request->banner;
         $category->icon = $request->icon;
+        $category->cover_image = $request->cover_image;
         $category->meta_title = $request->meta_title;
         $category->meta_description = $request->meta_description;
 

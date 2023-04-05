@@ -18,7 +18,7 @@ class ProductBulkUploadController extends Controller
             return view('seller.product.product_bulk_upload.index');
         }
         else{
-            flash('Your shop is not verified yet!')->warning();
+            flash(translate('Your shop is not verified yet!'))->warning();
             return back();
         }
     }

@@ -81,9 +81,9 @@ class ChatController extends Controller
     public function send_message_to_seller($conversation, $message, $seller_user, $user)
     {
         $array['view'] = 'emails.conversation';
-        $array['subject'] = 'Sender:- ' . $user->name;
+        $array['subject'] = translate('Sender').':- '. $user->name;
         $array['from'] = env('MAIL_FROM_ADDRESS');
-        $array['content'] = 'Hi! You recieved a message from ' . $user->name . '.';
+        $array['content'] = translate('Hi! You recieved a message from ') . $user->name . '.';
         $array['sender'] = $user->name;
 
         if ($seller_user->type == 'admin') {

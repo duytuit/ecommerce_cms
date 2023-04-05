@@ -16,7 +16,6 @@
 
 use App\Http\Controllers\DeliveryBoyController;
 use App\Http\Controllers\OrderController;
-use App\Http\Controllers\PurchaseHistoryController;
 
 Route::group(['prefix' =>'admin', 'middleware' => ['auth', 'admin']], function(){
     //Delivery Boy
@@ -47,7 +46,7 @@ Route::group(['middleware' => ['user', 'verified', 'unbanned']], function() {
         Route::get('/total-collections', 'total_collection')->name('total-collection');
         Route::get('/total-earnings', 'total_earning')->name('total-earnings');
         Route::get('/cancel-request/{id}', 'cancel_request')->name('cancel-request');
-        Route::get('/cancel-request-list', 'cancel_request_list')->name('cancel-request-list');
+        Route::get('/cancel-request-list', 'delivery_boys_cancel_request_list')->name('cancel-request-list');
     });
 
     Route::controller(OrderController::class)->group(function () {

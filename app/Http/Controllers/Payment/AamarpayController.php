@@ -18,7 +18,7 @@ class AamarpayController extends Controller
 {
     public function pay(){
         if (Auth::user()->phone == null) {
-            flash('Please add phone number to your profile')->warning();
+            flash(translate('Please add phone number to your profile'))->warning();
             return redirect()->route('profile');
         }
         

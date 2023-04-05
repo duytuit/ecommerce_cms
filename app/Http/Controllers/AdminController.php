@@ -17,7 +17,8 @@ class AdminController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function admin_dashboard(Request $request)
-    {
+    {   
+        CoreComponentRepository::initializeCache();
         $root_categories = Category::where('level', 0)->get();
 
         $cached_graph_data = Cache::remember('cached_graph_data', 86400, function() use ($root_categories){
@@ -50,8 +51,7 @@ class AdminController extends Controller
 
     function clearCache(Request $request)
     {
-        Artisan::call('cache:clear');
-        Artisan::call('config:clear');
+        Artisan::call('optimize:clear');
         flash(translate('Cache cleared successfully'))->success();
         return back();
     }

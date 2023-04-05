@@ -155,8 +155,8 @@
                 </li>
                 @if (addon_is_activated('refund_request'))
                     <li class="aiz-side-nav-item">
-                        <a href="{{ route('vendor_refund_request') }}"
-                            class="aiz-side-nav-link {{ areActiveRoutes(['vendor_refund_request', 'reason_show']) }}">
+                        <a href="{{ route('seller.vendor_refund_request') }}"
+                            class="aiz-side-nav-link {{ areActiveRoutes(['seller.vendor_refund_request', 'reason_show']) }}">
                             <i class="las la-backward aiz-side-nav-icon"></i>
                             <span class="aiz-side-nav-text">{{ translate('Received Refund Request') }}</span>
                         </a>

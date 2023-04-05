@@ -15,6 +15,9 @@ class Shop extends Model
   }
   
   public function seller_package(){
-      return $this->belongsTo(SellerPackage::class);
+    return $this->belongsTo(SellerPackage::class);
+  }
+  public function followers(){
+    return $this->hasMany(FollowSeller::class);
   }
 }

@@ -17,6 +17,7 @@ use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Str;
 use GuzzleHttp\Client;
 use Auth;
+use Storage;
 
 class LoginController extends Controller
 {
@@ -64,7 +65,7 @@ class LoginController extends Controller
         try {
             $user = Socialite::driver("sign-in-with-apple")->user();
         } catch (\Exception $e) {
-            flash("Something Went wrong. Please try again.")->error();
+            flash(translate("Something Went wrong. Please try again."))->error();
             return redirect()->route('user.login');
         }
         //check if provider_id exist
@@ -137,7 +138,7 @@ class LoginController extends Controller
                 $user = Socialite::driver($provider)->stateless()->user();
             }
         } catch (\Exception $e) {
-            flash("Something Went wrong. Please try again.")->error();
+            flash(translate("Something Went wrong. Please try again."))->error();
             return redirect()->route('user.login');
         }
 
@@ -263,6 +264,7 @@ class LoginController extends Controller
         }
 
         if (auth()->user()->user_type == 'admin' || auth()->user()->user_type == 'staff') {
+            CoreComponentRepository::instantiateShopRepository();
             return redirect()->route('admin.dashboard');
         } elseif (auth()->user()->user_type == 'seller') {
             return redirect()->route('seller.dashboard');
@@ -318,6 +320,7 @@ class LoginController extends Controller
 
     public function account_deletion(Request $request)
     {
+
         $redirect_route = 'home';
 
         if (auth()->user()) {
@@ -333,6 +336,26 @@ class LoginController extends Controller
         // }
 
         $auth_user = auth()->user();
+        
+        // user images delete from database and file storage
+        $uploads = $auth_user->uploads;
+        if($uploads){
+            foreach ($uploads as $upload) {
+                if (env('FILESYSTEM_DRIVER') == 's3') {
+                    Storage::disk('s3')->delete($upload->file_name);
+                    if (file_exists(public_path() . '/' . $upload->file_name)) {
+                        unlink(public_path() . '/' . $upload->file_name);
+            $upload->delete();
+
+                    }
+                } else {
+                    unlink(public_path() . '/' . $upload->file_name);
+            $upload->delete();
+
+                }
+            }
+        }
+
         $auth_user->customer_products()->delete();
 
         User::destroy(auth()->user()->id);
@@ -340,7 +363,7 @@ class LoginController extends Controller
         auth()->guard()->logout();
         $request->session()->invalidate();
 
-        flash("Your account deletion successfully done.")->success();
+        flash(translate("Your account deletion successfully done."))->success();
         return redirect()->route($redirect_route);
     }
 

@@ -3,6 +3,9 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Contracts\Validation\Validator;
+use Illuminate\Http\Exceptions\HttpResponseException;
+use Illuminate\Validation\ValidationException;
 
 class ProductRequest extends FormRequest
 {
@@ -23,15 +26,21 @@ class ProductRequest extends FormRequest
      */
     public function rules()
     {
-        return [
-            'name'          => 'required|max:255',
-            'category_id'   => 'required',
-            'unit'          => 'required',
-            'min_qty'       => 'required|numeric',
-            'unit_price'    => 'required|numeric',
-            'discount'      => 'required|numeric|lt:unit_price',
-            'current_stock' => 'required|numeric',
-        ];
+        $rules = [];
+        
+        $rules['name']          = 'required|max:255';
+        $rules['category_id']   = 'required';
+        $rules['unit' ]         = 'required';
+        $rules['min_qty' ]      = 'required|numeric';
+        $rules['unit_price']    = 'required|numeric';
+        if ($this->get('discount_type') == 'amount') {
+            $rules['discount' ] = 'required|numeric|lt:unit_price';
+        }else {
+            $rules['discount' ] = 'required|numeric|lt:100';
+        }
+        $rules['current_stock'] = 'required|numeric';
+
+        return $rules;
     }
 
     /**
@@ -55,5 +64,24 @@ class ProductRequest extends FormRequest
             'current_stock.required'    => 'Current stock is required',
             'current_stock.numeric'     => 'Current stock must be numeric',
         ];
+    }
+
+    /**
+     * Get the error messages for the defined validation rules.*
+     * @return array
+     */
+    public function failedValidation(Validator $validator)
+    {
+        // dd($this->expectsJson());
+        if ($this->expectsJson()) {
+            throw new HttpResponseException(response()->json([
+                'message' => $validator->errors()->all(),
+                'result' => false
+            ], 422));
+        } else {
+            throw (new ValidationException($validator))
+                    ->errorBag($this->errorBag)
+                    ->redirectTo($this->getRedirectUrl());
+        }
     }
 }

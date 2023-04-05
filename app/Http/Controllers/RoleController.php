@@ -133,6 +133,6 @@ class RoleController extends Controller
     }
 
     public function create_admin_permissions(){
-
+        
     }
 }

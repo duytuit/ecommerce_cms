@@ -5,10 +5,12 @@
 <div class="card">
   <div class="card-header">
       <h5 class="mb-0 h6">{{ translate('Seller Verification') }}</h5>
-      <div class="pull-right clearfix">
-        <a href="{{ route('sellers.reject', $shop->id) }}" class="btn btn-circle btn-danger d-innline-block">{{translate('Reject')}}</a></li>
-        <a href="{{ route('sellers.approve', $shop->id) }}" class="btn btn-circle btn-success d-innline-block">{{translate('Accept')}}</a>
-      </div>
+      @if ($shop->verification_status != 1 && $shop->verification_info != null)
+        <div class="pull-right clearfix">
+            <a href="{{ route('sellers.reject', $shop->id) }}" class="btn btn-circle btn-danger d-innline-block">{{translate('Reject')}}</a></li>
+            <a href="{{ route('sellers.approve', $shop->id) }}" class="btn btn-circle btn-success d-innline-block">{{translate('Accept')}}</a>
+        </div>
+      @endif
   </div>
   <div class="card-body row">
       <div class="col-md-5">
@@ -43,6 +45,7 @@
       </div>
       <div class="col-md-5">
         <h6 class="mb-4">{{ translate('Verification Info') }}</h6>
+        @if ($shop->verification_info != null)
           <table class="table table-striped table-bordered" cellspacing="0" width="100%">
               <tbody>
                   @foreach (json_decode($shop->verification_info) as $key => $info)
@@ -63,10 +66,13 @@
                   @endforeach
               </tbody>
           </table>
+        @endif
+        @if ($shop->verification_status != 1 && $shop->verification_info != null)
           <div class="text-center">
               <a href="{{ route('sellers.reject', $shop->id) }}" class="btn btn-sm btn-danger d-innline-block">{{translate('Reject')}}</a></li>
               <a href="{{ route('sellers.approve', $shop->id) }}" class="btn btn-sm btn-success d-innline-block">{{translate('Accept')}}</a>
           </div>
+        @endif
       </div>
   </div>
 </div>

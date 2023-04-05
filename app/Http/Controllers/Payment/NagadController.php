@@ -172,7 +172,7 @@ class NagadController{
                 return (new SellerPackageController)->purchase_payment_done(Session::get('payment_data'), $json);
             }
         }
-        flash('Payment Failed')->error();
+        flash(translate('Payment Failed'))->error();
         return redirect()->route('home');
     }
 }

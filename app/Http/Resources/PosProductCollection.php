@@ -19,6 +19,7 @@ class PosProductCollection extends ResourceCollection
                     'base_price' => home_base_price_by_stock_id($data->stock_id),
                     'qty' => $data->stock_qty,
                     'variant' => $data->variant,
+                    'digital' => $data->digital,
                 ];
             })
         ];

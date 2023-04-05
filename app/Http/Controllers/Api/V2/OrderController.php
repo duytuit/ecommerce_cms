@@ -21,6 +21,20 @@ class OrderController extends Controller
 {
     public function store(Request $request, $set_paid = false)
     {
+
+
+        if(get_setting('minimum_order_amount_check') == 1){
+            $subtotal = 0;
+            foreach (Cart::where('user_id', auth()->user()->id)->get() as $key => $cartItem){ 
+                $product = Product::find($cartItem['product_id']);
+                $subtotal += cart_product_price($cartItem, $product, false, false) * $cartItem['quantity'];
+            }
+            if ($subtotal < get_setting('minimum_order_amount')) {
+                return $this->failed("You order amount is less then the minimum order amount");
+            }
+        }
+
+
         $cartItems = Cart::where('user_id', auth()->user()->id)->get();
 
         if ($cartItems->isEmpty()) {
@@ -136,6 +150,9 @@ class OrderController extends Controller
                 //     $order_detail->pickup_point_id = $cartItem['pickup_point'];
                 // }
                 //End of storing shipping cost
+                if (addon_is_activated('club_point')) {
+                    $order_detail->earn_point = $product->earn_point;
+                }
 
                 $order_detail->quantity = $cartItem['quantity'];
                 $order_detail->save();

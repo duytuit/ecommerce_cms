@@ -67,7 +67,7 @@ class RazorpayController
         }
     }
 
-    public function success(Request $request)
+    public function payment_success(Request $request)
     {
         try {
 

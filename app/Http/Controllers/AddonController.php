@@ -127,6 +127,17 @@ class AddonController extends Controller
                         flash(translate('Addon installed successfully'))->success();
                         return redirect()->route('addons.index');
                     } else {
+                        $addon = Addon::where('unique_identifier', $json['unique_identifier'])->first();
+
+                        if($json['unique_identifier'] == 'delivery_boy' && $addon->version < 3.3) {
+                            $dir = base_path('resources/views/delivery_boys');
+                            foreach (glob($dir."/*.*") as $filename) {
+                                if (is_file($filename)) {
+                                    unlink($filename);
+                                }
+                            }
+                        }
+                        
                         // Create new directories.
                         if (!empty($json['directory'])) {
                             //dd($json['directory'][0]['name']);
@@ -149,8 +160,6 @@ class AddonController extends Controller
 
                         }
 
-                        $addon = Addon::where('unique_identifier', $json['unique_identifier'])->first();
-
                         for ($i = $addon->version + 0.05; $i <= $json['version']; $i = $i + 0.1) {
                             // Run sql modifications
                             $sql_version = $i+0.05;
@@ -161,6 +170,8 @@ class AddonController extends Controller
                         }
 
                         $addon->version = $json['version'];
+                        $addon->name = $json['name'];
+                        $addon->image = $json['addon_banner'];
                         $addon->purchase_code = $request->purchase_code;
                         $addon->save();
 

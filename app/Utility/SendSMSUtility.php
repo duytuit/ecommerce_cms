@@ -204,6 +204,24 @@ class SendSMSUtility
                 $response = curl_exec($ch);
                 curl_close($ch);
             return $response;
+        }elseif (OtpConfiguration::where('type', 'zender')->first()->value == 1) {
+            
+             $args = [
+                "secret" => env('ZENDER_API_SECRET'),
+                "phone" => $to,
+                "message" => $text,            
+                "mode" => env('ZENDER_MODE'),
+                "sim" => env('ZENDER_SIM'),
+                env('ZENDER_MODE_TYPE') => env('ZENDER_DEVICE_ID'),
+            ];
+
+            $cURL = curl_init("https://sms.dzshopee.com/api/send/sms");
+            curl_setopt($cURL, CURLOPT_RETURNTRANSFER, true);
+            curl_setopt($cURL, CURLOPT_POSTFIELDS, $args);
+            $response = curl_exec($cURL);
+            curl_close($cURL);
+            return $response;
+            
         }
         return true;
     }

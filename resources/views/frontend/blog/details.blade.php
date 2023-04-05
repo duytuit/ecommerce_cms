@@ -33,39 +33,96 @@
 
 <section class="py-4">
     <div class="container">
-        <div class="mb-4">
-            <img
-                src="{{ static_asset('assets/img/placeholder-rect.jpg') }}"
-                data-src="{{ uploaded_asset($blog->banner) }}"
-                alt="{{ $blog->title }}"
-                class="img-fluid lazyload w-100"
-            >
-        </div>
-        <div class="row">
-            <div class="col-xl-8 mx-auto">
-                <div class="bg-white rounded shadow-sm p-4"> 
-                    <div class="border-bottom">
-                        <h1 class="h4">
-                            {{ $blog->title }}
-                        </h1>
+        <div class="row gutters-16 justify-content-center">
 
-                        @if($blog->category != null)
-                        <div class="mb-2 opacity-50">
-                            <i>{{ $blog->category->category_name }}</i>
+            <!-- Blog Details -->
+            <div class="col-xl-7 col-lg-8">
+                <div class="mb-4">
+                    <!-- Title -->
+                    <h2 class="fs-20 fs-md-24 fw-700 mb-3 h-35px text-truncate">
+                        <a href="{{ url("blog").'/'. $blog->slug }}" class="text-reset hov-text-primary" title="{{ $blog->title }}">
+                            {{ $blog->title }}
+                        </a>
+                    </h2>
+                    <div class="row">
+                        <div class="col-4">
+                            <!-- Date -->
+                            <div>
+                                <small class="fs-12 fw-400 opacity-60">{{ date('M d, Y',strtotime($blog->created_at)) }}</small>
+                            </div>
+                            <!-- Caregory -->
+                            @if($blog->category != null)
+                                <div>
+                                    <small class="fs-12 fw-400 text-blue">{{ $blog->category->category_name }}</small>
+                                </div>
+                            @endif
                         </div>
-                        @endif
+                        <!-- Share -->
+                        <div class="col-8 text-right">
+                            <div class="aiz-share"></div>
+                        </div>
                     </div>
+                    <!-- Image -->
+                    <img src="{{ static_asset('assets/img/placeholder-rect.jpg') }}"
+                        data-src="{{ uploaded_asset($blog->banner) }}"
+                        alt="{{ $blog->title }}"
+                        class="img-fluid lazyload w-100 mt-3 mb-4">
+                    <!-- Description -->
                     <div class="mb-4 overflow-hidden">
                         {!! $blog->description !!}
                     </div>
-                    
+                    <!-- Facebook Comment -->
                     @if (get_setting('facebook_comment') == 1)
-                    <div>
+                    <div class="mb-4">
                         <div class="fb-comments" data-href="{{ route("blog",$blog->slug) }}" data-width="" data-numposts="5"></div>
                     </div>
                     @endif
                 </div>
             </div>
+
+            
+            <!-- recent posts -->
+            <div class="col-xl-3 col-lg-4">
+                <div class="p-3 border">
+                    <h3 class="fs-16 fw-700 text-dark mb-3">{{ translate('Recent Posts') }}</h3>
+                    <div class="row">
+                        @foreach($recent_blogs as $recent_blog)
+                        <div class="col-lg-12 col-sm-6 mb-4 hov-scale-img">
+                            <div class="row">
+                                <div class="col-4">
+                                    <!-- Image -->
+                                    <a href="{{ url("blog").'/'. $recent_blog->slug }}" class="text-reset d-block overflow-hidden size-90px mr-2">
+                                        <img src="{{ static_asset('assets/img/placeholder-rect.jpg') }}"
+                                            data-src="{{ uploaded_asset($recent_blog->banner) }}"
+                                            alt="{{ $recent_blog->title }}"
+                                            class="img-fit lazyload h-100 has-transition">
+                                    </a>
+                                </div>
+                                <div class="col-8">
+                                    <!-- Title -->
+                                    <h2 class="fs-14 fw-700 mb-3 h-35px text-truncate-2">
+                                        <a href="{{ url("blog").'/'. $recent_blog->slug }}" class="text-reset hov-text-primary" title="{{ $recent_blog->title }}">
+                                            {{ $recent_blog->title }}
+                                        </a>
+                                    </h2>
+                                    <!-- Date -->
+                                    <div>
+                                        <small class="fs-12 fw-400 opacity-60">{{ date('M d, Y',strtotime($recent_blog->created_at)) }}</small>
+                                    </div>
+                                    <!-- Category -->
+                                    @if($recent_blog->category != null)
+                                        <div>
+                                            <small class="fs-12 fw-400 text-blue">{{ $recent_blog->category->category_name }}</small>
+                                        </div>
+                                    @endif
+                                </div>
+                            </div>
+                        </div>
+                        @endforeach
+                    </div>
+                </div>
+            </div>
+
         </div>
     </div>
 </section>

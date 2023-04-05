@@ -10,7 +10,7 @@
             <label>{{translate('Message')}} <span class="text-danger">*</span></label>
         </div>
         <div class="col-lg-10">
-            <textarea name="meta_description" rows="8" class="form-control" disabled>{{ $seller_withdraw_request->message }}</textarea>
+            <textarea name="meta_description" rows="8" class="form-control rounded-0" disabled>{{ $seller_withdraw_request->message }}</textarea>
         </div>
     </div>
 </div>

@@ -1,7 +1,8 @@
 <form class="" action="{{ route('wallet_recharge.make_payment') }}" method="post" enctype="multipart/form-data">
     @csrf
-    <div class="modal-body gry-bg px-3 pt-3 mx-auto">
+    <div class="modal-body gry-bg px-3 pt-3 mx-auto c-scrollbar-light">
         <div class="align-items-center gutters-5 row">
+            <!-- Manual Payment Methods -->
             @foreach(\App\Models\ManualPaymentMethod::all() as $method)
               <div class="col-6 col-md-4">
                 <label class="aiz-megabox d-block mb-3">
@@ -18,37 +19,39 @@
         </div>
 
         <div id="manual_payment_data">
-
-            <div class="card mb-3 p-3 d-none">
+            <!-- Payment description -->
+            <div class="card rounded-0 shadow-none border mb-3 p-3 d-none">
                 <div id="manual_payment_description">
 
                 </div>
             </div>
 
-            <div class="card mb-3 p-3">
+            <div class="card rounded-0 shadow-none border mb-3 p-3">
+                <!-- Amount -->
                 <div class="row mt-3">
                     <div class="col-md-3">
                         <label>{{ translate('Amount')}} <span class="text-danger">*</span></label>
                     </div>
                     <div class="col-md-9">
-                        <input type="number" lang="en" class="form-control mb-3" min="0" step="0.01" name="amount" placeholder="{{ translate('Amount') }}" required>
+                        <input type="number" lang="en" class="form-control mb-3 rounded-0" min="0" step="0.01" name="amount" placeholder="{{ translate('Amount') }}" required>
                     </div>
                 </div>
-
+                <!-- Transaction ID -->
                 <div class="row">
                     <div class="col-md-3">
                         <label>{{ translate('Transaction ID')}} <span class="text-danger">*</span></label>
                     </div>
                     <div class="col-md-9">
-                        <input type="text" class="form-control mb-3" name="trx_id" placeholder="{{ translate('Transaction ID') }}" required>
+                        <input type="text" class="form-control mb-3 rounded-0" name="trx_id" placeholder="{{ translate('Transaction ID') }}" required>
                     </div>
                 </div>
+                <!-- Payment screenshot -->
                 <div class="form-group row">
                     <label class="col-md-3 col-form-label">{{ translate('Photo') }}</label>
                     <div class="col-md-9">
                         <div class="input-group" data-toggle="aizuploader" data-type="image">
                             <div class="input-group-prepend">
-                                <div class="input-group-text bg-soft-secondary font-weight-medium">{{ translate('Browse')}}</div>
+                                <div class="input-group-text bg-soft-secondary font-weight-medium rounded-0">{{ translate('Browse')}}</div>
                             </div>
                             <div class="form-control file-amount">{{ translate('Choose image') }}</div>
                             <input type="hidden" name="photo" class="selected-files">
@@ -58,8 +61,9 @@
                     </div>
                 </div>
             </div>
+            <!-- Confirm Button -->
             <div class="form-group text-right">
-                <button type="submit" class="btn btn-sm btn-primary transition-3d-hover mr-1">{{translate('Confirm')}}</button>
+                <button type="submit" class="btn btn-sm btn-primary rounded-0 w-150px transition-3d-hover">{{translate('Confirm')}}</button>
             </div>
         </div>
     </div>

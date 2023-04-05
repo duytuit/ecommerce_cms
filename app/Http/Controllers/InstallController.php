@@ -10,6 +10,7 @@ use App\Models\BusinessSetting;
 use App\Models\User;
 use CoreComponentRepository;
 use Artisan;
+use Session;
 
 class InstallController extends Controller
 {
@@ -30,6 +31,7 @@ class InstallController extends Controller
     }
 
     public function step3($error = "") {
+        CoreComponentRepository::instantiateShopRepository();
         if($error == ""){
             return view('installation.step3');
         }else {
@@ -45,7 +47,8 @@ class InstallController extends Controller
         return view('installation.step5');
     }
 
-    public function purchase_code(Request $request) {
+	public function purchase_code(Request $request) {
+        Session::put('purchase_code', $request->purchase_code);
         return redirect('step3');
     }
 
@@ -76,25 +79,31 @@ class InstallController extends Controller
         $newRouteServiceProvier      = base_path('app/Providers/RouteServiceProvider.txt');
         copy($newRouteServiceProvier, $previousRouteServiceProvier);
         //sleep(5);
-        return view('installation.step6');
 
-        // return redirect('step6');
+        if (Session::has('purchase_code')) {
+            $business_settings = new BusinessSetting;
+            $business_settings->type = 'purchase_code';
+            $business_settings->value = Session::get('purchase_code');
+            $business_settings->save();
+            Session::forget('purchase_code');
+        }
+        return view('installation.step6');
     }
     public function database_installation(Request $request) {
-
-        if(self::check_database_connection($request->DB_HOST, $request->DB_DATABASE, $request->DB_USERNAME, $request->DB_PASSWORD)) {
-            $path = base_path('.env');
-            if (file_exists($path)) {
-                foreach ($request->types as $type) {
-                    $this->writeEnvironmentFile($type, $request[$type]);
-                }
-                return redirect('step4');
-            }else {
-                return redirect('step3');
-            }
-        }else {
-            return redirect('step3/database_error');
-        }
+        return redirect('step4');
+//        if(self::check_database_connection($request->DB_HOST, $request->DB_DATABASE, $request->DB_USERNAME, $request->DB_PASSWORD)) {
+//            $path = base_path('.env');
+//            if (file_exists($path)) {
+//                foreach ($request->types as $type) {
+//                    $this->writeEnvironmentFile($type, $request[$type]);
+//                }
+//                return redirect('step4');
+//            }else {
+//                return redirect('step3');
+//            }
+//        }else {
+//            return redirect('step3/database_error');
+//        }
     }
 
     public function import_sql() {

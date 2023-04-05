@@ -31,12 +31,13 @@ class OrderController extends Controller
         // Staff Permission Check
         $this->middleware(['permission:view_all_orders|view_inhouse_orders|view_seller_orders|view_pickup_point_orders'])->only('all_orders');
         $this->middleware(['permission:view_order_details'])->only('show');
-        $this->middleware(['permission:delete_order'])->only('destroy');
+        $this->middleware(['permission:delete_order'])->only('destroy','bulk_order_delete');
     }
 
     // All Orders
     public function all_orders(Request $request)
     {
+        CoreComponentRepository::instantiateShopRepository();
 
         $date = $request->date;
         $sort_search = null;
@@ -177,7 +178,6 @@ class OrderController extends Controller
 
             $order->additional_info = $request->additional_info;
 
-            //======== Closed By Kiron ==========
             // $order->shipping_type = $carts[0]['shipping_type'];
             // if ($carts[0]['shipping_type'] == 'pickup_point') {
             //     $order->pickup_point_id = $cartItem['pickup_point'];
@@ -237,15 +237,15 @@ class OrderController extends Controller
                 if (addon_is_activated('club_point')) {
                     $order_detail->earn_point = $product->earn_point;
                 }
-
+                
                 $order_detail->save();
 
                 $product->num_of_sale += $cartItem['quantity'];
                 $product->save();
 
                 $order->seller_id = $product->user_id;
-                //======== Added By Kiron ==========
                 $order->shipping_type = $cartItem['shipping_type'];
+                
                 if ($cartItem['shipping_type'] == 'pickup_point') {
                     $order->pickup_point_id = $cartItem['pickup_point'];
                 }
@@ -287,6 +287,10 @@ class OrderController extends Controller
         }
 
         $combined_order->save();
+
+        foreach($combined_order->orders as $order){
+            NotificationUtility::sendOrderPlacedNotification($order);
+        }
 
         $request->session()->put('combined_order_id', $combined_order->id);
     }
@@ -382,14 +386,6 @@ class OrderController extends Controller
             $user = User::where('id', $order->user_id)->first();
             $user->balance += $order->grand_total;
             $user->save();
-        }
-
-        if (
-            $order->payment_status == 'paid' &&
-            $order->delivery_status == 'delivered' &&
-            $order->commission_calculated == 0
-        ) {
-            calculateCommissionAffilationClubPoint($order);
         }
 
         if (Auth::user()->user_type == 'seller') {
@@ -530,7 +526,6 @@ class OrderController extends Controller
 
         if (
             $order->payment_status == 'paid' &&
-            $order->delivery_status == 'delivered' &&
             $order->commission_calculated == 0
         ) {
             calculateCommissionAffilationClubPoint($order);

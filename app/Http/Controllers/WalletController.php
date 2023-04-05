@@ -15,7 +15,7 @@ class WalletController extends Controller
 
     public function index()
     {
-        $wallets = Wallet::where('user_id', Auth::user()->id)->latest()->paginate(9);
+        $wallets = Wallet::where('user_id', Auth::user()->id)->latest()->paginate(10);
         return view('frontend.user.wallet.index', compact('wallets'));
     }
 
@@ -52,7 +52,7 @@ class WalletController extends Controller
         Session::forget('payment_data');
         Session::forget('payment_type');
 
-        flash(translate('Payment completed'))->success();
+        flash(translate('Recharge completed'))->success();
         return redirect()->route('wallet.index');
     }
 

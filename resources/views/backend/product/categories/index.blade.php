@@ -2,6 +2,10 @@
 
 @section('content')
 
+@php
+    CoreComponentRepository::instantiateShopRepository();
+    CoreComponentRepository::initializeCache();
+@endphp
 
 <div class="aiz-titlebar text-left mt-2 mb-3">
     <div class="row align-items-center">
@@ -39,6 +43,7 @@
                     <th data-breakpoints="lg">{{ translate('Level') }}</th>
                     <th data-breakpoints="lg">{{translate('Banner')}}</th>
                     <th data-breakpoints="lg">{{translate('Icon')}}</th>
+                    <th data-breakpoints="lg">{{translate('Cover Image')}}</th>
                     <th data-breakpoints="lg">{{translate('Featured')}}</th>
                     <th data-breakpoints="lg">{{translate('Commission')}}</th>
                     <th width="10%" class="text-right">{{translate('Options')}}</th>
@@ -73,6 +78,13 @@
                                 <span class="avatar avatar-square avatar-xs">
                                     <img src="{{ uploaded_asset($category->icon) }}" alt="{{translate('icon')}}">
                                 </span>
+                            @else
+                                —
+                            @endif
+                        </td>
+                        <td>
+                            @if($category->icon != null)
+                                <img src="{{ uploaded_asset($category->cover_image) }}" alt="{{translate('Cover Image')}}" class="h-50px">
                             @else
                                 —
                             @endif
