@@ -23,7 +23,7 @@ class WholesaleProductController extends Controller
 
     public function all_wholesale_products(Request $request)
     {
-        CoreComponentRepository::instantiateShopRepository();
+//        CoreComponentRepository::instantiateShopRepository();
 
         $type = 'All';
         $col_name = null;
@@ -58,7 +58,7 @@ class WholesaleProductController extends Controller
 
     public function in_house_wholesale_products(Request $request)
     {
-        CoreComponentRepository::instantiateShopRepository();
+//        CoreComponentRepository::instantiateShopRepository();
 
         $type = 'In House';
         $col_name = null;
@@ -87,7 +87,7 @@ class WholesaleProductController extends Controller
 
     public function seller_wholesale_products(Request $request)
     {
-        CoreComponentRepository::instantiateShopRepository();
+//        CoreComponentRepository::instantiateShopRepository();
 
         $type = 'Seller';
         $col_name = null;
@@ -101,7 +101,7 @@ class WholesaleProductController extends Controller
             $products = $products->where('user_id', $request->user_id);
             $seller_id = $request->user_id;
         }
-        
+
         if ($request->type != null){
             $var = explode(",", $request->type);
             $col_name = $var[0];
@@ -120,7 +120,7 @@ class WholesaleProductController extends Controller
         return view('wholesale.products.index', compact('products','type', 'col_name', 'query', 'sort_search','seller_id'));
     }
 
-    // Wholesale Products list in Seller panel 
+    // Wholesale Products list in Seller panel
     public function wholesale_products_list_seller(Request $request)
     {
         $sort_search = null;
@@ -147,14 +147,14 @@ class WholesaleProductController extends Controller
 
     public function product_create_admin()
     {
-        CoreComponentRepository::initializeCache();
+//        CoreComponentRepository::initializeCache();
 
         $categories = Category::where('parent_id', 0)
             ->where('digital', 0)
             ->with('childrenCategories')
             ->get();
         return view('wholesale.products.create', compact('categories'));
-   
+
     }
 
     public function product_create_seller()
@@ -177,7 +177,7 @@ class WholesaleProductController extends Controller
             else{
                 return view('wholesale.frontend.seller_products.create', compact('categories'));
             }
-        }     
+        }
     }
 
     /**
@@ -187,7 +187,7 @@ class WholesaleProductController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function product_store_admin(Request $request)
-    { 
+    {
         (new WholesaleService)->store($request);
         return redirect()->route('wholesale_products.in_house');
     }
@@ -199,7 +199,7 @@ class WholesaleProductController extends Controller
                 flash(translate('Upload limit has been reached. Please upgrade your package.'))->warning();
                 return back();
             }
-        }  
+        }
 
         (new WholesaleService)->store($request);
         return redirect()->route('seller.wholesale_products_list');
@@ -208,7 +208,7 @@ class WholesaleProductController extends Controller
 
     public function product_edit_admin(Request $request, $id)
     {
-        CoreComponentRepository::initializeCache();
+//        CoreComponentRepository::initializeCache();
 
         $product = Product::findOrFail($id);
         if($product->digital == 1) {
@@ -238,11 +238,11 @@ class WholesaleProductController extends Controller
             ->where('digital', 0)
             ->with('childrenCategories')
             ->get();
-            
+
         return view('wholesale.frontend.seller_products.edit', compact('product', 'categories', 'tags','lang'));
     }
 
-   
+
     public function product_update_admin(Request $request, $id)
     {
         (new WholesaleService)->update($request, $id);
