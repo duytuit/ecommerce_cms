@@ -55,7 +55,7 @@ class ProductController extends Controller
      */
     public function admin_products(Request $request)
     {
-        CoreComponentRepository::instantiateShopRepository();
+//        CoreComponentRepository::instantiateShopRepository();
 
         $type = 'In House';
         $col_name = null;
@@ -161,7 +161,7 @@ class ProductController extends Controller
      */
     public function create()
     {
-        CoreComponentRepository::initializeCache();
+//        CoreComponentRepository::initializeCache();
 
         $categories = Category::where('parent_id', 0)
             ->where('digital', 0)
@@ -394,7 +394,7 @@ class ProductController extends Controller
         $product_new = $product->replicate();
         $product_new->slug = $product_new->slug . '-' . Str::random(5);
         $product_new->save();
-        
+
         //Product Stock
         $this->productStockService->product_duplicate_store($product->stocks, $product_new);
 
@@ -442,7 +442,7 @@ class ProductController extends Controller
         }
 
         $product->save();
-        
+
         Artisan::call('view:clear');
         Artisan::call('cache:clear');
         return 1;
@@ -465,7 +465,7 @@ class ProductController extends Controller
         }
 
         $product->save();
-        
+
         Artisan::call('view:clear');
         Artisan::call('cache:clear');
         return 1;

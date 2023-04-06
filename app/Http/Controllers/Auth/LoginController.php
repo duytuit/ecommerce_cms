@@ -264,7 +264,7 @@ class LoginController extends Controller
         }
 
         if (auth()->user()->user_type == 'admin' || auth()->user()->user_type == 'staff') {
-            CoreComponentRepository::instantiateShopRepository();
+//            CoreComponentRepository::instantiateShopRepository();
             return redirect()->route('admin.dashboard');
         } elseif (auth()->user()->user_type == 'seller') {
             return redirect()->route('seller.dashboard');
@@ -336,7 +336,7 @@ class LoginController extends Controller
         // }
 
         $auth_user = auth()->user();
-        
+
         // user images delete from database and file storage
         $uploads = $auth_user->uploads;
         if($uploads){

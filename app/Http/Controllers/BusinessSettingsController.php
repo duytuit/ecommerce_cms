@@ -11,103 +11,103 @@ class BusinessSettingsController extends Controller
 {
     public function __construct() {
         // Staff Permission Check
-        $this->middleware(['permission:seller_commission_configuration'])->only('vendor_commission');
-        $this->middleware(['permission:seller_verification_form_configuration'])->only('seller_verification_form');
-        $this->middleware(['permission:general_settings'])->only('general_setting');
-        $this->middleware(['permission:features_activation'])->only('activation');
-        $this->middleware(['permission:smtp_settings'])->only('smtp_settings');
-        $this->middleware(['permission:payment_methods_configurations'])->only('payment_method');
-        $this->middleware(['permission:order_configuration'])->only('order_configuration');
-        $this->middleware(['permission:file_system_&_cache_configuration'])->only('file_system');
-        $this->middleware(['permission:social_media_logins'])->only('social_login');
-        $this->middleware(['permission:facebook_chat'])->only('facebook_chat');
-        $this->middleware(['permission:facebook_comment'])->only('facebook_comment');
-        $this->middleware(['permission:analytics_tools_configuration'])->only('google_analytics');
-        $this->middleware(['permission:google_recaptcha_configuration'])->only('google_recaptcha');
-        $this->middleware(['permission:google_map_setting'])->only('google_map');
-        $this->middleware(['permission:google_firebase_setting'])->only('google_firebase');
-        $this->middleware(['permission:shipping_configuration'])->only('shipping_configuration');
+//        $this->middleware(['permission:seller_commission_configuration'])->only('vendor_commission');
+//        $this->middleware(['permission:seller_verification_form_configuration'])->only('seller_verification_form');
+//        $this->middleware(['permission:general_settings'])->only('general_setting');
+//        $this->middleware(['permission:features_activation'])->only('activation');
+//        $this->middleware(['permission:smtp_settings'])->only('smtp_settings');
+//        $this->middleware(['permission:payment_methods_configurations'])->only('payment_method');
+//        $this->middleware(['permission:order_configuration'])->only('order_configuration');
+//        $this->middleware(['permission:file_system_&_cache_configuration'])->only('file_system');
+//        $this->middleware(['permission:social_media_logins'])->only('social_login');
+//        $this->middleware(['permission:facebook_chat'])->only('facebook_chat');
+//        $this->middleware(['permission:facebook_comment'])->only('facebook_comment');
+//        $this->middleware(['permission:analytics_tools_configuration'])->only('google_analytics');
+//        $this->middleware(['permission:google_recaptcha_configuration'])->only('google_recaptcha');
+//        $this->middleware(['permission:google_map_setting'])->only('google_map');
+//        $this->middleware(['permission:google_firebase_setting'])->only('google_firebase');
+//        $this->middleware(['permission:shipping_configuration'])->only('shipping_configuration');
     }
 
     public function general_setting(Request $request)
     {
-        CoreComponentRepository::instantiateShopRepository();
-        CoreComponentRepository::initializeCache();
+//        CoreComponentRepository::instantiateShopRepository();
+//        CoreComponentRepository::initializeCache();
     	return view('backend.setup_configurations.general_settings');
     }
 
     public function activation(Request $request)
     {
-        CoreComponentRepository::instantiateShopRepository();
-        CoreComponentRepository::initializeCache();
+//        CoreComponentRepository::instantiateShopRepository();
+//        CoreComponentRepository::initializeCache();
     	return view('backend.setup_configurations.activation');
     }
 
     public function social_login(Request $request)
     {
-        CoreComponentRepository::instantiateShopRepository();
-        CoreComponentRepository::initializeCache();
+//        CoreComponentRepository::instantiateShopRepository();
+//        CoreComponentRepository::initializeCache();
         return view('backend.setup_configurations.social_login');
     }
 
     public function smtp_settings(Request $request)
     {
-        CoreComponentRepository::instantiateShopRepository();
-        CoreComponentRepository::initializeCache();
+//        CoreComponentRepository::instantiateShopRepository();
+//        CoreComponentRepository::initializeCache();
         return view('backend.setup_configurations.smtp_settings');
     }
 
     public function google_analytics(Request $request)
     {
-        CoreComponentRepository::instantiateShopRepository();
-        CoreComponentRepository::initializeCache();
+//        CoreComponentRepository::instantiateShopRepository();
+//        CoreComponentRepository::initializeCache();
         return view('backend.setup_configurations.google_configuration.google_analytics');
     }
 
     public function google_recaptcha(Request $request)
     {
-        CoreComponentRepository::instantiateShopRepository();
-        CoreComponentRepository::initializeCache();
+//        CoreComponentRepository::instantiateShopRepository();
+//        CoreComponentRepository::initializeCache();
         return view('backend.setup_configurations.google_configuration.google_recaptcha');
     }
-    
+
     public function google_map(Request $request) {
-        CoreComponentRepository::instantiateShopRepository();
-        CoreComponentRepository::initializeCache();
+//        CoreComponentRepository::instantiateShopRepository();
+//        CoreComponentRepository::initializeCache();
         return view('backend.setup_configurations.google_configuration.google_map');
     }
-    
+
     public function google_firebase(Request $request) {
-        CoreComponentRepository::instantiateShopRepository();
-        CoreComponentRepository::initializeCache();
+//        CoreComponentRepository::instantiateShopRepository();
+//        CoreComponentRepository::initializeCache();
         return view('backend.setup_configurations.google_configuration.google_firebase');
     }
 
     public function facebook_chat(Request $request)
     {
-        CoreComponentRepository::instantiateShopRepository();
-        CoreComponentRepository::initializeCache();
+//        CoreComponentRepository::instantiateShopRepository();
+//        CoreComponentRepository::initializeCache();
         return view('backend.setup_configurations.facebook_chat');
     }
 
     public function facebook_comment(Request $request)
     {
-        CoreComponentRepository::instantiateShopRepository();
-        CoreComponentRepository::initializeCache();
+//        CoreComponentRepository::instantiateShopRepository();
+//        CoreComponentRepository::initializeCache();
         return view('backend.setup_configurations.facebook_configuration.facebook_comment');
     }
 
     public function payment_method(Request $request)
     {
-        CoreComponentRepository::instantiateShopRepository();
-        CoreComponentRepository::initializeCache();
+//        CoreComponentRepository::instantiateShopRepository();
+//        CoreComponentRepository::initializeCache();
         return view('backend.setup_configurations.payment_method');
     }
 
     public function file_system(Request $request)
     {
-        CoreComponentRepository::instantiateShopRepository();
-        CoreComponentRepository::initializeCache();
+//        CoreComponentRepository::instantiateShopRepository();
+//        CoreComponentRepository::initializeCache();
         return view('backend.setup_configurations.file_system');
     }
 
@@ -381,7 +381,7 @@ class BusinessSettingsController extends Controller
         $business_settings->value = json_encode($form);
         if($business_settings->save()){
             Artisan::call('cache:clear');
-            
+
             flash(translate("Verification form updated successfully"))->success();
             return back();
         }

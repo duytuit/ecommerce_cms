@@ -2,10 +2,10 @@
 
 @section('content')
 
-@php
-    CoreComponentRepository::instantiateShopRepository();
-    CoreComponentRepository::initializeCache();
-@endphp
+{{--@php--}}
+{{--    CoreComponentRepository::instantiateShopRepository();--}}
+{{--    CoreComponentRepository::initializeCache();--}}
+{{--@endphp--}}
 
 <div class="aiz-titlebar text-left mt-2 mb-3">
     <h5 class="mb-0 h6">{{translate('Add New Product')}}</h5>
@@ -668,17 +668,17 @@
 		}
         // Disable the submit button while evaluating if the form should be submitted
         // $("button[type='submit']").prop('disabled', true);
-        
+
         // var valid = true;
 
         // if (!valid) {
             // e.preventDefault();
-            
+
             ////Reactivate the button if the form was not submitted
             // $("button[type='submit']").button.prop('disabled', false);
         // }
     });
-    
+
     $("[name=shipping_type]").on("change", function (){
         $(".flat_rate_shipping_div").hide();
 
