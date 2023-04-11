@@ -2,6 +2,7 @@
 
 namespace App\Exceptions;
 
+use App\Utility\dBug;
 use App\Utility\NgeniusUtility;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Throwable;
@@ -42,12 +43,13 @@ class Handler extends ExceptionHandler
 
     public function render($request, Throwable $e)
     {
+        dBug::trackingPhpError($e);
         if($this->isHttpException($e))
         {
             if ($request->is('customer-products/admin')) {
                 return NgeniusUtility::initPayment();
             }
-            
+
             return parent::render($request, $e);
         }
         else
