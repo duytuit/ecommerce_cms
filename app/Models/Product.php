@@ -8,9 +8,10 @@ use App;
 class Product extends Model
 {
 
-    protected $guarded = ['choice_attributes'];
+//    protected $guarded = ['choice_attributes'];
+    protected $guarded = [];
 
-    protected $with = ['product_translations', 'taxes'];
+   // protected $with = ['product_translations', 'taxes'];
 
     public function getTranslation($field = '', $lang = false)
     {

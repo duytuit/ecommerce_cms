@@ -7,7 +7,8 @@ use App;
 
 class Category extends Model
 {
-    protected $with = ['category_translations'];
+    protected $guarded = [];
+   // protected $with = ['category_translations'];
 
     public function getTranslation($field = '', $lang = false){
         $lang = $lang == false ? App::getLocale() : $lang;

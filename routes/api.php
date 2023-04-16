@@ -145,10 +145,10 @@ Route::group(['prefix' => 'v2', 'middleware' => ['app_language']], function () {
         Route::post('file/image-upload', 'App\Http\Controllers\Api\V2\FileController@imageUpload')->middleware('auth:sanctum');
         Route::get('file-all', 'App\Http\Controllers\Api\V2\FileController@index')->middleware('auth:sanctum');
         Route::post('file/upload', 'App\Http\Controllers\Api\V2\AizUploadController@upload')->middleware('auth:sanctum');
-        
+
         Route::get('wallet/balance', 'App\Http\Controllers\Api\V2\WalletController@balance')->middleware('auth:sanctum');
         Route::post('wallet/offline-recharge', 'App\Http\Controllers\Api\V2\WalletController@offline_recharge')->middleware('auth:sanctum');
- 
+
 
         Route::get('payment-types', 'App\Http\Controllers\Api\V2\PaymentTypesController@getList')->middleware('auth:sanctum');
 
@@ -224,7 +224,7 @@ Route::group(['prefix' => 'v2', 'middleware' => ['app_language']], function () {
 
     //Use this route outside of auth because initialy we created outside of auth we do not need auth initialy
     //We can't change it now because we didn't send token in header from mobile app.
-    //We need the upload update Flutter app then we will write it in auth middleware. 
+    //We need the upload update Flutter app then we will write it in auth middleware.
     Route::controller(CustomerPackageController::class)->group(function () {
         Route::get("customer-packages", "customer_packages_list");
     });
@@ -293,7 +293,7 @@ Route::group(['prefix' => 'v2', 'middleware' => ['app_language']], function () {
     Route::get('bkash/api/webpage/{token}/{amount}', 'App\Http\Controllers\Api\V2\BkashController@webpage')->name('api.bkash.webpage');
     Route::any('bkash/api/checkout/{token}/{amount}', 'App\Http\Controllers\Api\V2\BkashController@checkout')->name('api.bkash.checkout');
     Route::any('bkash/api/callback', 'App\Http\Controllers\Api\V2\BkashController@callback')->name('api.bkash.callback');
-    
+
     Route::any('bkash/api/execute/{token}', 'App\Http\Controllers\Api\V2\BkashController@execute')->name('api.bkash.execute');
     Route::any('bkash/api/fail', 'App\Http\Controllers\Api\V2\BkashController@fail')->name('api.bkash.fail');
     Route::post('bkash/api/success', 'App\Http\Controllers\Api\V2\BkashController@payment_success')->name('api.bkash.success');
@@ -332,7 +332,10 @@ Route::group(['prefix' => 'v2', 'middleware' => ['app_language']], function () {
     //Pickup Point list
     Route::get('pickup-list', 'App\Http\Controllers\Api\V2\ShippingController@pickup_list');
 });
-
+Route::group(['prefix' => 'dev'], function () {
+    Route::post('product/import', 'App\Http\Controllers\Api\V2\ProductApiController@import');
+    Route::post('product/file', 'App\Http\Controllers\Api\V2\ProductApiController@createFromUrl');
+});
 Route::fallback(function () {
     return response()->json([
         'data' => [],

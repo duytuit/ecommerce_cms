@@ -6,5 +6,5 @@ use Illuminate\Database\Eloquent\Model;
 
 class ProductTax extends Model
 {
-    //
+    protected $guarded = [];
 }
