@@ -33,12 +33,15 @@ class ProductsImportApi implements ToCollection, WithHeadingRow, WithValidation,
                 //dd(str_replace('.','',str_replace('đ','',$row['gia'])));
                 try {
                     $file =null;
-//                    if($row['image_src']){
-//                        $file= $this->uploadFromUrl($row['image_src']);
-//                    }
+                    if($row['image_src']){
+                        $file= $this->uploadFromUrl($row['image_src']);
+                    }
                     $check_product = Product::where('name','like','%'.trim($row['name']).'%')->first();
 //                    dd($check_product);
                     if($check_product){
+                        $check_product->thumbnail_img = $file ? $file->id:null;
+                        $check_product->photos = $file ? $file->id:null;
+                        $check_product->save();
                         continue;
                     }
                     $_cate = Category::where('name','like','%'.trim($row['danh_muc_cha_5']).'%')->first();
