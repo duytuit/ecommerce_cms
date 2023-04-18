@@ -40,11 +40,11 @@ class HomeController extends Controller
     public function index()
     {
         $featured_categories = Cache::rememberForever('featured_categories', function () {
-            return Category::where('featured', 1)->get();
+            return Category::where('featured', 1)->limit(12)->get();
         });
 
         $todays_deal_products = Cache::rememberForever('todays_deal_products', function () {
-            return filter_products(Product::where('published', 1)->where('todays_deal', '1'))->get();
+            return filter_products(Product::where('published', 1)->where('todays_deal', '1'))->limit(12)->get();
         });
 
         $newest_products = Cache::remember('newest_products', 3600, function () {
