@@ -39,18 +39,26 @@ class ProductsImportApi implements ToCollection, WithHeadingRow, WithValidation,
                     $check_product = Product::where('name','like','%'.trim($row['name']).'%')->first();
 //                    dd($check_product);
                     if($check_product){
-//                        $check_product->thumbnail_img = $file ? $file->id:null;
-//                        $check_product->photos = $file ? $file->id:null;
-//                        $check_product->save();
-                        continue;
+                        $check_product->barcode = trim($row['code_product']);
+                        $check_product->slug = Str::slug(strtolower($row['name']));
+                        $check_product->external_link_btn = null;
+                        $check_product->external_link =null;
+                        $check_product->save();
+
                     }
                     $_cate = Category::where('name','like','%'.trim($row['danh_muc_cha_5']).'%')->first();
+                    $_cate->slug=Str::slug(strtolower($row['danh_muc_cha_5']));
+                    $_cate->save();
+                    $_brand = Brand::where('name','like','%'.trim($row['hang']).'%')->first();
+                    $_brand->slug=Str::slug(strtolower($row['hang']));
+                    $_brand->save();
+                    continue;
                     if(!$_cate){
                         $_cate = Category::create([
                             'name' => trim($row['danh_muc_cha_5']),
                             'featured' =>1,
                             'top' =>1,
-                            'slug' =>preg_replace('/[^A-Za-z0-9\-]/', '', str_replace(' ', '-', strtolower($row['danh_muc_cha_5']))),
+                            'slug' =>Str::slug(strtolower($row['danh_muc_cha_5'])),
                             'meta_title' =>trim($row['danh_muc_cha_5']),
                             'meta_description' =>trim($row['danh_muc_cha_5'])
                         ]);
@@ -65,7 +73,7 @@ class ProductsImportApi implements ToCollection, WithHeadingRow, WithValidation,
                         $_brand = Brand::create([
                             'name' => trim($row['hang']),
                             'top' =>1,
-                            'slug' =>preg_replace('/[^A-Za-z0-9\-]/', '', str_replace(' ', '-', strtolower($row['hang']))),
+                            'slug' =>Str::slug(strtolower($row['hang'])),
                             'meta_title' =>trim($row['hang']),
                             'meta_description' =>trim($row['hang'])
                         ]);
@@ -92,9 +100,8 @@ class ProductsImportApi implements ToCollection, WithHeadingRow, WithValidation,
                         'min_qty' => 10,
                         'current_stock' => 1,
                         'low_stock_quantity' => 1,
+                        'barcode'=>$row['code_product'],
                         'featured' => 0,
-                        'external_link_btn' => 'nhathuocsuckhoe',
-                        'external_link' => $row['product_link_href'],
                         'discount_type' => 'percent',
                         'discount' => str_replace('%','',$row['giam_gia']),
                         'unit_price' => str_replace('.','',str_replace('đ','',$row['gia'])),
@@ -104,7 +111,7 @@ class ProductsImportApi implements ToCollection, WithHeadingRow, WithValidation,
                         'colors' => json_encode(array()),
                         'choice_options' => json_encode(array()),
                         'variations' => json_encode(array()),
-                        'slug' => preg_replace('/[^A-Za-z0-9\-]/', '', str_replace(' ', '-', strtolower($row['name']))),
+                        'slug' => Str::slug(strtolower($row['name'])),
                         'thumbnail_img' => $file ? $file->id:null,
                         'photos' => $file ? $file->id:null,
                     ]);
