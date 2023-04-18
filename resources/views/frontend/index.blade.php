@@ -120,7 +120,7 @@
                                     @endif
                                 @endif
                             @endforeach
-                        
+
                             @php
                                 $init += 2;
                                 $end += 2;
@@ -141,15 +141,15 @@
             <!-- Banner -->
             @if (get_setting('todays_deal_banner') != null || get_setting('todays_deal_banner_small') != null)
                 <div class="overflow-hidden d-none d-md-block">
-                    <img src="{{ static_asset('assets/img/placeholder-rect.jpg') }}" 
-                        data-src="{{ uploaded_asset(get_setting('todays_deal_banner')) }}" 
-                        alt="{{ env('APP_NAME') }} promo" class="lazyload img-fit h-100 has-transition" 
+                    <img src="{{ static_asset('assets/img/placeholder-rect.jpg') }}"
+                        data-src="{{ uploaded_asset(get_setting('todays_deal_banner')) }}"
+                        alt="{{ env('APP_NAME') }} promo" class="lazyload img-fit h-100 has-transition"
                         onerror="this.onerror=null;this.src='{{ static_asset('assets/img/placeholder-rect.jpg') }}';">
                 </div>
                 <div class="overflow-hidden d-md-none">
-                    <img src="{{ static_asset('assets/img/placeholder-rect.jpg') }}" 
-                        data-src="{{ get_setting('todays_deal_banner_small') != null ? uploaded_asset(get_setting('todays_deal_banner_small')) : uploaded_asset(get_setting('todays_deal_banner')) }}" 
-                        alt="{{ env('APP_NAME') }} promo" class="lazyload img-fit h-100 has-transition" 
+                    <img src="{{ static_asset('assets/img/placeholder-rect.jpg') }}"
+                        data-src="{{ get_setting('todays_deal_banner_small') != null ? uploaded_asset(get_setting('todays_deal_banner_small')) : uploaded_asset(get_setting('todays_deal_banner')) }}"
+                        alt="{{ env('APP_NAME') }} promo" class="lazyload img-fit h-100 has-transition"
                         onerror="this.onerror=null;this.src='{{ static_asset('assets/img/placeholder-rect.jpg') }}';">
                 </div>
             @endif
@@ -200,8 +200,8 @@
     @if (get_setting('home_banner1_images') != null)
     <div class="mb-2 mb-md-3 mt-2 mt-md-3">
         <div class="container">
-            @php 
-                $banner_1_imags = json_decode(get_setting('home_banner1_images')); 
+            @php
+                $banner_1_imags = json_decode(get_setting('home_banner1_images'));
                 $data_md = count($banner_1_imags) >= 2 ? 2 : 1;
             @endphp
             <div class="w-100">
@@ -209,7 +209,7 @@
                     @foreach ($banner_1_imags as $key => $value)
                         <div class="carousel-box overflow-hidden hov-scale-img">
                             <a href="{{ json_decode(get_setting('home_banner1_links'), true)[$key] }}" class="d-block text-reset overflow-hidden">
-                                <img src="{{ static_asset('assets/img/placeholder-rect.jpg') }}" data-src="{{ uploaded_asset($value) }}" 
+                                <img src="{{ static_asset('assets/img/placeholder-rect.jpg') }}" data-src="{{ uploaded_asset($value) }}"
                                 alt="{{ env('APP_NAME') }} promo" class="img-fluid lazyload w-100 has-transition" onerror="this.onerror=null;this.src='{{ static_asset('assets/img/placeholder-rect.jpg') }}';">
                             </a>
                         </div>
@@ -218,7 +218,7 @@
             </div>
         </div>
     </div>
-    @endif  
+    @endif
 
     <!-- Featured Categories -->
     @if (count($featured_categories) > 0)
@@ -236,37 +236,24 @@
                             <a class="text-blue fs-10 fs-md-12 fw-700 hov-text-primary animate-underline-primary" href="{{ route('categories.all') }}">{{ translate('View All Categories') }}</a>
                         </div>
                     </div>
-                    <div class="row no-gutters border-top border-left">
+                    <div class="row no-gutters">
                         @foreach ($featured_categories as $key => $category)
-                            <div class="col-xl-4 col-md-6 border-right border-bottom">
-                                <div class="bg-white pt-3 pl-3 pr-3 h-100 hov-scale-img" style="min-height: 240px !important;">
-                                    <div class="row">
-                                        <!-- Category Banner -->
-                                        <div class="col-md-5 py-3 h-200px text-center h-md-100">
-                                            <img src="{{ uploaded_asset($category->banner) }}" alt="{{ $category->getTranslation('name') }}" class="w-auto h-100 has-transition"  
-                                            onerror="this.onerror=null;this.src='{{ static_asset('assets/img/placeholder.jpg') }}';">
-                                        </div>
-                                        <!-- Categories -->
-                                        <div class="col py-3 text-center text-md-left">
-                                            <!-- Category Name -->
-                                            <h6 class="text-dark mb-3"><a class="text-reset fw-700 fs-14 hov-text-primary" href="{{ route('products.category', $category->slug) }}">{{ $category->getTranslation('name') }}</a></h6>
-                                            <!-- Sub Categories -->
-                                            <ul class="mb-3 list-unstyled">
-                                                @foreach (array_slice(\App\Utility\CategoryUtility::get_immediate_children_ids($category->id), 0, 5, true) as $key => $first_level_id)
-                                                <li class="text-dark mb-2">
-                                                    <a class="text-reset fw-400 fs-14 hov-text-primary animate-underline-primary" href="{{ route('products.category', \App\Models\Category::find($first_level_id)->slug) }}" >{{ \App\Models\Category::find($first_level_id)->getTranslation('name') }}</a>
-                                                </li>
-                                                @endforeach
-                                            </ul>
-                                        </div>
+                            <div class="col-xl-2 col-md-4">
+                                    <div class="carousel-box position-relative text-center has-transition hov-scale-img hov-animate-outline border-right border-top border-bottom  border-left " style="width: 100%; display: inline-block;">
+                                        <a href="{{ route('products.category', $category->slug) }}" class="d-block" tabindex="0">
+                                            <img src="{{ uploaded_asset($category->banner) }}" alt="{{ $category->getTranslation('name') }}" class="h-130px mx-auto has-transition p-2 p-sm-4 mw-100 ls-is-cached lazyloaded"
+                                                 onerror="this.onerror=null;this.src='{{ static_asset('assets/img/placeholder.jpg') }}';">
+                                        </a>
+                                        <h6 class="text-dark mb-3 h-40px text-truncate-2">
+                                            <a class="text-reset fw-700 fs-14 hov-text-primary" href="{{ route('products.category', $category->slug) }}"  title="{{ $category->getTranslation('name') }}" tabindex="0">{{ $category->getTranslation('name') }}</a>
+                                        </h6>
                                     </div>
-                                </div>
                             </div>
                         @endforeach
                     </div>
                 </div>
             </div>
-        </section>   
+        </section>
     @endif
 
     <!-- Banner Section 2 -->
@@ -281,7 +268,7 @@
                 @foreach ($banner_2_imags as $key => $value)
                     <div class="carousel-box overflow-hidden hov-scale-img">
                         <a href="{{ json_decode(get_setting('home_banner1_links'), true)[$key] }}" class="d-block text-reset overflow-hidden">
-                            <img src="{{ static_asset('assets/img/placeholder-rect.jpg') }}" data-src="{{ uploaded_asset($value) }}" 
+                            <img src="{{ static_asset('assets/img/placeholder-rect.jpg') }}" data-src="{{ uploaded_asset($value) }}"
                             alt="{{ env('APP_NAME') }} promo" class="img-fluid lazyload w-100 has-transition" onerror="this.onerror=null;this.src='{{ static_asset('assets/img/placeholder-rect.jpg') }}';">
                         </a>
                     </div>
@@ -325,7 +312,7 @@
                         </div>
                     </div>
                 </div>
-            </section>   
+            </section>
         @endif
     </div>
 
@@ -333,15 +320,15 @@
     @if (get_setting('home_banner3_images') != null)
     <div class="mb-2 mb-md-3 mt-2 mt-md-3">
         <div class="container">
-            @php 
-                $banner_3_imags = json_decode(get_setting('home_banner3_images')); 
+            @php
+                $banner_3_imags = json_decode(get_setting('home_banner3_images'));
                 $data_md = count($banner_3_imags) >= 2 ? 2 : 1;
             @endphp
             <div class="aiz-carousel gutters-16 overflow-hidden arrow-inactive-none arrow-dark arrow-x-15" data-items="{{ count($banner_3_imags) }}" data-xxl-items="{{ count($banner_3_imags) }}" data-xl-items="{{ count($banner_3_imags) }}" data-lg-items="{{ $data_md }}" data-md-items="{{ $data_md }}" data-sm-items="1" data-xs-items="1" data-arrows="true" data-dots="false">
                 @foreach ($banner_3_imags as $key => $value)
                     <div class="carousel-box overflow-hidden hov-scale-img">
                         <a href="{{ json_decode(get_setting('home_banner1_links'), true)[$key] }}" class="d-block text-reset overflow-hidden">
-                            <img src="{{ static_asset('assets/img/placeholder-rect.jpg') }}" data-src="{{ uploaded_asset($value) }}" 
+                            <img src="{{ static_asset('assets/img/placeholder-rect.jpg') }}" data-src="{{ uploaded_asset($value) }}"
                             alt="{{ env('APP_NAME') }} promo" class="img-fluid lazyload w-100 has-transition" onerror="this.onerror=null;this.src='{{ static_asset('assets/img/placeholder-rect.jpg') }}';">
                         </a>
                     </div>
@@ -437,15 +424,15 @@
                     <!-- Banner -->
                     @if (get_setting('classified_banner_image') != null || get_setting('classified_banner_image_small') != null)
                         <div class="mb-3 overflow-hidden hov-scale-img d-none d-md-block">
-                            <img src="{{ static_asset('assets/img/placeholder-rect.jpg') }}" 
-                                data-src="{{ uploaded_asset(get_setting('classified_banner_image')) }}" 
-                                alt="{{ env('APP_NAME') }} promo" class="lazyload img-fit h-100 has-transition" 
+                            <img src="{{ static_asset('assets/img/placeholder-rect.jpg') }}"
+                                data-src="{{ uploaded_asset(get_setting('classified_banner_image')) }}"
+                                alt="{{ env('APP_NAME') }} promo" class="lazyload img-fit h-100 has-transition"
                                 onerror="this.onerror=null;this.src='{{ static_asset('assets/img/placeholder-rect.jpg') }}';">
                         </div>
                         <div class="mb-3 overflow-hidden hov-scale-img d-md-none">
-                            <img src="{{ static_asset('assets/img/placeholder-rect.jpg') }}" 
-                                data-src="{{ get_setting('classified_banner_image_small') != null ? uploaded_asset(get_setting('classified_banner_image_small')) : uploaded_asset(get_setting('classified_banner_image')) }}" 
-                                alt="{{ env('APP_NAME') }} promo" class="lazyload img-fit h-100 has-transition" 
+                            <img src="{{ static_asset('assets/img/placeholder-rect.jpg') }}"
+                                data-src="{{ get_setting('classified_banner_image_small') != null ? uploaded_asset(get_setting('classified_banner_image_small')) : uploaded_asset(get_setting('classified_banner_image')) }}"
+                                alt="{{ env('APP_NAME') }} promo" class="lazyload img-fit h-100 has-transition"
                                 onerror="this.onerror=null;this.src='{{ static_asset('assets/img/placeholder-rect.jpg') }}';">
                         </div>
                     @endif
@@ -489,12 +476,12 @@
             </section>
         @endif
     @endif
-    
+
     <!-- Top Sellers -->
     @php
         $best_selers = Cache::remember('best_selers', 86400, function () {
             return \App\Models\Shop::where('verification_status', 1)->orderBy('num_of_sale', 'desc')->take(5)->get();
-        });   
+        });
     @endphp
     @if (get_setting('vendor_system_activation') == 1)
         <section class="mb-2 mb-md-3 mt-2 mt-md-3">
@@ -572,7 +559,7 @@
             </div>
         </section>
     @endif
-    
+
     <!-- Top Brands -->
     @if (get_setting('top_brands') != null)
         <section class="mb-2 mb-md-3 mt-2 mt-md-3">
