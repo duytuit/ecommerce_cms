@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Utility\dBug;
 use Auth;
+use Carbon\Carbon;
 use Hash;
 use Mail;
 use Cache;
@@ -273,6 +275,7 @@ class HomeController extends Controller
                 $affiliateController = new AffiliateController;
                 $affiliateController->processAffiliateStats($referred_by_user->id, 1, 0, 0, 0);
             }
+
             return view('frontend.product_details', compact('detailedProduct', 'product_queries', 'total_query', 'reviews', 'review_status'));
         }
         abort(404);

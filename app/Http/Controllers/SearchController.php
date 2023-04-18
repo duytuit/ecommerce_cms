@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Utility\dBug;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use App\Models\Search;
 use App\Models\Product;
@@ -90,10 +92,10 @@ class SearchController extends Controller
             $case1 = $query . '%';
             $case2 = '%' . $query . '%';
 
-            $products->orderByRaw("CASE 
-                WHEN name LIKE '$case1' THEN 1 
-                WHEN name LIKE '$case2' THEN 2 
-                ELSE 3 
+            $products->orderByRaw("CASE
+                WHEN name LIKE '$case1' THEN 1
+                WHEN name LIKE '$case2' THEN 2
+                ELSE 3
                 END");
         }
 
@@ -133,7 +135,6 @@ class SearchController extends Controller
         }
 
         $products = filter_products($products)->with('taxes')->paginate(24)->appends(request()->query());
-
         return view('frontend.product_listing', compact('products', 'query', 'category_id', 'brand_id', 'sort_by', 'seller_id', 'min_price', 'max_price', 'attributes', 'selected_attribute_values', 'colors', 'selected_color'));
     }
 
@@ -198,10 +199,10 @@ class SearchController extends Controller
         $case1 = $query . '%';
         $case2 = '%' . $query . '%';
 
-        $products_query->orderByRaw("CASE 
-                WHEN name LIKE '$case1' THEN 1 
-                WHEN name LIKE '$case2' THEN 2 
-                ELSE 3 
+        $products_query->orderByRaw("CASE
+                WHEN name LIKE '$case1' THEN 1
+                WHEN name LIKE '$case2' THEN 2
+                ELSE 3
                 END");
         $products = $products_query->limit(3)->get();
 

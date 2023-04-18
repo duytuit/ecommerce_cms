@@ -26,7 +26,7 @@ class AppLanguage
         else{
             $locale = 'en';
         }
-    
+
 
         // set laravel localization
         App::setLocale($locale);

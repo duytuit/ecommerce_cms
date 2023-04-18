@@ -14,6 +14,7 @@ class HttpsProtocol {
      */
     public function handle($request, Closure $next)
     {
+        // Middleware 2
         if (env('FORCE_HTTPS') == "On" && !$request->secure()) {
             return redirect()->secure($request->getRequestUri());
         }

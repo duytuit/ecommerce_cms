@@ -20,6 +20,14 @@
     RewriteRule ^ index.php [L]
 </IfModule>
 
+# Disable index view
+Options -Indexes
+
+# Hide a specific file
+<Files ~ "\.(env|json|config.js|md|gitignore|gitattributes|lock)$">
+    Order allow,deny
+    Deny from all
+</Files>
 # Fonts
 # Add correct content-type for fonts
 AddType application/vnd.ms-fontobject .eot
@@ -41,15 +49,6 @@ ExpiresByType application/x-font-opentype "access plus 1 year"
 ExpiresByType application/x-font-woff "access plus 1 year"
 ExpiresByType application/font-woff2  "access plus 1 month"
 ExpiresByType image/svg+xml "access plus 1 year"
-# Disable index view
-Options -Indexes
-
-# Hide a specific file
-<Files ~ "\.(env|json|config.js|md|gitignore|gitattributes|lock)$">
-    Order allow,deny
-    Deny from all
-</Files>
-
 ## EXPIRES CACHING ##
 <IfModule mod_expires.c>
     ExpiresActive On
