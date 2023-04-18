@@ -49,9 +49,7 @@ class ProductsImportApi implements ToCollection, WithHeadingRow, WithValidation,
                     $_cate = Category::where('name','like','%'.trim($row['danh_muc_cha_5']).'%')->first();
                     $_cate->slug=Str::slug(strtolower($row['danh_muc_cha_5']));
                     $_cate->save();
-                    $_brand = Brand::where('name','like','%'.trim($row['hang']).'%')->first();
-                    $_brand->slug=Str::slug(strtolower($row['hang']));
-                    $_brand->save();
+
                     continue;
                     if(!$_cate){
                         $_cate = Category::create([
