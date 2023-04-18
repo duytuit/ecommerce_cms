@@ -8,7 +8,7 @@ use App;
 class Brand extends Model
 {
     protected $guarded = [];
-   // protected $with = ['brand_translations'];
+    protected $with = ['brand_translations'];
 
   public function getTranslation($field = '', $lang = false){
       $lang = $lang == false ? App::getLocale() : $lang;
