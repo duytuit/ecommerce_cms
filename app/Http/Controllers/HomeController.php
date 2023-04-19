@@ -91,6 +91,7 @@ class HomeController extends Controller
             } catch (\Exception $e) {
             }
         }
+
         return view('frontend.user_registration');
     }
 

@@ -5,7 +5,6 @@
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 @endif
 @php
-   \App\Utility\dBug::trackingPhpErrorV2(\Carbon\Carbon::now().'end');
 @endphp
 <head>
 
@@ -277,8 +276,8 @@
     @yield('modal')
 
     <!-- SCRIPTS -->
-    <script src="{{ static_asset('assets/js/vendors.js?v=1') }}"></script>
-    <script src="{{ static_asset('assets/js/aiz-core.js') }}"></script>
+    <script src="{{ static_asset('assets/js/vendors.js?v=2') }}"></script>
+    <script src="{{ static_asset('assets/js/aiz-core.js?v=4') }}"></script>
 
 
 
