@@ -750,38 +750,10 @@ function translate($key, $lang = null, $addslashes = false)
 
     $lang_key = preg_replace('/[^A-Za-z0-9\_]/', '', str_replace(' ', '_', strtolower($key)));
 
-    $translations_en = Cache::rememberForever('translations-en', function () {
-        return Translation::where('lang', 'en')->pluck('lang_value', 'lang_key')->toArray();
-    });
+    $translations_en = trans('translate_'.$lang);
 
     if (!isset($translations_en[$lang_key])) {
-        $translation_def = new Translation;
-        $translation_def->lang = 'en';
-        $translation_def->lang_key = $lang_key;
-        $translation_def->lang_value = str_replace(array("\r", "\n", "\r\n"), "", $key);
-        $translation_def->save();
-        Cache::forget('translations-en');
-    }
-
-    // return user session lang
-    $translation_locale = Cache::rememberForever("translations-{$lang}", function () use ($lang) {
-        return Translation::where('lang', $lang)->pluck('lang_value', 'lang_key')->toArray();
-    });
-    if (isset($translation_locale[$lang_key])) {
-        return $addslashes ? addslashes(trim($translation_locale[$lang_key])) : trim($translation_locale[$lang_key]);
-    }
-
-    // return default lang if session lang not found
-    $translations_default = Cache::rememberForever('translations-' . env('DEFAULT_LANGUAGE', 'en'), function () {
-        return Translation::where('lang', env('DEFAULT_LANGUAGE', 'en'))->pluck('lang_value', 'lang_key')->toArray();
-    });
-    if (isset($translations_default[$lang_key])) {
-        return $addslashes ? addslashes(trim($translations_default[$lang_key])) : trim($translations_default[$lang_key]);
-    }
-
-    // fallback to en lang
-    if (!isset($translations_en[$lang_key])) {
-        return trim($key);
+       return $key;
     }
     return $addslashes ? addslashes(trim($translations_en[$lang_key])) : trim($translations_en[$lang_key]);
 }
@@ -874,7 +846,7 @@ function getShippingCost($carts, $index, $carrier = '')
 
         $carrier = Carrier::find($carrier);
         if ($carrier->carrier_ranges->first()) {
-            $carrier_billing_type   = $carrier->carrier_ranges->first()->billing_type;
+            $carrier_billing_type = $carrier->carrier_ranges->first()->billing_type;
             if ($product->added_by == 'admin') {
                 $itemsWeightOrPrice = $carrier_billing_type == 'weight_based' ? $admin_product_total_weight : $admin_product_total_price;
             } else {
@@ -891,7 +863,7 @@ function getShippingCost($carts, $index, $carrier = '')
         return 0;
     } else {
         if ($product->is_quantity_multiplied && ($shipping_type == 'product_wise_shipping')) {
-            return  $product->shipping_cost * $cartItem['quantity'];
+            return $product->shipping_cost * $cartItem['quantity'];
         }
         return $product->shipping_cost;
     }
@@ -1038,16 +1010,19 @@ if (!function_exists('isUnique')) {
 }
 
 if (!function_exists('get_setting')) {
-    function get_setting($key, $default = null, $lang = false)
+    function get_setting($key, $default = null, $settings = null, $lang = false)
     {
-        $settings = Cache::remember('business_settings', 86400, function () {
-            return BusinessSetting::all();
-        });
+        $_settings = $settings;
+        if(!$_settings){
+            $_settings = Cache::remember('business_settings', 86400, function () {
+                return BusinessSetting::all();
+            });
+        }
         if ($lang == false) {
-            $setting = $settings->where('type', $key)->first();
+            $setting = $_settings->where('type', $key)->first();
         } else {
-            $setting = $settings->where('type', $key)->where('lang', $lang)->first();
-            $setting = !$setting ? $settings->where('type', $key)->first() : $setting;
+            $setting = $_settings->where('type', $key)->where('lang', $lang)->first();
+            $setting = !$setting ? $_settings->where('type', $key)->first() : $setting;
         }
         return $setting == null ? $default : $setting->value;
     }

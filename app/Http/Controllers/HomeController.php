@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\BusinessSetting;
 use App\Utility\dBug;
 use Auth;
 use Carbon\Carbon;
@@ -52,8 +53,11 @@ class HomeController extends Controller
         $newest_products = Cache::remember('newest_products', 3600, function () {
             return filter_products(Product::latest())->limit(12)->get();
         });
-
-        return view('frontend.index', compact('featured_categories', 'todays_deal_products', 'newest_products'));
+        $settings = Cache::remember('business_settings', 86400, function () {
+                return BusinessSetting::all();
+        });
+       // \View::share('settings', $settings);
+        return view('frontend.index', compact('featured_categories', 'todays_deal_products', 'newest_products','settings'));
     }
 
     public function login()

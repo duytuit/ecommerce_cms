@@ -1,53 +1,51 @@
 <!DOCTYPE html>
 @if(\App\Models\Language::where('code', Session::get('locale', Config::get('app.locale')))->first()->rtl == 1)
-<html dir="rtl" lang="{{ str_replace('_', '-', app()->getLocale()) }}">
+    <html dir="rtl" lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 @else
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
+    <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 @endif
-@php
-@endphp
 <head>
 
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <meta name="app-url" content="{{ getBaseURL() }}">
     <meta name="file-base-url" content="{{ getFileBaseURL() }}">
 
-    <title>@yield('meta_title', get_setting('website_name').' | '.get_setting('site_motto'))</title>
+    <title>@yield('meta_title', get_setting('website_name',null,@$settings).' | '.get_setting('site_motto',null,@$settings))</title>
 
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="robots" content="index, follow">
-    <meta name="description" content="@yield('meta_description', get_setting('meta_description') )" />
-    <meta name="keywords" content="@yield('meta_keywords', get_setting('meta_keywords') )">
+    <meta name="description" content="@yield('meta_description', get_setting('meta_description',null,@$settings) )" />
+    <meta name="keywords" content="@yield('meta_keywords', get_setting('meta_keywords',null,@$settings) )">
 
     @yield('meta')
 
     @if(!isset($detailedProduct) && !isset($customer_product) && !isset($shop) && !isset($page) && !isset($blog))
         <!-- Schema.org markup for Google+ -->
-        <meta itemprop="name" content="{{ get_setting('meta_title') }}">
-        <meta itemprop="description" content="{{ get_setting('meta_description') }}">
-        <meta itemprop="image" content="{{ uploaded_asset(get_setting('meta_image')) }}">
+        <meta itemprop="name" content="{{ get_setting('meta_title',null,@$settings) }}">
+        <meta itemprop="description" content="{{ get_setting('meta_description',null,@$settings) }}">
+        <meta itemprop="image" content="{{ uploaded_asset(get_setting('meta_image',null,@$settings)) }}">
 
         <!-- Twitter Card data -->
         <meta name="twitter:card" content="product">
         <meta name="twitter:site" content="@publisher_handle">
-        <meta name="twitter:title" content="{{ get_setting('meta_title') }}">
-        <meta name="twitter:description" content="{{ get_setting('meta_description') }}">
+        <meta name="twitter:title" content="{{ get_setting('meta_title',null,@$settings) }}">
+        <meta name="twitter:description" content="{{ get_setting('meta_description',null,@$settings) }}">
         <meta name="twitter:creator" content="@author_handle">
-        <meta name="twitter:image" content="{{ uploaded_asset(get_setting('meta_image')) }}">
+        <meta name="twitter:image" content="{{ uploaded_asset(get_setting('meta_image',null,@$settings)) }}">
 
         <!-- Open Graph data -->
-        <meta property="og:title" content="{{ get_setting('meta_title') }}" />
+        <meta property="og:title" content="{{ get_setting('meta_title',null,@$settings) }}" />
         <meta property="og:type" content="website" />
         <meta property="og:url" content="{{ route('home') }}" />
-        <meta property="og:image" content="{{ uploaded_asset(get_setting('meta_image')) }}" />
-        <meta property="og:description" content="{{ get_setting('meta_description') }}" />
+        <meta property="og:image" content="{{ uploaded_asset(get_setting('meta_image',null,@$settings)) }}" />
+        <meta property="og:description" content="{{ get_setting('meta_description',null,@$settings) }}" />
         <meta property="og:site_name" content="{{ env('APP_NAME') }}" />
         <meta property="fb:app_id" content="{{ env('FACEBOOK_PIXEL_ID') }}">
     @endif
 
     <!-- Favicon -->
-    <link rel="icon" href="{{ uploaded_asset(get_setting('site_icon')) }}">
+    <link rel="icon" href="{{ uploaded_asset(get_setting('site_icon',null,@$settings)) }}">
 
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -105,9 +103,9 @@
             --soft-white: #b5b5bf;
             --dark: #292933;
             --soft-dark: #1b1b28;
-            --primary: {{ get_setting('base_color', '#d43533') }};
-            --hov-primary: {{ get_setting('base_hov_color', '#9d1b1a') }};
-            --soft-primary: {{ hex2rgba(get_setting('base_color','#d43533'),.15) }};
+            --primary: {{ get_setting('base_color',null,@$settings, '#d43533') }};
+            --hov-primary: {{ get_setting('base_hov_color',null,@$settings, '#9d1b1a') }};
+            --soft-primary: {{ hex2rgba(get_setting('base_color',null,@$settings,'#d43533'),.15) }};
         }
         body{
             font-family: 'Public Sans', sans-serif;
@@ -157,7 +155,7 @@
         .pac-container { z-index: 100000; }
     </style>
 
-@if (get_setting('google_analytics') == 1)
+@if (get_setting('google_analytics',null,@$settings) == 1)
     <!-- Global site tag (gtag.js) - Google Analytics -->
     <script async src="https://www.googletagmanager.com/gtag/js?id={{ env('TRACKING_ID') }}"></script>
 
@@ -169,7 +167,7 @@
     </script>
 @endif
 
-@if (get_setting('facebook_pixel') == 1)
+@if (get_setting('facebook_pixel',null,@$settings) == 1)
     <!-- Facebook Pixel Code -->
     <script>
         !function(f,b,e,v,n,t,s)
@@ -190,7 +188,7 @@
 @endif
 
 @php
-    echo get_setting('header_script');
+    echo get_setting('header_script',null,@$settings);
 @endphp
 
 </head>
@@ -208,12 +206,12 @@
     </div>
 
     <!-- cookies agreement -->
-    @if (get_setting('show_cookies_agreement') == 'on')
+    @if (get_setting('show_cookies_agreement',null,@$settings) == 'on')
         <div class="aiz-cookie-alert shadow-xl">
             <div class="p-3 bg-dark rounded">
                 <div class="text-white mb-3">
                     @php
-                        echo get_setting('cookies_agreement_text');
+                        echo get_setting('cookies_agreement_text',null,@$settings);
                     @endphp
                 </div>
                 <button class="btn btn-primary aiz-cookie-accept">
@@ -224,15 +222,15 @@
     @endif
 
     <!-- website popup -->
-    @if (get_setting('show_website_popup') == 'on')
+    @if (get_setting('show_website_popup',null,@$settings) == 'on')
         <div class="modal website-popup removable-session d-none" data-key="website-popup" data-value="removed">
             <div class="absolute-full bg-black opacity-60"></div>
             <div class="modal-dialog modal-dialog-centered modal-dialog-zoom modal-md mx-4 mx-md-auto">
                 <div class="modal-content position-relative border-0 rounded-0">
                     <div class="aiz-editor-data">
-                        {!! get_setting('website_popup_content') !!}
+                        {!! get_setting('website_popup_content',null,@$settings) !!}
                     </div>
-                    @if (get_setting('show_subscribe_form') == 'on')
+                    @if (get_setting('show_subscribe_form',null,@$settings) == 'on')
                         <div class="pb-5 pt-4 px-3 px-md-5">
                             <form class="" method="POST" action="{{ route('subscribers.store') }}">
                                 @csrf
@@ -281,7 +279,7 @@
 
 
 
-    @if (get_setting('facebook_chat') == 1)
+    @if (get_setting('facebook_chat',null,@$settings) == 1)
         <script type="text/javascript">
             window.fbAsyncInit = function() {
                 FB.init({
@@ -704,7 +702,7 @@
     @yield('script')
 
     @php
-        echo get_setting('footer_script');
+        echo get_setting('footer_script',null,@$settings);
     @endphp
 
 </body>

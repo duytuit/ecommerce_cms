@@ -11,7 +11,7 @@
                     <h4 class="text-dark fs-14 fw-700 mt-3">{{ translate('Terms & conditions') }}</h4>
                 </a>
             </div>
-            
+
             <!-- Return Policy -->
             <div class="col-lg-3 col-6 policy-file">
                 <a class="text-reset h-100  border-right border-bottom border-soft-light text-center p-2 p-md-4 d-block hov-ls-1" href="{{ route('returnpolicy') }}">
@@ -75,7 +75,7 @@
             <!-- about & subscription -->
             <div class="col-xl-6 col-lg-7">
                 <div class="mb-4 text-secondary text-justify">
-                    {!! get_setting('about_us_description',null,App::getLocale()) !!}
+                    {!! get_setting('about_us_description',null,null,App::getLocale()) !!}
                 </div>
                 <h5 class="fs-14 fw-700 text-soft-light mt-1 mb-3">{{ translate('Subscribe to our newsletter for regular updates about Offers, Coupons & more') }}</h5>
                 <div class="mb-3">
@@ -92,7 +92,7 @@
                     </form>
                 </div>
             </div>
-            
+
             <div class="col d-none d-lg-block"></div>
 
             <!-- Follow & Apps -->
@@ -167,11 +167,11 @@
             <div class="{{ $col_values }}">
                 <div class="text-center text-sm-left mt-4">
                     <h4 class="fs-14 text-secondary text-uppercase fw-700 mb-3">
-                        {{ get_setting('widget_one',null,App::getLocale()) }}
+                        {{ get_setting('widget_one',null,null,App::getLocale()) }}
                     </h4>
                     <ul class="list-unstyled">
-                        @if ( get_setting('widget_one_labels',null,App::getLocale()) !=  null )
-                            @foreach (json_decode( get_setting('widget_one_labels',null,App::getLocale()), true) as $key => $value)
+                        @if ( get_setting('widget_one_labels',null,null,App::getLocale()) !=  null )
+                            @foreach (json_decode( get_setting('widget_one_labels',null,null,App::getLocale()), true) as $key => $value)
                             <li class="mb-2">
                                 <a href="{{ json_decode( get_setting('widget_one_links'), true)[$key] }}" class="fs-13 text-soft-light animate-underline-white">
                                     {{ $value }}
@@ -190,7 +190,7 @@
                     <ul class="list-unstyled">
                         <li class="mb-2">
                             <p  class="fs-13 text-secondary mb-1">{{ translate('Address') }}</p>
-                            <p  class="fs-13 text-soft-light">{{ get_setting('contact_address',null,App::getLocale()) }}</p>
+                            <p  class="fs-13 text-soft-light">{{ get_setting('contact_address',null,null,App::getLocale()) }}</p>
                         </li>
                         <li class="mb-2">
                             <p  class="fs-13 text-secondary mb-1">{{ translate('Phone') }}</p>
@@ -260,7 +260,7 @@
                         <ul class="list-unstyled">
                             <li class="mb-2">
                                 <p class="fs-13 text-soft-light mb-0">
-                                    {{ translate('Become A Seller') }} 
+                                    {{ translate('Become A Seller') }}
                                     <a href="{{ route('shops.create') }}" class="fs-13 fw-700 text-warning ml-2">{{ translate('Apply Now') }}</a>
                                 </p>
                             </li>
@@ -292,7 +292,7 @@
                                     </a>
                                 </li>
                             @endguest
-                            
+
                             @if(get_setting('delivery_boy_app_link'))
                                 <li class="mb-2">
                                     <a class="fs-13 text-soft-light animate-underline-white" target="_blank" href="{{ get_setting('delivery_boy_app_link')}}">
@@ -313,13 +313,13 @@
         <!-- Quick links -->
         <div class="aiz-accordion-wrap bg-black">
             <div class="aiz-accordion-heading container bg-black">
-                <button class="aiz-accordion fs-14 text-white bg-transparent">{{ get_setting('widget_one',null,App::getLocale()) }}</button>
+                <button class="aiz-accordion fs-14 text-white bg-transparent">{{ get_setting('widget_one',null,null,App::getLocale()) }}</button>
             </div>
             <div class="aiz-accordion-panel bg-transparent" style="background-color: #212129 !important;">
                 <div class="container">
                     <ul class="list-unstyled mt-3">
-                        @if ( get_setting('widget_one_labels',null,App::getLocale()) !=  null )
-                            @foreach (json_decode( get_setting('widget_one_labels',null,App::getLocale()), true) as $key => $value)
+                        @if ( get_setting('widget_one_labels',null,null,App::getLocale()) !=  null )
+                            @foreach (json_decode( get_setting('widget_one_labels',null,null,App::getLocale()), true) as $key => $value)
                             <li class="mb-2 pb-2 @if (url()->current() == json_decode( get_setting('widget_one_links'), true)[$key]) active @endif">
                                 <a href="{{ json_decode( get_setting('widget_one_links'), true)[$key] }}" class="fs-13 text-soft-light text-sm-secondary animate-underline-white">
                                     {{ $value }}
@@ -331,7 +331,7 @@
                 </div>
             </div>
         </div>
-        
+
         <!-- Contacts -->
         <div class="aiz-accordion-wrap bg-black">
             <div class="aiz-accordion-heading container bg-black">
@@ -342,7 +342,7 @@
                     <ul class="list-unstyled mt-3">
                         <li class="mb-2">
                             <p  class="fs-13 text-secondary mb-1">{{ translate('Address') }}</p>
-                            <p  class="fs-13 text-soft-light">{{ get_setting('contact_address',null,App::getLocale()) }}</p>
+                            <p  class="fs-13 text-soft-light">{{ get_setting('contact_address',null,null,App::getLocale()) }}</p>
                         </li>
                         <li class="mb-2">
                             <p  class="fs-13 text-secondary mb-1">{{ translate('Phone') }}</p>
@@ -418,7 +418,7 @@
                     <ul class="list-unstyled mt-3">
                         <li class="mb-2 pb-2 {{ areActiveRoutes(['shops.create'],' active')}}">
                             <p class="fs-13 text-soft-light text-sm-secondary mb-0">
-                                {{ translate('Become A Seller') }} 
+                                {{ translate('Become A Seller') }}
                                 <a href="{{ route('shops.create') }}" class="fs-13 fw-700 text-warning ml-2">{{ translate('Apply Now') }}</a>
                             </p>
                         </li>
@@ -480,7 +480,7 @@
             <!-- Copyright -->
             <div class="col-lg-6 order-1 order-lg-0">
                 <div class="text-center text-lg-left fs-14" current-verison="{{get_setting("current_version")}}">
-                    {!! get_setting('frontend_copyright_text', null, App::getLocale()) !!}
+                    {!! get_setting('frontend_copyright_text', null,null, App::getLocale()) !!}
                 </div>
             </div>
 
