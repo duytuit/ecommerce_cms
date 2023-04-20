@@ -20,7 +20,7 @@ class Language
     public function handle($request, Closure $next)
     {
         // Middleware 1
-        App\Utility\dBug::trackingPhpErrorV2(Carbon::now().'begin');
+//        App\Utility\dBug::trackingPhpErrorV2(Carbon::now().'begin');
         if(Session::has('locale')){
             $locale = Session::get('locale');
         }
