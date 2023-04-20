@@ -1,10 +1,10 @@
 <!-- Top Bar Banner -->
-@if(get_setting('topbar_banner') != null)
+@if(get_setting('topbar_banner',null,@$settings) != null)
 <div class="position-relative top-banner removable-session z-1035 d-none" data-key="top-banner" data-value="removed">
-    <a href="{{ get_setting('topbar_banner_link') }}" class="d-block text-reset">
-        <img src="{{ uploaded_asset(get_setting('topbar_banner')) }}" class="d-none d-xl-block img-fit"> <!-- For Large device -->
-        <img src="{{ get_setting('topbar_banner_medium') != null ? uploaded_asset(get_setting('topbar_banner_medium')) : uploaded_asset(get_setting('topbar_banner')) }}" class="d-none d-md-block d-xl-none img-fit"> <!-- For Medium device -->
-        <img src="{{ get_setting('topbar_banner_small') != null ? uploaded_asset(get_setting('topbar_banner_small')) : uploaded_asset(get_setting('topbar_banner')) }}" class="d-md-none img-fit"> <!-- For Small device -->
+    <a href="{{ get_setting('topbar_banner_link',null,@$settings) }}" class="d-block text-reset">
+        <img src="{{ uploaded_asset(get_setting('topbar_banner',null,@$settings)) }}" class="d-none d-xl-block img-fit"> <!-- For Large device -->
+        <img src="{{ get_setting('topbar_banner_medium',null,@$settings) != null ? uploaded_asset(get_setting('topbar_banner_medium',null,@$settings)) : uploaded_asset(get_setting('topbar_banner',null,@$settings)) }}" class="d-none d-md-block d-xl-none img-fit"> <!-- For Medium device -->
+        <img src="{{ get_setting('topbar_banner_small',null,@$settings) != null ? uploaded_asset(get_setting('topbar_banner_small',null,@$settings)) : uploaded_asset(get_setting('topbar_banner',null,@$settings)) }}" class="d-md-none img-fit"> <!-- For Small device -->
     </a>
     <button class="btn text-white h-100 absolute-top-right set-session" data-key="top-banner" data-value="removed" data-toggle="remove-parent" data-parent=".top-banner">
         <i class="la la-close la-2x"></i>
@@ -19,7 +19,7 @@
             <div class="col-lg-6 col">
                 <ul class="list-inline d-flex justify-content-between justify-content-lg-start mb-0">
                     <!-- Language switcher -->
-                    @if(get_setting('show_language_switcher') == 'on')
+                    @if(get_setting('show_language_switcher',null,@$settings) == 'on')
                     <li class="list-inline-item dropdown mr-4" id="lang-change">
                         @php
                             if(Session::has('locale')){
@@ -53,7 +53,7 @@
                     @endif
 
                     <!-- Currency Switcher -->
-                    @if(get_setting('show_currency_switcher') == 'on')
+                    @if(get_setting('show_currency_switcher',null,@$settings) == 'on')
                     <li class="list-inline-item dropdown ml-auto ml-lg-0 mr-0" id="currency-change">
                         @php
                             if(Session::has('currency_code')){
@@ -61,7 +61,7 @@
                             }
                             else{
                                   $currency_code = Cache::remember('currency_code', 86400, function (){
-                                    return \App\Models\Currency::findOrFail(get_setting('system_default_currency'))->code;
+                                    return \App\Models\Currency::findOrFail(get_setting('system_default_currency',null,@$settings))->code;
                                 });
                             }
                             $_currency_name = Cache::remember('currency_name', 86400, function () use($currency_code){
@@ -89,7 +89,7 @@
 
             <div class="col-6 text-right d-none d-lg-block">
                 <ul class="list-inline mb-0 h-100 d-flex justify-content-end align-items-center">
-                    @if (get_setting('vendor_system_activation') == 1)
+                    @if (get_setting('vendor_system_activation',null,@$settings) == 1)
                         <!-- Become a Seller -->
                         <li class="list-inline-item mr-0 pl-0 py-2">
                             <a href="{{ route('shops.create') }}" class="text-secondary fs-12 pr-3 d-inline-block border-width-2 border-right">{{ translate('Become a Seller !')}}</a>
@@ -99,12 +99,12 @@
                             <a href="{{ route('seller.login') }}" class="text-secondary fs-12 pl-3 d-inline-block">{{ translate('Login to Seller')}}</a>
                         </li>
                     @endif
-                    @if (get_setting('helpline_number'))
+                    @if (get_setting('helpline_number',null,@$settings))
                         <!-- Helpline -->
                         <li class="list-inline-item ml-3 pl-3 mr-0 pr-0">
-                            <a href="tel:{{ get_setting('helpline_number') }}" class="text-secondary fs-12 d-inline-block py-2">
+                            <a href="tel:{{ get_setting('helpline_number',null,@$settings) }}" class="text-secondary fs-12 d-inline-block py-2">
                                 <span>{{ translate('Helpline')}}</span>
-                                <span>{{ get_setting('helpline_number') }}</span>
+                                <span>{{ get_setting('helpline_number',null,@$settings) }}</span>
                             </a>
                         </li>
                     @endif
@@ -114,7 +114,7 @@
     </div>
 </div>
 
-<header class="@if(get_setting('header_stikcy') == 'on') sticky-top @endif z-1020 bg-white">
+<header class="@if(get_setting('header_stikcy',null,@$settings) == 'on') sticky-top @endif z-1020 bg-white">
     <!-- Search Bar -->
     <div class="position-relative logo-bar-area border-bottom border-md-nonea z-1025">
         <div class="container">
@@ -132,7 +132,7 @@
                 <div class="col-auto pl-0 pr-3 d-flex align-items-center">
                     <a class="d-block py-20px mr-3 ml-0" href="{{ route('home') }}">
                         @php
-                            $header_logo = get_setting('header_logo');
+                            $header_logo = get_setting('header_logo',null,@$settings);
                         @endphp
                         @if($header_logo != null)
                             <img src="{{ uploaded_asset($header_logo) }}" alt="{{ env('APP_NAME') }}" class="mw-100 h-30px h-md-40px" height="40">
@@ -347,7 +347,7 @@
                                         <span class="user-top-menu-name has-transition ml-3">{{ translate('Downloads') }}</span>
                                     </a>
                                 </li>
-                                @if (get_setting('conversation_system') == 1)
+                                @if (get_setting('conversation_system',null,@$settings) == 1)
                                 <li class="user-top-nav-element border border-top-0" data-id="1">
                                     <a href="{{ route('conversations.index') }}" class="text-truncate text-dark px-4 fs-14 d-flex align-items-center hov-column-gap-1">
                                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16">
@@ -363,7 +363,7 @@
                                 </li>
                                 @endif
 
-                                @if (get_setting('wallet_system') == 1)
+                                @if (get_setting('wallet_system',null,@$settings) == 1)
                                 <li class="user-top-nav-element border border-top-0" data-id="1">
                                     <a href="{{ route('wallet.index') }}" class="text-truncate text-dark px-4 fs-14 d-flex align-items-center hov-column-gap-1">
                                         <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="16" height="16" viewBox="0 0 16 16">
@@ -434,11 +434,11 @@
                 <div class="ml-xl-4 w-100 overflow-hidden">
                     <div class="d-flex align-items-center justify-content-center justify-content-xl-start h-100">
                         <ul class="list-inline mb-0 pl-0 hor-swipe c-scrollbar-light">
-                            @foreach (json_decode( get_setting('header_menu_labels'), true) as $key => $value)
+                            @foreach (json_decode( get_setting('header_menu_labels',null,@$settings), true) as $key => $value)
                             <li class="list-inline-item mr-0 animate-underline-white">
-                                <a href="{{ json_decode( get_setting('header_menu_links'), true)[$key] }}"
+                                <a href="{{ json_decode( get_setting('header_menu_links',null,@$settings), true)[$key] }}"
                                     class="fs-13 px-3 py-3 d-inline-block fw-700 text-white header_menu_links hov-bg-black-10
-                                    @if (url()->current() == json_decode( get_setting('header_menu_links'), true)[$key]) active @endif">
+                                    @if (url()->current() == json_decode( get_setting('header_menu_links',null,@$settings), true)[$key]) active @endif">
                                     {{ translate($value) }}
                                 </a>
                             </li>
@@ -504,11 +504,11 @@
         @endauth
         <hr>
         <ul class="mb-0 pl-3 pb-3 h-100">
-            @foreach (json_decode( get_setting('header_menu_labels'), true) as $key => $value)
+            @foreach (json_decode( get_setting('header_menu_labels',null,@$settings), true) as $key => $value)
             <li class="mr-0">
-                <a href="{{ json_decode( get_setting('header_menu_links'), true)[$key] }}"
+                <a href="{{ json_decode( get_setting('header_menu_links',null,@$settings), true)[$key] }}"
                     class="fs-13 px-3 py-3 w-100 d-inline-block fw-700 text-dark header_menu_links
-                    @if (url()->current() == json_decode( get_setting('header_menu_links'), true)[$key]) active @endif">
+                    @if (url()->current() == json_decode( get_setting('header_menu_links',null,@$settings), true)[$key]) active @endif">
                     {{ translate($value) }}
                 </a>
             </li>
