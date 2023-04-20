@@ -1,5 +1,11 @@
 <!DOCTYPE html>
-@if(\App\Models\Language::where('code', Session::get('locale', Config::get('app.locale')))->first()->rtl == 1)
+@php
+     $code = Session::get('locale', Config::get('app.locale'));
+     $code = Cache::remember('code_'.$code, 86400, function () use($code) {
+        return \App\Models\Language::where('code', $code)->first()->rtl;
+    });
+@endphp
+@if($code == 1)
     <html dir="rtl" lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 @else
     <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
@@ -647,7 +653,12 @@
         var iti = intlTelInput(input, {
             separateDialCode: true,
             utilsScript: "{{ static_asset('assets/js/intlTelutils.js') }}?1590403638580",
-            onlyCountries: @php echo json_encode(\App\Models\Country::where('status', 1)->pluck('code')->toArray()) @endphp,
+            onlyCountries: @php
+                                $country = Cache::remember('country_status_1', 86400, function () {
+                                    return \App\Models\Country::where('status', 1)->pluck('code')->toArray();
+                                });
+                            echo json_encode($country);
+                           @endphp,
             customPlaceholder: function(selectedCountryPlaceholder, selectedCountryData) {
                 if (selectedCountryData.iso2 == 'bd') {
                     return "01xxxxxxxxx";

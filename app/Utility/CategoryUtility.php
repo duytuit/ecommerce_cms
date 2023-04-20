@@ -2,14 +2,19 @@
 
 namespace App\Utility;
 
+use App\Models\BusinessSetting;
 use App\Models\Category;
+use Illuminate\Support\Facades\Cache;
 
 class CategoryUtility
 {
     /*when with trashed is true id will get even the deleted items*/
     public static function get_immediate_children($id, $with_trashed = false, $as_array = false)
     {
-        $children = $with_trashed ? Category::where('parent_id', $id)->orderBy('order_level', 'desc')->get() : Category::where('parent_id', $id)->orderBy('order_level', 'desc')->get();
+
+        $children = Cache::remember('parent_id_'.$id, 86400, function ()use($id) {
+            return Category::where('parent_id', $id)->orderBy('order_level', 'desc')->get();
+        });
         $children = $as_array && !is_null($children) ? $children->toArray() : $children;
 
         return $children;

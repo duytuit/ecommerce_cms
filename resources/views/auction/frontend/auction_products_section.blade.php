@@ -9,11 +9,11 @@
             </div>
             <div class="aiz-carousel gutters-10 half-outside-arrow" data-items="6" data-xl-items="5" data-lg-items="4"  data-md-items="3" data-sm-items="2" data-xs-items="2" data-arrows='true'>
                 @php
-                    $products = \App\Models\Product::latest()->where('published', 1)->where('auction_product', 1);
-                    if(get_setting('seller_auction_product') == 0){
-                        $products = $products->where('added_by','admin');
-                    }
-                    $products = $products->where('auction_start_date','<=', strtotime("now"))->where('auction_end_date','>=', strtotime("now"))->limit(12)->get();
+                      $products = \App\Models\Product::latest()->where('published', 1)->where('auction_product', 1);
+                      if(get_setting('seller_auction_product') == 0){
+                          $products = $products->where('added_by','admin');
+                      }
+                      $products = $products->where('auction_start_date','<=', strtotime("now"))->where('auction_end_date','>=', strtotime("now"))->limit(12)->get();
                 @endphp
                 @foreach ($products as $key => $product)
                     <div class="carousel-box">

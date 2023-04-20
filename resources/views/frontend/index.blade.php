@@ -38,7 +38,9 @@
 
     <!-- Flash Deal -->
     @php
-        $flash_deal = \App\Models\FlashDeal::where('status', 1)->where('featured', 1)->first();
+         $flash_deal = Cache::remember('flash_deal', 86400, function () {
+                return \App\Models\FlashDeal::where('status', 1)->where('featured', 1)->first();
+         });
     @endphp
     @if($flash_deal != null && strtotime(date('Y-m-d H:i:s')) >= $flash_deal->start_date && strtotime(date('Y-m-d H:i:s')) <= $flash_deal->end_date)
     <section class="mb-2 mb-md-3 mt-2 mt-md-3">
@@ -405,7 +407,9 @@
     <!-- Classified Product -->
     @if(get_setting('classified_product',null,@$settings) == 1)
         @php
-            $classified_products = \App\Models\CustomerProduct::where('status', '1')->where('published', '1')->take(6)->get();
+             $classified_products = Cache::remember('classified_products', 86400, function () {
+                return \App\Models\CustomerProduct::where('status', '1')->where('published', '1')->take(6)->get();
+            });
         @endphp
         @if (count($classified_products) > 0)
             <section class="mb-2 mb-md-3 mt-2 mt-md-3">

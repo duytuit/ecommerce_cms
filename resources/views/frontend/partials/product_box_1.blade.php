@@ -1,11 +1,15 @@
 @php
     if (auth()->user() != null) {
         $user_id = Auth::user()->id;
-        $cart = \App\Models\Cart::where('user_id', $user_id)->get();
+        $cart = Cache::remember('cart_'.$user_id, 86400, function () use($user_id){
+                return \App\Models\Cart::where('user_id', $user_id)->get();
+        });
     } else {
         $temp_user_id = Session()->get('temp_user_id');
         if ($temp_user_id) {
-            $cart = \App\Models\Cart::where('temp_user_id', $temp_user_id)->get();
+             $cart = Cache::remember('cart_temp_'.$temp_user_id, 86400, function () use($temp_user_id){
+                return \App\Models\Cart::where('temp_user_id', $temp_user_id)->get();
+            });
         }
     }
 
@@ -58,7 +62,7 @@
                 </a>
             </div>
             <!-- add to cart -->
-            <a class="cart-btn absolute-bottom-left w-100 h-35px aiz-p-hov-icon text-white fs-13 fw-700 d-flex flex-column justify-content-center align-items-center @if(in_array($product->id, $cart_added)) active @endif" 
+            <a class="cart-btn absolute-bottom-left w-100 h-35px aiz-p-hov-icon text-white fs-13 fw-700 d-flex flex-column justify-content-center align-items-center @if(in_array($product->id, $cart_added)) active @endif"
                 href="javascript:void(0)" onclick="showAddToCartModal({{ $product->id }})">
                 <span class="cart-btn-text">{{ translate('Add to Cart') }}</span>
                 <br>
@@ -67,11 +71,11 @@
         @endif
         @if($product->auction_product == 1 && $product->auction_start_date <= strtotime("now") && $product->auction_end_date >= strtotime("now"))
             <!-- Place Bid -->
-            @php 
+            @php
                 $highest_bid = $product->bids->max('amount');
-                $min_bid_amount = $highest_bid != null ? $highest_bid+1 : $product->starting_bid; 
+                $min_bid_amount = $highest_bid != null ? $highest_bid+1 : $product->starting_bid;
             @endphp
-            <a class="cart-btn absolute-bottom-left w-100 h-35px aiz-p-hov-icon text-white fs-13 fw-700 d-flex flex-column justify-content-center align-items-center @if(in_array($product->id, $cart_added)) active @endif" 
+            <a class="cart-btn absolute-bottom-left w-100 h-35px aiz-p-hov-icon text-white fs-13 fw-700 d-flex flex-column justify-content-center align-items-center @if(in_array($product->id, $cart_added)) active @endif"
                 href="javascript:void(0)" onclick="bid_single_modal({{ $product->id }}, {{ $min_bid_amount }})">
                 <span class="cart-btn-text">{{ translate('Place Bid') }}</span>
                 <br>
@@ -79,7 +83,7 @@
             </a>
         @endif
     </div>
-    
+
     <div class="p-2 p-md-3 text-left">
         <!-- Product name -->
         <h3 class="fw-400 fs-13 text-truncate-2 lh-1-4 mb-0 h-35px text-center">
