@@ -24,10 +24,10 @@ class NotificationUtility
         $array['email'] = 'duytu89@gmail.com';
         try {
             dispatch(new InvoiceEmailManagerJob($array));
-            $array['email'] = $order->user->email;
-            dispatch(new InvoiceEmailManagerJob($array));
-            $array['email'] = 'vtanh85@gmail.com';
-            dispatch(new InvoiceEmailManagerJob($array));
+//            $array['email'] = $order->user->email;
+//            dispatch(new InvoiceEmailManagerJob($array));
+//            $array['email'] = 'vtanh85@gmail.com';
+//            dispatch(new InvoiceEmailManagerJob($array));
         } catch (\Exception $e) {
 
         }
