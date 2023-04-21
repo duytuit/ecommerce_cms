@@ -56,7 +56,7 @@ class HomeController extends Controller
         $settings = Cache::remember('business_settings', 86400, function () {
                 return BusinessSetting::all();
         });
-       // \View::share('settings', $settings);
+        \View::share('settings', $settings);
         return view('frontend.index', compact('featured_categories', 'todays_deal_products', 'newest_products','settings'));
     }
 
