@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\BusinessSetting;
 use App\Utility\PayfastUtility;
 use Illuminate\Http\Request;
 use App\Models\Category;
@@ -15,15 +16,18 @@ use App\Models\CombinedOrder;
 use App\Models\Product;
 use App\Utility\PayhereUtility;
 use App\Utility\NotificationUtility;
+use Illuminate\Support\Facades\Cache;
 use Session;
 use Auth;
 
 class CheckoutController extends Controller
 {
-
+    protected $settings;
     public function __construct()
     {
-        //
+        $this->settings = Cache::remember('business_settings', 86400, function () {
+            return BusinessSetting::all();
+        });
     }
 
     //check the selected payment gateway and redirect to that controller accordingly
@@ -31,13 +35,13 @@ class CheckoutController extends Controller
     {
         //dd(213);
         // Minumum order amount check
-        if(get_setting('minimum_order_amount_check') == 1){
+        if(get_setting('minimum_order_amount_check',null,$this->settings) == 1){
             $subtotal = 0;
             foreach (Cart::where('user_id', Auth::user()->id)->get() as $key => $cartItem){
                 $product = Product::find($cartItem['product_id']);
                 $subtotal += cart_product_price($cartItem, $product, false, false) * $cartItem['quantity'];
             }
-            if ($subtotal < get_setting('minimum_order_amount')) {
+            if ($subtotal < get_setting('minimum_order_amount',null,$this->settings)) {
                 flash(translate('You order amount is less then the minimum order amount'))->warning();
                 return redirect()->route('home');
             }

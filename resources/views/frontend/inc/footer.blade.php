@@ -532,16 +532,21 @@
             </a>
         </div>
         @php
-            if(auth()->user() != null) {
+             if (auth()->user() != null) {
                 $user_id = Auth::user()->id;
-                $cart = \App\Models\Cart::where('user_id', $user_id)->get();
+                 $cart = Cache::remember('cart_'.$user_id, 86400, function () use($user_id){
+                    return \App\Models\Cart::where('user_id', $user_id)->get();
+                 });
             } else {
-                $temp_user_id = Session()->get('temp_user_id');
-                if($temp_user_id) {
-                    $cart = \App\Models\Cart::where('temp_user_id', $temp_user_id)->get();
+                 $temp_user_id = Session()->get('temp_user_id');
+                if ($temp_user_id) {
+                    $cart = Cache::remember('cart_temp_'.$temp_user_id, 86400, function () use($temp_user_id){
+                    return \App\Models\Cart::where('temp_user_id', $temp_user_id)->get();
+                    });
                 }
             }
         @endphp
+
 
         <!-- Cart -->
         @php

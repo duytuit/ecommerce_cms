@@ -17,6 +17,9 @@
     if(isset($cart) && count($cart) > 0){
         $cart_added = $cart->pluck('product_id')->toArray();
     }
+    $home_base_price = home_base_price($product);
+    $home_discounted_base_price = home_discounted_base_price($product);
+    $discount_in_percentage = discount_in_percentage($product)
 @endphp
 <div class="aiz-card-box h-auto bg-white py-3 hov-scale-img">
     <div class="position-relative h-140px h-md-200px img-fit overflow-hidden">
@@ -35,8 +38,8 @@
                 onerror="this.onerror=null;this.src='{{ static_asset('assets/img/placeholder.jpg') }}';">
         </a>
         <!-- Discount percentage tag -->
-        @if(discount_in_percentage($product) > 0)
-            <span class="absolute-top-left bg-primary ml-1 mt-1 fs-11 fw-700 text-white w-35px text-center" style="padding-top:2px;padding-bottom:2px;">-{{discount_in_percentage($product)}}%</span>
+        @if($discount_in_percentage > 0)
+            <span class="absolute-top-left bg-primary ml-1 mt-1 fs-11 fw-700 text-white w-35px text-center" style="padding-top:2px;padding-bottom:2px;">-{{$discount_in_percentage}}%</span>
         @endif
         <!-- Wholesale tag -->
         @if ($product->wholesale_product)
@@ -92,14 +95,14 @@
         <div class="fs-14 d-flex justify-content-center mt-3">
             @if($product->auction_product == 0)
                 <!-- Previous price -->
-                @if(home_base_price($product) != home_discounted_base_price($product))
+                @if($home_base_price != $home_discounted_base_price)
                     <div class="disc-amount has-transition">
-                        <del class="fw-400 text-secondary mr-1">{{ home_base_price($product) }}</del>
+                        <del class="fw-400 text-secondary mr-1">{{ $home_base_price }}</del>
                     </div>
                 @endif
                 <!-- price -->
                 <div class="">
-                    <span class="fw-700 text-primary">{{ home_discounted_base_price($product) }}</span>
+                    <span class="fw-700 text-primary">{{ $home_discounted_base_price }}</span>
                 </div>
             @endif
             @if($product->auction_product == 1)

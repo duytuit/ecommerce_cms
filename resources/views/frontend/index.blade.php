@@ -96,7 +96,9 @@
                             @foreach ($flash_deals as $key => $flash_deal_product)
                                 @if ($key >= $init && $key <= $end)
                                     @php
-                                        $product = \App\Models\Product::find($flash_deal_product->product_id);
+                                         $product = Cache::remember('product_'.$flash_deal_product->product_id, 86400, function () use($flash_deal_product) {
+                                                return \App\Models\Product::find($flash_deal_product->product_id);
+                                         });
                                     @endphp
                                     @if ($product != null && $product->published != 0)
                                         @php
@@ -582,7 +584,11 @@
                     <div class="row row-cols-xxl-6 row-cols-xl-6 row-cols-lg-4 row-cols-md-4 row-cols-3 gutters-16 border-top border-left">
                         @php $top_brands = json_decode(get_setting('top_brands',null,@$settings)); @endphp
                         @foreach ($top_brands as $value)
-                            @php $brand = \App\Models\Brand::find($value); @endphp
+                            @php
+                                 $brand = Cache::remember('brand_'.$value, 86400, function () use($value) {
+                                                return \App\Models\Brand::find($value);
+                                         });
+                            @endphp
                             @if ($brand != null)
                                 <div class="col text-center border-right border-bottom hov-scale-img has-transition hov-shadow-out z-1">
                                     <a href="{{ route('products.brand', $brand->slug) }}" class="d-block p-sm-3">

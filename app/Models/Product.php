@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use App;
+use Illuminate\Support\Facades\Cache;
 
 class Product extends Model
 {
@@ -15,8 +16,11 @@ class Product extends Model
 
     public function getTranslation($field = '', $lang = false)
     {
+        $_product = $this->product_translations;
         $lang = $lang == false ? App::getLocale() : $lang;
-        $product_translations = $this->product_translations->where('lang', $lang)->first();
+        $product_translations = Cache::remember('product_translation_name_'.$lang, 86400, function () use($_product,$lang) {
+            return $_product->where('lang', $lang)->first();
+        });
         return $product_translations != null ? $product_translations->$field : $this->$field;
     }
 
