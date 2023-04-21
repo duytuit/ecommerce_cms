@@ -134,7 +134,7 @@ class CheckoutController extends Controller
         }
 
         $carrier_list = array();
-        if(get_setting('shipping_type') == 'carrier_wise_shipping'){
+        if(get_setting('shipping_type',null,$this->settings) == 'carrier_wise_shipping'){
             $zone = \App\Models\Country::where('id',$carts[0]['address']['country_id'])->first()->zone_id;
 
             $carrier_query = Carrier::query();
@@ -170,7 +170,7 @@ class CheckoutController extends Controller
                 $tax += cart_product_tax($cartItem, $product,false) * $cartItem['quantity'];
                 $subtotal += cart_product_price($cartItem, $product, false, false) * $cartItem['quantity'];
 
-                if(get_setting('shipping_type') != 'carrier_wise_shipping' || $request['shipping_type_' . $product->user_id] == 'pickup_point'){
+                if(get_setting('shipping_type',null,$this->settings) != 'carrier_wise_shipping' || $request['shipping_type_' . $product->user_id] == 'pickup_point'){
                     if ($request['shipping_type_' . $product->user_id] == 'pickup_point') {
                         $cartItem['shipping_type'] = 'pickup_point';
                         $cartItem['pickup_point'] = $request['pickup_point_id_' . $product->user_id];
