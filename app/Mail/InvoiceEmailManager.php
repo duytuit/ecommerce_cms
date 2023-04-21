@@ -6,6 +6,7 @@ use Illuminate\Bus\Queueable;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Contracts\Queue\ShouldQueue;
+use Illuminate\Support\Facades\Mail;
 
 class InvoiceEmailManager extends Mailable
 {
@@ -29,10 +30,12 @@ class InvoiceEmailManager extends Mailable
      public function build()
      {
          return $this->view($this->array['view'])
-                     ->from($this->array['from'], env('MAIL_FROM_NAME'))
-                     ->subject($this->array['subject'])
-                     ->with([
-                         'order' => $this->array['order']
-                     ]);
+             ->from($this->array['from'], env('MAIL_FROM_NAME'))
+             ->subject($this->array['subject'])
+             ->with([
+                 'order' => $this->array['order']
+             ]);
+
+
      }
 }

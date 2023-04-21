@@ -29,10 +29,11 @@ class CheckoutController extends Controller
     //check the selected payment gateway and redirect to that controller accordingly
     public function checkout(Request $request)
     {
+        //dd(213);
         // Minumum order amount check
         if(get_setting('minimum_order_amount_check') == 1){
             $subtotal = 0;
-            foreach (Cart::where('user_id', Auth::user()->id)->get() as $key => $cartItem){ 
+            foreach (Cart::where('user_id', Auth::user()->id)->get() as $key => $cartItem){
                 $product = Product::find($cartItem['product_id']);
                 $subtotal += cart_product_price($cartItem, $product, false, false) * $cartItem['quantity'];
             }
@@ -42,12 +43,12 @@ class CheckoutController extends Controller
             }
         }
         // Minumum order amount check end
-        
+
         if ($request->payment_option != null) {
             (new OrderController)->store($request);
 
             $request->session()->put('payment_type', 'cart_payment');
-            
+
             $data['combined_order_id'] = $request->session()->get('combined_order_id');
             $request->session()->put('payment_data', $data);
 
@@ -139,7 +140,7 @@ class CheckoutController extends Controller
             })->orWhere('free_shipping', 1);
             $carrier_list = $carrier_query->get();
         }
-        
+
         return view('frontend.delivery_info', compact('carts','carrier_list'));
     }
 
@@ -211,12 +212,12 @@ class CheckoutController extends Controller
                                     ->get();
 
                     $coupon_discount = 0;
-                    
+
                     if ($coupon->type == 'cart_base') {
                         $subtotal = 0;
                         $tax = 0;
                         $shipping = 0;
-                        foreach ($carts as $key => $cartItem) { 
+                        foreach ($carts as $key => $cartItem) {
                             $product = Product::find($cartItem['product_id']);
                             $subtotal += cart_product_price($cartItem, $product, false, false) * $cartItem['quantity'];
                             $tax += cart_product_tax($cartItem, $product,false) * $cartItem['quantity'];
@@ -235,7 +236,7 @@ class CheckoutController extends Controller
 
                         }
                     } elseif ($coupon->type == 'product_base') {
-                        foreach ($carts as $key => $cartItem) { 
+                        foreach ($carts as $key => $cartItem) {
                             $product = Product::find($cartItem['product_id']);
                             foreach ($coupon_details as $key => $coupon_detail) {
                                 if ($coupon_detail->product_id == $cartItem['product_id']) {
@@ -266,7 +267,7 @@ class CheckoutController extends Controller
                         $response_message['response'] = 'warning';
                         $response_message['message'] = translate('This coupon is not applicable to your cart products!');
                     }
-                    
+
                 } else {
                     $response_message['response'] = 'warning';
                     $response_message['message'] = translate('You already used this coupon!');
@@ -336,12 +337,11 @@ class CheckoutController extends Controller
         Cart::where('user_id', $combined_order->user_id)
                 ->delete();
 
-        //Session::forget('club_point');
-        //Session::forget('combined_order_id');
-        
-        // foreach($combined_order->orders as $order){
-        //     NotificationUtility::sendOrderPlacedNotification($order);
-        // }
+        Session::forget('club_point');
+        Session::forget('combined_order_id');
+//         foreach($combined_order->orders as $order){
+             NotificationUtility::sendOrderPlacedNotification($combined_order->orders[0]);
+//         }
 
         return view('frontend.order_confirmed', compact('combined_order'));
     }
