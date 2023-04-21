@@ -58,12 +58,12 @@ class CheckoutController extends Controller
 
             if ($request->session()->get('combined_order_id') != null) {
 
-                // If block for Online payment, wallet and cash on delivery. Else block for Offline payment
-                $decorator = __NAMESPACE__ . '\\Payment\\' . str_replace(' ', '', ucwords(str_replace('_', ' ', $request->payment_option))) . "Controller";
-                if (class_exists($decorator)) {
-                    return (new $decorator)->pay($request);
-                }
-                else {
+//                // If block for Online payment, wallet and cash on delivery. Else block for Offline payment
+//                $decorator = __NAMESPACE__ . '\\Payment\\' . str_replace(' ', '', ucwords(str_replace('_', ' ', $request->payment_option))) . "Controller";
+//                if (class_exists($decorator)) {
+//                    return (new $decorator)->pay($request);
+//                }
+//                else {
                     $combined_order = CombinedOrder::findOrFail($request->session()->get('combined_order_id'));
                     $manual_payment_data = array(
                         'name'   => $request->payment_option,
@@ -78,7 +78,7 @@ class CheckoutController extends Controller
                     }
                     flash(translate('Your order has been placed successfully. Please submit payment information from purchase history'))->success();
                     return redirect()->route('order_confirmed');
-                }
+               // }
             }
         } else {
             flash(translate('Select Payment Option.'))->warning();
