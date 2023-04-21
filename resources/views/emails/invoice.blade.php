@@ -61,7 +61,10 @@
 <body>
 	<div>
 		@php
-			$logo = get_setting('header_logo',null,@$settings);
+             $settings = Cache::remember('business_settings', 86400, function () {
+                  return \App\Models\BusinessSetting::all();
+              });
+              $logo = get_setting('header_logo',null,@$settings);
 		@endphp
 		<div style="background: #eceff4;padding: 1.5rem;">
 			<table>
