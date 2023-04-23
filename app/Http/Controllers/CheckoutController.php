@@ -347,14 +347,15 @@ class CheckoutController extends Controller
         Session::forget('club_point');
         Session::forget('combined_order_id');
          foreach($combined_order->orders as $order){
-             NotificationUtility::sendOrderPlacedNotification($combined_order->orders[0]);
+             NotificationUtility::sendOrderPlacedNotification($order);
          }
 
         return view('frontend.order_confirmed', compact('combined_order'));
     }
     protected function save_payment($request)
     {
-        $carts = Cart::where('user_id', Auth::user()->id)
+        $user = Auth::user();
+        $carts = Cart::where('user_id', $user->id)
             ->get();
 
         if ($carts->isEmpty()) {
@@ -366,8 +367,8 @@ class CheckoutController extends Controller
 
         $shippingAddress = [];
         if ($address != null) {
-            $shippingAddress['name']        = Auth::user()->name;
-            $shippingAddress['email']       = Auth::user()->email;
+            $shippingAddress['name']        = $user->name;
+            $shippingAddress['email']       = $user->email;
             $shippingAddress['address']     = $address->address;
             $shippingAddress['country']     = $address->country->name;
             $shippingAddress['state']       = $address->state->name;
@@ -380,7 +381,7 @@ class CheckoutController extends Controller
         }
 
         $combined_order = new CombinedOrder;
-        $combined_order->user_id = Auth::user()->id;
+        $combined_order->user_id = $user->id;
         $combined_order->shipping_address = json_encode($shippingAddress);
         $combined_order->save();
 
@@ -398,7 +399,7 @@ class CheckoutController extends Controller
         foreach ($seller_products as $seller_product) {
             $order = new Order;
             $order->combined_order_id = $combined_order->id;
-            $order->user_id = Auth::user()->id;
+            $order->user_id = $user->id;
             $order->shipping_address = $combined_order->shipping_address;
 
             $order->additional_info = $request->additional_info;
@@ -501,7 +502,7 @@ class CheckoutController extends Controller
                 $order->grand_total -= $coupon_discount;
 
                 $coupon_usage = new CouponUsage;
-                $coupon_usage->user_id = Auth::user()->id;
+                $coupon_usage->user_id = $user->id;
                 $coupon_usage->coupon_id = Coupon::where('code', $seller_product[0]->coupon_code)->first()->id;
                 $coupon_usage->save();
             }
