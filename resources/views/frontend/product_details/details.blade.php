@@ -3,7 +3,11 @@
     <h1 class="mb-4 fs-16 fw-700 text-dark">
         {{ $detailedProduct->getTranslation('name') }}
     </h1>
-
+    @php
+        $detailedProduct_home_price = home_price($detailedProduct);
+        $detailedProduct_home_discounted_price = home_discounted_price($detailedProduct);
+        $detailedProduct_discount_in_percentage = discount_in_percentage($detailedProduct);
+    @endphp
     <div class="row align-items-center mb-3">
         <!-- Review -->
         @if ($detailedProduct->auction_product != 1)
@@ -66,8 +70,8 @@
             @endif
         </div>
     </div>
-    
-    
+
+
     <!-- Brand Logo & Name -->
     @if ($detailedProduct->brand != null)
         <div class="d-flex flex-wrap align-items-center mb-3">
@@ -76,7 +80,7 @@
                     class="text-reset hov-text-primary fs-14 fw-700">{{ $detailedProduct->brand->name }}</a>
         </div>
     @endif
-    
+
     <!-- Seller Info -->
     <div class="d-flex flex-wrap align-items-center">
         <div class="d-flex align-items-center mr-4">
@@ -102,7 +106,7 @@
                         <path id="Path_3015" data-name="Path 3015" d="M131.349,99.312h5a.5.5,0,1,1,0,1h-5a.5.5,0,1,1,0-1" transform="translate(-1181 -346.5)" fill="#f4b650"/>
                         </g>
                     </svg>
-                    
+
                     {{ translate('Message Seller') }}
                 </button>
             </div>
@@ -192,7 +196,7 @@
             </table>
         @else
         <!-- Without Wholesale -->
-            @if (home_price($detailedProduct) != home_discounted_price($detailedProduct))
+            @if ($detailedProduct_home_price != $detailedProduct_home_discounted_price)
                 <div class="row no-gutters mb-3">
                     <div class="col-sm-2">
                         <div class="text-secondary fs-14 fw-400">{{ translate('Price')}}</div>
@@ -201,19 +205,19 @@
                         <div class="d-flex align-items-center">
                             <!-- Discount Price -->
                             <strong class="fs-16 fw-700 text-primary">
-                                {{ home_discounted_price($detailedProduct) }}
+                                {{ $detailedProduct_home_discounted_price }}
                             </strong>
                             <!-- Home Price -->
                             <del class="fs-14 opacity-60 ml-2">
-                                {{ home_price($detailedProduct) }}
+                                {{ $detailedProduct_home_price }}
                             </del>
                             <!-- Unit -->
                             @if($detailedProduct->unit != null)
                                 <span class="opacity-70 ml-1">/{{ $detailedProduct->getTranslation('unit') }}</span>
                             @endif
                             <!-- Discount percentage -->
-                            @if(discount_in_percentage($detailedProduct) > 0)
-                                <span class="bg-primary ml-2 fs-11 fw-700 text-white w-35px text-center p-1" style="padding-top:2px;padding-bottom:2px;">-{{discount_in_percentage($detailedProduct)}}%</span>
+                            @if($detailedProduct_discount_in_percentage > 0)
+                                <span class="bg-primary ml-2 fs-11 fw-700 text-white w-35px text-center p-1" style="padding-top:2px;padding-bottom:2px;">-{{$detailedProduct_discount_in_percentage}}%</span>
                             @endif
                             <!-- Club Point -->
                             @if (addon_is_activated('club_point') && $detailedProduct->earn_point > 0)
@@ -243,7 +247,7 @@
                         <div class="d-flex align-items-center">
                             <!-- Discount Price -->
                             <strong class="fs-16 fw-700 text-primary">
-                                {{ home_discounted_price($detailedProduct) }}
+                                {{ $detailedProduct_home_discounted_price }}
                             </strong>
                             <!-- Unit -->
                             @if ($detailedProduct->unit != null)
@@ -271,7 +275,7 @@
             @endif
         @endif
     @endif
-    
+
     @if ($detailedProduct->auction_product != 1)
         <form id="option-choice-form">
             @csrf
@@ -342,12 +346,12 @@
                     <div class="col-sm-10">
                         <div class="product-quantity d-flex align-items-center">
                             <div class="row no-gutters align-items-center aiz-plus-minus mr-3" style="width: 130px;">
-                                <button class="btn col-auto btn-icon btn-sm btn-light rounded-0" 
+                                <button class="btn col-auto btn-icon btn-sm btn-light rounded-0"
                                     type="button" data-type="minus" data-field="quantity" disabled="">
                                     <i class="las la-minus"></i>
                                 </button>
-                                <input type="number" name="quantity" 
-                                    class="col border-0 text-center flex-grow-1 fs-16 input-number" placeholder="1" 
+                                <input type="number" name="quantity"
+                                    class="col border-0 text-center flex-grow-1 fs-16 input-number" placeholder="1"
                                     value="{{ $detailedProduct->min_qty }}" min="{{ $detailedProduct->min_qty }}" max="10" lang="en">
                                 <button class="btn col-auto btn-icon btn-sm btn-light rounded-0" type="button" data-type="plus" data-field="quantity">
                                     <i class="las la-plus"></i>
@@ -371,7 +375,7 @@
                 </div>
 
             @endif
-            
+
             <!-- Total Price -->
             <div class="row no-gutters pb-3 d-none" id="chosen_price_div">
                 <div class="col-sm-2">
@@ -388,11 +392,11 @@
 
         </form>
     @endif
-    
+
     @if ($detailedProduct->auction_product)
-        @php 
+        @php
             $highest_bid = $detailedProduct->bids->max('amount');
-            $min_bid_amount = $highest_bid != null ? $highest_bid+1 : $detailedProduct->starting_bid; 
+            $min_bid_amount = $highest_bid != null ? $highest_bid+1 : $detailedProduct->starting_bid;
         @endphp
         @if($detailedProduct->auction_end_date >= strtotime("now"))
             <div class="mt-4">

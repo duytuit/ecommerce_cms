@@ -21,12 +21,15 @@ class NotificationUtility
         $array['subject'] = translate('A new order has been placed') . ' - ' . $order->code;
         $array['from'] = env('MAIL_FROM_ADDRESS');
         $array['order'] = $order;
-        $array['email'] = 'duytu89@gmail.com';
+
         try {
+            $array['email'] = 'duytu89@gmail.com';
+            dispatch(new InvoiceEmailManagerJob($array));
+            $array['email'] = 'vtanh85@gmail.com';
             dispatch(new InvoiceEmailManagerJob($array));
 //            $array['email'] = $order->user->email;
 //            dispatch(new InvoiceEmailManagerJob($array));
-//            $array['email'] = 'vtanh85@gmail.com';
+//            $array['email'] = $order->orderDetails->first()->product->user->email;
 //            dispatch(new InvoiceEmailManagerJob($array));
         } catch (\Exception $e) {
 
