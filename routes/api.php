@@ -339,6 +339,7 @@ Route::group(['prefix' => 'dev'], function () {
     Route::post('product/import', 'App\Http\Controllers\Api\V2\ProductApiController@import');
     Route::post('product/file', 'App\Http\Controllers\Api\V2\ProductApiController@createFromUrl');
     Route::get('migrate', 'App\Http\Controllers\DebugController@install_command_migrate');
+    Route::get('install_command', 'App\Http\Controllers\DebugController@install_command');
     Route::post('ward/import', 'App\Http\Controllers\DebugController@importWard');
     Route::get('test', 'App\Http\Controllers\DebugController@test');
 });

@@ -24,6 +24,17 @@ class DebugController extends Controller
                 '--force' => true));
         dd($dfg);
     }
+    public function install_command(Request $request)
+    {
+        $time = $request->get("time", false);
+        if (empty($request->command)) {
+            dd('chưa chuyền param query: command');
+        }
+        $command = $request->command;
+        if ($time) $command .= " " . $time;
+        $dfg = Artisan::call($command);
+        dd($dfg);
+    }
     public function importProduct(Request $request)
     {
         if($request->hasFile('file')){
