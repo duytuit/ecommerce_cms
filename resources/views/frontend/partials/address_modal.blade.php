@@ -28,38 +28,52 @@
                                 <label>{{ translate('Country')}}</label>
                             </div>
                             <div class="col-md-10">
-                                <div class="mb-3">
+                                <div class="mb-3 select_country">
                                     <select class="form-control aiz-selectpicker rounded-0" data-live-search="true" data-placeholder="{{ translate('Select your country') }}" name="country_id" required>
                                         <option value="">{{ translate('Select your country') }}</option>
                                         @foreach (\App\Models\Country::where('status', 1)->get() as $key => $country)
-                                            <option value="{{ $country->id }}">{{ $country->name }}</option>
+                                            <option value="{{ $country->id }}" {{Config::get('app.locale') == 'vn' && $country->id == 238 ? 'selected' :'' }}>{{ $country->name }}</option>
                                         @endforeach
                                     </select>
                                 </div>
                             </div>
                         </div>
+                        <div class="vietnam"  style="display: {{Config::get('app.locale') == 'vn' ? 'block' :'none' }}">
+                            <!-- Wards -->
+                            <div class="row">
+                                <div class="col-md-2">
+                                    <label>{{ translate('Wards')}}</label>
+                                </div>
+                                <div class="col-md-10 search_ward">
+                                    <select class="form-control mb-3 aiz-selectpicker rounded-0" data-live-search="true" name="ward_id">
 
-                        <!-- State -->
-                        <div class="row">
-                            <div class="col-md-2">
-                                <label>{{ translate('State')}}</label>
-                            </div>
-                            <div class="col-md-10">
-                                <select class="form-control mb-3 aiz-selectpicker rounded-0" data-live-search="true" name="state_id" >
-
-                                </select>
+                                    </select>
+                                </div>
                             </div>
                         </div>
+                        <div class="not_in_vietnam" style="display:{{Config::get('app.locale') == 'vn' ? 'none' :'block' }}">
+                            <!-- State -->
+                            <div class="row">
+                                <div class="col-md-2">
+                                    <label>{{ translate('State')}}</label>
+                                </div>
+                                <div class="col-md-10">
+                                    <select class="form-control mb-3 rounded-0" data-live-search="true" name="state_id" >
 
-                        <!-- City -->
-                        <div class="row">
-                            <div class="col-md-2">
-                                <label>{{ translate('City')}}</label>
+                                    </select>
+                                </div>
                             </div>
-                            <div class="col-md-10">
-                                <select class="form-control mb-3 aiz-selectpicker rounded-0" data-live-search="true" name="city_id" >
 
-                                </select>
+                            <!-- City -->
+                            <div class="row">
+                                <div class="col-md-2">
+                                    <label>{{ translate('City')}}</label>
+                                </div>
+                                <div class="col-md-10">
+                                    <select class="form-control mb-3 aiz-selectpicker rounded-0" data-live-search="true" name="city_id">
+
+                                    </select>
+                                </div>
                             </div>
                         </div>
 
@@ -182,13 +196,31 @@
 
         $(document).on('change', '[name=country_id]', function() {
             var country_id = $(this).val();
-            get_states(country_id);
+            if(country_id == "238"){
+                $('.vietnam').show();
+                $('.not_in_vietnam').hide();
+               // get_ward(country_id);
+            }else{
+                $('.vietnam').hide();
+                $('.not_in_vietnam').show();
+                get_states(country_id);
+            }
+
         });
+        $(document).ready(function (){
+           $('.search_ward input[type="search"]').on('keyup', function(){
+                get_ward($(this).val());
+           });
+            $('#edit_modal_body').on('keyup','.search_ward_edit input[type="search"]', function(){
+                get_ward($(this).val());
+            });
+        })
 
         $(document).on('change', '[name=state_id]', function() {
             var state_id = $(this).val();
             get_city(state_id);
         });
+
 
         function get_states(country_id) {
             $('[name="state"]').html("");
@@ -226,6 +258,25 @@
                     var obj = JSON.parse(response);
                     if(obj != '') {
                         $('[name="city_id"]').html(obj);
+                        AIZ.plugins.bootstrapSelect('refresh');
+                    }
+                }
+            });
+        }
+        function get_ward(value) {
+            $('[name="ward"]').html("");
+            $.ajax({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                url: "{{route('ajax.ajaxWards')}}",
+                type: 'GET',
+                data: {
+                    search: value
+                },
+                success: function (response) {
+                    if(response != '') {
+                        $('[name="ward_id"]').html(response);
                         AIZ.plugins.bootstrapSelect('refresh');
                     }
                 }

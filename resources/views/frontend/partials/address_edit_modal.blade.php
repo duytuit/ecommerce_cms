@@ -29,39 +29,55 @@
                 </div>
             </div>
         </div>
-
-        <!-- State -->
-        <div class="row">
-            <div class="col-md-2">
-                <label>{{ translate('State')}}</label>
-            </div>
-            <div class="col-md-10">
-                <select class="form-control mb-3 aiz-selectpicker rounded-0" name="state_id" id="edit_state"  data-live-search="true" required>
-                    @foreach ($states as $key => $state)
-                        <option value="{{ $state->id }}" @if($address_data->state_id == $state->id) selected @endif>
-                            {{ $state->name }}
-                        </option>
-                    @endforeach
-                </select>
-            </div>
-        </div>
-
-        <!-- City -->
-        <div class="row">
-            <div class="col-md-2">
-                <label>{{ translate('City')}}</label>
-            </div>
-            <div class="col-md-10">
-                <select class="form-control mb-3 aiz-selectpicker rounded-0" data-live-search="true" name="city_id" required>
-                    @foreach ($cities as $key => $city)
-                        <option value="{{ $city->id }}" @if($address_data->city_id == $city->id) selected @endif>
-                            {{ $city->name }}
-                        </option>
-                    @endforeach
-                </select>
+        <div class="vietnam" style="display: {{Config::get('app.locale') == 'vn' ? 'block' :'none' }}">
+            <!-- Wards -->
+            <div class="row">
+                <div class="col-md-2">
+                    <label>{{ translate('Wards')}}</label>
+                </div>
+                <div class="col-md-10 search_ward_edit">
+                    <select class="form-control mb-3 rounded-0 aiz-selectpicker"  data-live-search="true" name="ward_id" id="edit_ward_id">
+                        <?php $ward = isset($ward) ? $ward : '' ?>
+                        @if($ward)
+                            <option value="{{$ward->id}}" selected>{{$ward->address}}</option>
+                        @endif
+                    </select>
+                </div>
             </div>
         </div>
-        
+        <div class="not_in_vietnam" style="display:{{Config::get('app.locale') == 'vn' ? 'none' :'block' }}">
+            <!-- State -->
+            <div class="row">
+                <div class="col-md-2">
+                    <label>{{ translate('State')}}</label>
+                </div>
+                <div class="col-md-10">
+                    <select class="form-control mb-3 aiz-selectpicker rounded-0" name="state_id" id="edit_state"  data-live-search="true">
+                        @foreach ($states as $key => $state)
+                            <option value="{{ $state->id }}" @if($address_data->state_id == $state->id) selected @endif>
+                                {{ $state->name }}
+                            </option>
+                        @endforeach
+                    </select>
+                </div>
+            </div>
+
+            <!-- City -->
+            <div class="row">
+                <div class="col-md-2">
+                    <label>{{ translate('City')}}</label>
+                </div>
+                <div class="col-md-10">
+                    <select class="form-control mb-3 aiz-selectpicker rounded-0" data-live-search="true" name="city_id">
+                        @foreach ($cities as $key => $city)
+                            <option value="{{ $city->id }}" @if($address_data->city_id == $city->id) selected @endif>
+                                {{ $city->name }}
+                            </option>
+                        @endforeach
+                    </select>
+                </div>
+            </div>
+        </div>
         @if (get_setting('google_map') == 1)
             <!-- Google Map -->
             <div class="row mt-3 mb-3">
@@ -121,3 +137,4 @@
         </div>
     </div>
 </form>
+

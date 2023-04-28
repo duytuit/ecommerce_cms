@@ -4,9 +4,11 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use App;
+use Illuminate\Support\Facades\Cache;
 
 class City extends Model
 {
+    protected $guarded = [];
     public function getTranslation($field = '', $lang = false){
         $lang = $lang == false ? App::getLocale() : $lang;
         $city_translation = $this->hasMany(CityTranslation::class)->where('lang', $lang)->first();
@@ -25,5 +27,11 @@ class City extends Model
     public function state()
     {
         return $this->belongsTo(State::class);
+    }
+    public static function getDetail($id)
+    {
+        return Cache::remember('getDetailCityId_'.$id, 86400, function () use($id) {
+            return self::find($id);
+        });
     }
 }

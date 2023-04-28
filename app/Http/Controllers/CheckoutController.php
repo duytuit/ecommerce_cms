@@ -3,8 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Models\BusinessSetting;
+use App\Models\Campain;
 use App\Models\OrderDetail;
 use App\Models\User;
+use App\Models\Ward;
 use App\Utility\PayfastUtility;
 use Illuminate\Http\Request;
 use App\Models\Category;
@@ -346,8 +348,10 @@ class CheckoutController extends Controller
 
         Session::forget('club_point');
         Session::forget('combined_order_id');
+        $total = ['email'=>1, 'app'=> 0, 'sms'=> 0];
+        $campain = Campain::updateOrCreateCampain($combined_order->shipping_address, config('type-campain.Bill'), $combined_order->id, $total,0, 0);
          foreach($combined_order->orders as $order){
-             NotificationUtility::sendOrderPlacedNotification($order);
+             NotificationUtility::sendOrderPlacedNotification($order,$campain);
          }
 
         return view('frontend.order_confirmed', compact('combined_order'));
@@ -364,15 +368,16 @@ class CheckoutController extends Controller
         }
 
         $address = Address::where('id', $carts[0]['address_id'])->first();
-
         $shippingAddress = [];
         if ($address != null) {
+            $ward = Ward::getDetail($address->ward_id);
             $shippingAddress['name']        = $user->name;
             $shippingAddress['email']       = $user->email;
-            $shippingAddress['address']     = $address->address;
+            $shippingAddress['address']     = $address->address .','. $ward->address;
             $shippingAddress['country']     = $address->country->name;
-            $shippingAddress['state']       = $address->state->name;
-            $shippingAddress['city']        = $address->city->name;
+            $shippingAddress['state']       = @$address->state->name;
+            $shippingAddress['city']        = @$address->city->name;
+            $shippingAddress['ward']        = $ward->name;
             $shippingAddress['postal_code'] = $address->postal_code;
             $shippingAddress['phone']       = $address->phone;
             if ($address->latitude || $address->longitude) {

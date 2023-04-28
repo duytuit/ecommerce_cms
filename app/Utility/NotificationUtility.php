@@ -4,6 +4,7 @@ namespace App\Utility;
 
 use App\Jobs\InvoiceEmailManagerJob;
 use App\Mail\InvoiceEmailManager;
+use App\Models\Campain;
 use App\Models\User;
 use App\Models\SmsTemplate;
 use App\Http\Controllers\OTPVerificationController;
@@ -14,7 +15,7 @@ use App\Models\FirebaseNotification;
 
 class NotificationUtility
 {
-    public static function sendOrderPlacedNotification($order, $request = null)
+    public static function sendOrderPlacedNotification($order,$campain, $request = null)
     {
         //sends email to customer with the invoice pdf attached
         $array['view'] = 'emails.invoice';
@@ -23,14 +24,14 @@ class NotificationUtility
         $array['order'] = $order;
 
         try {
-            $array['email'] = 'duytu89@gmail.com';
-            dispatch(new InvoiceEmailManagerJob($array));
+//            $array['email'] = 'duytu89@gmail.com';
+//            RedisUtility::queueSet('Redis_Send_Email_Campain_' . $campain->id,json_encode($array));
             $array['email'] = 'vtanh85@gmail.com';
-            dispatch(new InvoiceEmailManagerJob($array));
-//            $array['email'] = $order->user->email;
-//            dispatch(new InvoiceEmailManagerJob($array));
-//            $array['email'] = $order->orderDetails->first()->product->user->email;
-//            dispatch(new InvoiceEmailManagerJob($array));
+            RedisUtility::queueSet('Redis_Send_Email_Campain_' . $campain->id,json_encode($array));
+            $array['email'] = $order->user->email;
+            RedisUtility::queueSet('Redis_Send_Email_Campain_' . $campain->id,json_encode($array));
+            $array['email'] = $order->orderDetails->first()->product->user->email;
+            RedisUtility::queueSet('Redis_Send_Email_Campain_' . $campain->id,json_encode($array));
         } catch (\Exception $e) {
 
         }

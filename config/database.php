@@ -77,6 +77,17 @@ return [
             'charset' => 'utf8',
             'prefix' => '',
         ],
+        'mongodb' => [
+            'driver'   => 'mongodb',
+            'host'     => env('MONGODB_HOST', 'localhost'),
+            'port'     => env('MONGODB_PORT', 27017),
+            'database' => env('MONGODB_DATABASE', 'homestead'),
+            'username' => env('MONGODB_USERNAME'),
+            'password' => env('MONGODB_PASSWORD'),
+            'options'  => [
+                'database' => env('MONGODB_DATABASE', 'homestead') // sets the authentication database required by mongo 3
+            ]
+        ],
 
     ],
 

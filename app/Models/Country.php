@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Country extends Model
 {
+    protected $guarded = [];
         /**
          * Get the Zone that owns the Country
          *
@@ -15,5 +16,5 @@ class Country extends Model
         {
             return $this->belongsTo(Zone::class);
         }
-    
+
 }

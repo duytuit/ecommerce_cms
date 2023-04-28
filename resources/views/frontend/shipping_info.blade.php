@@ -70,8 +70,11 @@
                                                     <!-- Address -->
                                                     <span class="flex-grow-1 pl-3 text-left">
                                                         <div class="row">
+                                                            @php
+                                                                $ward = \App\Models\Ward::getDetail($address->ward_id);
+                                                            @endphp
                                                             <span class="fs-14 text-secondary col-3">{{ translate('Address') }}</span>
-                                                            <span class="fs-14 text-dark fw-500 ml-2 col">{{ $address->address }}</span>
+                                                            <span class="fs-14 text-dark fw-500 ml-2 col">{{ $address->address .' - '. @$ward->address }}</span>
                                                         </div>
                                                         <div class="row">
                                                             <span class="fs-14 text-secondary col-3">{{ translate('Postal Code') }}</span>
@@ -104,7 +107,7 @@
                                     </div>
                                 </div>
                                 @endforeach
-                                
+
                                 <input type="hidden" name="checkout_type" value="logged">
                                 <!-- Add New Address -->
                                 <div class="mb-5" >

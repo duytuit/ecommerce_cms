@@ -4,6 +4,7 @@
      $code = Cache::remember('code_'.$code, 86400, function () use($code) {
         return \App\Models\Language::where('code', $code)->first()->rtl;
     });
+
 @endphp
 @if($code == 1)
     <html dir="rtl" lang="{{ str_replace('_', '-', app()->getLocale()) }}">
@@ -65,7 +66,7 @@
     @endif
     <link rel="stylesheet" href="{{ static_asset('assets/css/aiz-core.css') }}">
     <link rel="stylesheet" href="{{ static_asset('assets/css/custom-style.css') }}">
-
+{{--    <link rel="stylesheet" href="{{ static_asset('assets/css/select2.min.css') }}">--}}
 
     <script>
         var AIZ = AIZ || {};
@@ -282,8 +283,7 @@
     <!-- SCRIPTS -->
     <script src="{{ static_asset('assets/js/vendors.js?v=2') }}"></script>
     <script src="{{ static_asset('assets/js/aiz-core.js?v=4') }}"></script>
-
-
+{{--    <script src="{{ static_asset('assets/js/select2.full.min.js') }}"></script>--}}
 
     @if (get_setting('facebook_chat',null,@$settings) == 1)
         <script type="text/javascript">

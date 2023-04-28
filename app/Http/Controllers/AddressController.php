@@ -2,6 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\district;
+use App\Models\Ward;
+use App\Utility\dBug;
 use Illuminate\Http\Request;
 use App\Models\Address;
 use App\Models\City;
@@ -47,8 +50,9 @@ class AddressController extends Controller
         }
         $address->address       = $request->address;
         $address->country_id    = $request->country_id;
-        $address->state_id      = $request->state_id??1;
-        $address->city_id       = $request->city_id??1;
+        $address->state_id      = $request->state_id??0;
+        $address->city_id       = $request->city_id??0;
+        $address->ward_id       = $request->ward_id;
         $address->longitude     = $request->longitude;
         $address->latitude      = $request->latitude;
         $address->postal_code   = $request->postal_code;
@@ -81,7 +85,7 @@ class AddressController extends Controller
         $data['address_data'] = Address::findOrFail($id);
         $data['states'] = State::where('status', 1)->where('country_id', $data['address_data']->country_id)->get();
         $data['cities'] = City::where('status', 1)->where('state_id', $data['address_data']->state_id)->get();
-
+        $data['ward'] = Ward::find($data['address_data']->ward_id);
         $returnHTML = view('frontend.partials.address_edit_modal', $data)->render();
         return response()->json(array('data' => $data, 'html'=>$returnHTML));
 //        return ;
@@ -99,9 +103,10 @@ class AddressController extends Controller
         $address = Address::findOrFail($id);
 
         $address->address       = $request->address;
-        $address->country_id    = $request->country_id;
-        $address->state_id      = $request->state_id;
-        $address->city_id       = $request->city_id;
+        $address->country_id    = $request->country_id??$address->country_id;
+        $address->state_id      = $request->state_id??$address->state_id;
+        $address->city_id       = $request->city_id??$address->city_id;
+        $address->ward_id       = $request->ward_id??$address->ward_id;
         $address->longitude     = $request->longitude;
         $address->latitude      = $request->latitude;
         $address->postal_code   = $request->postal_code;
@@ -146,7 +151,19 @@ class AddressController extends Controller
         $html = '<option value="">'.translate("Select City").'</option>';
 
         foreach ($cities as $row) {
-            $html .= '<option value="' . $row->id . '">' . $row->getTranslation('name') . '</option>';
+            $html .= '<option value="' . $row->id . '">' . $row->name . '</option>';
+        }
+
+        echo json_encode($html);
+    }
+    public function getWards(Request $request) {
+        $wards = Ward::select(['id','address'])->get();
+        $html = '<option value="">'.translate("Select Ward").'</option>';
+
+        foreach ($wards as $row) {
+            $district = district::getDetail($row->district_id);
+            $city = City::getDetail($district->city_id);
+            $html .= '<option value="' . $row->id . '">' . $row->name .'-'.$district->name.'-'.$city->name. '</option>';
         }
 
         echo json_encode($html);
@@ -163,4 +180,39 @@ class AddressController extends Controller
 
         return back();
     }
+    public function ajaxWards(Request $request)
+    {
+        if ($request->search) {
+            $where[] = ['address', 'like', '%' . $request->search . '%'];
+            $wards = $this->getListWards(['where' => $where]);
+            $html = '';
+
+            foreach ($wards as $row) {
+                $html .= '<option value="' . $row->id . '">' . $row->address . '</option>';
+            }
+            return response()->json($html);
+        }
+        $wards = $this->getListWards(['select' => ['id', 'address']]);
+        $html = '';
+
+        foreach ($wards as $row) {
+            $html .= '<option value="' . $row->id . '">' . $row->address . '</option>';
+        }
+        return response()->json($html);
+    }
+   protected function getListWards(array $options = []){
+       $default = [
+           'select'   => '*',
+           'where'    => [],
+           'order_by' => 'id DESC',
+           'per_page' => 20,
+       ];
+       $options = array_merge($default, $options);
+       extract($options);
+       $model = Ward::select($options['select']);
+       if ($options['where']) {
+           $model = $model->where($options['where']);
+       }
+       return $model->orderByRaw($options['order_by'])->paginate($options['per_page']);
+   }
 }

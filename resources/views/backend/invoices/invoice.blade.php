@@ -16,7 +16,7 @@
             direction: <?php echo  $direction ?>;
             text-align: <?php echo  $text_align ?>;
 			padding:0;
-			margin:0; 
+			margin:0;
 		}
 		.gry-color *,
 		.gry-color{
@@ -91,7 +91,7 @@
 					<td class="text-right small">
                         <span class="gry-color small">
                             {{  translate('Payment method') }}:
-                        </span> 
+                        </span>
                         <span class="strong">
                             {{ translate(ucfirst(str_replace('_', ' ', $order->payment_type))) }}
                         </span>
@@ -108,7 +108,7 @@
 				@endphp
 				<tr><td class="strong small gry-color">{{ translate('Bill to') }}:</td></tr>
 				<tr><td class="strong">{{ $shipping_address->name }}</td></tr>
-				<tr><td class="gry-color small">{{ $shipping_address->address }}, {{ $shipping_address->city }},  @if(isset(json_decode($order->shipping_address)->state)) {{ json_decode($order->shipping_address)->state }} - @endif {{ $shipping_address->postal_code }}, {{ $shipping_address->country }}</td></tr>
+				<tr><td class="gry-color small">{{ $shipping_address->address }}, {{ Config::get('app.locale') == 'vn' ? '' : $shipping_address->city }}, {{ Config::get('app.locale') == 'vn' ? '' : json_decode($order->shipping_address)->state }} - {{ $shipping_address->postal_code }}, {{ $shipping_address->country }}</td></tr>
 				<tr><td class="gry-color small">{{ translate('Email') }}: {{ $shipping_address->email }}</td></tr>
 				<tr><td class="gry-color small">{{ translate('Phone') }}: {{ $shipping_address->phone }}</td></tr>
 			</table>
@@ -131,7 +131,7 @@
 		                @if ($orderDetail->product != null)
 							<tr class="">
 								<td>
-                                    {{ $orderDetail->product->name }} 
+                                    {{ $orderDetail->product->name }}
                                     @if($orderDetail->variation != null) ({{ $orderDetail->variation }}) @endif
                                     <br>
                                     <small>
