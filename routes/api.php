@@ -332,9 +332,9 @@ Route::group(['prefix' => 'v2', 'middleware' => ['app_language']], function () {
     //Pickup Point list
     Route::get('pickup-list', 'App\Http\Controllers\Api\V2\ShippingController@pickup_list');
 });
-Route::prefix('ajax')->name('ajax.')->group(function () {
-    Route::get('/ajax_wards', 'App\Http\Controllers\AddressController@ajaxWards')->name('ajaxWards');
-});
+//Route::prefix('ajax')->name('ajax.')->group(function () {
+//    Route::get('/ajax_wards', 'App\Http\Controllers\AddressController@ajaxWards')->name('ajaxWards');
+//});
 Route::group(['prefix' => 'dev'], function () {
     Route::post('product/import', 'App\Http\Controllers\Api\V2\ProductApiController@import');
     Route::post('product/file', 'App\Http\Controllers\Api\V2\ProductApiController@createFromUrl');
