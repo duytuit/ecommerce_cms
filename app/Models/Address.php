@@ -7,7 +7,7 @@ use Illuminate\Support\Facades\Cache;
 
 class Address extends Model
 {
-    protected $fillable = ['set_default'];
+    protected $guarded = [];
 
     public function user()
     {
