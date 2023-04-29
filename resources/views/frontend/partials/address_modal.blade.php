@@ -34,7 +34,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="vietnam"  style="display: {{Config::get('app.locale') == 'vn' ? 'block' :'none' }}">
+                        <div class="vietnam">
                             <!-- Wards -->
                             <div class="row">
                                 <div class="col-md-2">
@@ -47,30 +47,6 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="not_in_vietnam" style="display:{{Config::get('app.locale') == 'vn' ? 'none' :'block' }}">
-                            <div class="row">
-                                <div class="col-md-2">
-                                    <label>{{ translate('State')}}</label>
-                                </div>
-                                <div class="col-md-10">
-                                    <select class="form-control mb-3 aiz-selectpicker" data-live-search="true" name="state_id" >
-
-                                    </select>
-                                </div>
-                            </div>
-
-                            <div class="row">
-                                <div class="col-md-2">
-                                    <label>{{ translate('City')}}</label>
-                                </div>
-                                <div class="col-md-10">
-                                    <select class="form-control mb-3 aiz-selectpicker" data-live-search="true" name="city_id" >
-
-                                    </select>
-                                </div>
-                            </div>
-                        </div>
-
 
                         @if (get_setting('google_map') == 1)
                             <div class="row">
