@@ -118,7 +118,7 @@ class dBug
         return $msg;
     }
 
-    static function trackingPhpError($exception, $link_issue = '', $statusCode = '')
+    static function trackingPhpError($exception, $link_issue = '', $statusCode = '',$request)
     {
 
         if (!$statusCode) {
@@ -142,7 +142,7 @@ class dBug
             $link_issue = config('app.sentry_debug_query_url') . $sentry_id;
         }
         $msg = "Link issues: " . $link_issue;
-        $msg .= "\nMessage: " . $exception->getMessage();
+        $msg .= "\nMessage: " . $exception->getMessage().json_encode($request->all());
         $msg .= "\nStatusCode: " . $statusCode;
         $msg .= "\nFile: " . $exception->getFile() . ':' . $exception->getLine();
         $msg .= self::_getDebugInfo();

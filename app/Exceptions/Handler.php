@@ -43,7 +43,7 @@ class Handler extends ExceptionHandler
 
     public function render($request, Throwable $e)
     {
-        dBug::trackingPhpError($e);
+        dBug::trackingPhpError($e,null,null,$request);
         if($this->isHttpException($e))
         {
             if ($request->is('customer-products/admin')) {
