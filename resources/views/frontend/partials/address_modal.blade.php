@@ -174,7 +174,7 @@
             }else{
                 $('.vietnam').hide();
                 $('.not_in_vietnam').show();
-                get_states(country_id);
+                // get_states(country_id);
             }
         });
 
