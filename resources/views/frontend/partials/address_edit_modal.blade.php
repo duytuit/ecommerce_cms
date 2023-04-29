@@ -32,7 +32,7 @@
                 <label>{{ translate('State')}}</label>
             </div>
             <div class="col-md-10">
-                <select class="form-control mb-3 aiz-selectpicker" name="state_id" id="edit_state"  data-live-search="true" required>
+                <select class="form-control mb-3 aiz-selectpicker" name="state_id" id="edit_state"  data-live-search="true" >
                     @foreach ($states as $key => $state)
                         <option value="{{ $state->id }}" @if($address_data->state_id == $state->id) selected @endif>
                             {{ $state->name }}
@@ -47,7 +47,7 @@
                 <label>{{ translate('City')}}</label>
             </div>
             <div class="col-md-10">
-                <select class="form-control mb-3 aiz-selectpicker" data-live-search="true" name="city_id" required>
+                <select class="form-control mb-3 aiz-selectpicker" data-live-search="true" name="city_id" >
                     @foreach ($cities as $key => $city)
                         <option value="{{ $city->id }}" @if($address_data->city_id == $city->id) selected @endif>
                             {{ $city->name }}
