@@ -249,7 +249,7 @@
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                 },
                 url: "{{route('ajax.ajaxWards')}}",
-                type: 'GET',
+                type: 'POST',
                 data: {
                     search: value
                 },
