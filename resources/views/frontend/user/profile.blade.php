@@ -75,23 +75,26 @@
         </div>
         <div class="card-body">
             @foreach (Auth::user()->addresses as $key => $address)
+                @php
+                    $ward = \App\Models\Ward::getDetail($address->ward_id);
+                @endphp
                 <div class="">
                     <div class="border p-4 mb-4 position-relative">
                         <div class="row fs-14 mb-2 mb-md-0">
                             <span class="col-md-2 text-secondary">{{ translate('Address') }}:</span>
-                            <span class="col-md-8 text-dark">{{ $address->address }}</span>
+                            <span class="col-md-8 text-dark">{{ $address->address.' - '. @$ward->address}}</span>
                         </div>
                         <div class="row fs-14 mb-2 mb-md-0">
                             <span class="col-md-2 text-secondary">{{ translate('Postal Code') }}:</span>
                             <span class="col-md-10 text-dark">{{ $address->postal_code }}</span>
                         </div>
-                        <div class="row fs-14 mb-2 mb-md-0">
+                        <div class="row fs-14 mb-2 mb-md-0 {{Config::get('app.locale') == 'vn' ? 'hide' : ''}}">
                             <span class="col-md-2 text-secondary">{{ translate('City') }}:</span>
                             <span class="col-md-10 text-dark">{{ optional($address->city)->name }}</span>
                         </div>
-                        <div class="row fs-14 mb-2 mb-md-0">
+                        <div class="row fs-14 mb-2 mb-md-0 {{Config::get('app.locale') == 'vn' ? 'hide' : ''}}">
                             <span class="col-md-2 text-secondary">{{ translate('State') }}:</span>
-                            <span class="col-md-10 text-dark">{{ optional($address->state)->name }}</span>
+                            <span class="col-md-10 text-dark">{{  optional($address->state)->name }}</span>
                         </div>
                         <div class="row fs-14 mb-2 mb-md-0">
                             <span class="col-md-2 text-secondary">{{ translate('Country') }}:</span>
