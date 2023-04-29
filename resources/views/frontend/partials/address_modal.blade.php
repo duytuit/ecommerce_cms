@@ -34,20 +34,38 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="vietnam">
-                            <!-- Wards -->
-                            <div class="row">
-                                <div class="col-md-2">
-                                    <label>{{ translate('Wards')}}</label>
-                                </div>
-                                <div class="col-md-10 search_ward">
-                                    <select class="form-control mb-3 aiz-selectpicker " data-live-search="true" name="ward_id">
+                        <!-- Wards -->
+                        <div class="row">
+                            <div class="col-md-2">
+                                <label>{{ translate('Wards')}}</label>
+                            </div>
+                            <div class="col-md-10 search_ward">
+                                <select class="form-control mb-3 aiz-selectpicker " data-live-search="true" name="ward_id">
 
-                                    </select>
-                                </div>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-2">
+                                <label>{{ translate('State')}}</label>
+                            </div>
+                            <div class="col-md-10">
+                                <select class="form-control mb-3 aiz-selectpicker" data-live-search="true" name="state_id" required>
+
+                                </select>
                             </div>
                         </div>
 
+                        <div class="row">
+                            <div class="col-md-2">
+                                <label>{{ translate('City')}}</label>
+                            </div>
+                            <div class="col-md-10">
+                                <select class="form-control mb-3 aiz-selectpicker" data-live-search="true" name="city_id" required>
+
+                                </select>
+                            </div>
+                        </div>
                         @if (get_setting('google_map') == 1)
                             <div class="row">
                                 <input id="searchInput" class="controls" type="text" placeholder="{{translate('Enter a location')}}">

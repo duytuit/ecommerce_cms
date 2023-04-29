@@ -21,7 +21,7 @@
         <input type="text" name="phone" value="{{ $phone }}"><br>
         <input type="text" name="address" value="{{ $address }}">
         <input type="text" name="city" value="{{ $city }}">
-        <input type="text" name="ward" value="{{ @$ward }}">
+{{--        <input type="text" name="ward" value="{{ @$ward }}">--}}
         <input type="hidden" name="country" value="Sri Lanka"><br><br>
         <input type="hidden" name="hash" value="{{ $hash_value }}">
         <input type="submit" value="Buy Now">
