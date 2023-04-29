@@ -34,28 +34,43 @@
                                 </div>
                             </div>
                         </div>
+                        <div class="vietnam"  style="display: {{Config::get('app.locale') == 'vn' ? 'block' :'none' }}">
+                            <!-- Wards -->
+                            <div class="row">
+                                <div class="col-md-2">
+                                    <label>{{ translate('Wards')}}</label>
+                                </div>
+                                <div class="col-md-10 search_ward">
+                                    <select class="form-control mb-3 aiz-selectpicker " data-live-search="true" name="ward_id">
 
-                        <div class="row">
-                            <div class="col-md-2">
-                                <label>{{ translate('State')}}</label>
+                                    </select>
+                                </div>
                             </div>
-                            <div class="col-md-10">
-                                <select class="form-control mb-3 aiz-selectpicker" data-live-search="true" name="state_id" >
+                        </div>
+                        <div class="not_in_vietnam" style="display:{{Config::get('app.locale') == 'vn' ? 'none' :'block' }}">
+                            <div class="row">
+                                <div class="col-md-2">
+                                    <label>{{ translate('State')}}</label>
+                                </div>
+                                <div class="col-md-10">
+                                    <select class="form-control mb-3 aiz-selectpicker" data-live-search="true" name="state_id" >
 
-                                </select>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-2">
+                                    <label>{{ translate('City')}}</label>
+                                </div>
+                                <div class="col-md-10">
+                                    <select class="form-control mb-3 aiz-selectpicker" data-live-search="true" name="city_id" >
+
+                                    </select>
+                                </div>
                             </div>
                         </div>
 
-                        <div class="row">
-                            <div class="col-md-2">
-                                <label>{{ translate('City')}}</label>
-                            </div>
-                            <div class="col-md-10">
-                                <select class="form-control mb-3 aiz-selectpicker" data-live-search="true" name="city_id" >
-
-                                </select>
-                            </div>
-                        </div>
 
                         @if (get_setting('google_map') == 1)
                             <div class="row">
@@ -133,6 +148,14 @@
 
 @section('script')
     <script type="text/javascript">
+        $(document).ready(function (){
+            $('.search_ward input[type="search"]').on('keyup', function(){
+                get_ward($(this).val());
+            });
+            $('#edit_modal_body').on('keyup','.search_ward_edit input[type="search"]', function(){
+                get_ward($(this).val());
+            });
+        })
         function add_new_address(){
             $('#new-address-modal').modal('show');
         }
@@ -169,7 +192,14 @@
 
         $(document).on('change', '[name=country_id]', function() {
             var country_id = $(this).val();
-            get_states(country_id);
+            if(country_id == "238"){
+                $('.vietnam').show();
+                $('.not_in_vietnam').hide();
+            }else{
+                $('.vietnam').hide();
+                $('.not_in_vietnam').show();
+                get_states(country_id);
+            }
         });
 
         $(document).on('change', '[name=state_id]', function() {
@@ -213,6 +243,25 @@
                     var obj = JSON.parse(response);
                     if(obj != '') {
                         $('[name="city_id"]').html(obj);
+                        AIZ.plugins.bootstrapSelect('refresh');
+                    }
+                }
+            });
+        }
+        function get_ward(value) {
+            $('[name="ward"]').html("");
+            $.ajax({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                url: "{{route('ajax.ajaxWards')}}",
+                type: 'GET',
+                data: {
+                    search: value
+                },
+                success: function (response) {
+                    if(response != '') {
+                        $('[name="ward_id"]').html(response);
                         AIZ.plugins.bootstrapSelect('refresh');
                     }
                 }
