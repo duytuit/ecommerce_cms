@@ -37,7 +37,7 @@
                         <!-- Wards -->
                         <div class="row">
                             <div class="col-md-2">
-                                <label>{{ translate('Wards')}}</label>
+                                <label>Wards</label>
                             </div>
                             <div class="col-md-10 search_ward">
                                 <select class="form-control mb-3 aiz-selectpicker " data-live-search="true" name="ward_id">
