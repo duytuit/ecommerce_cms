@@ -1,5 +1,6 @@
 <form class="form-default" role="form" action="{{ route('addresses.update', $address_data->id) }}" method="POST">
-    @csrf
+{{--    @csrf--}}
+    {{ csrf_token() }}
     <div class="p-3">
         <!-- Address -->
         <div class="row">

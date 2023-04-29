@@ -9,7 +9,8 @@
                 </button>
             </div>
             <form class="form-default" role="form" action="{{ route('addresses.store') }}" method="POST">
-                @csrf
+{{--                @csrf--}}
+                {{ csrf_token() }}
                 <div class="modal-body c-scrollbar-light">
                     <div class="p-3">
                         <!-- Address -->
