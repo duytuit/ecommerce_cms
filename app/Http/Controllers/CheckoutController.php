@@ -373,11 +373,11 @@ class CheckoutController extends Controller
             $ward = Ward::getDetail($address->ward_id);
             $shippingAddress['name']        = $user->name;
             $shippingAddress['email']       = $user->email;
-            $shippingAddress['address']     = $address->address .','. $ward->address;
+            $shippingAddress['address']     = $address->address .','. @$ward->address;
             $shippingAddress['country']     = $address->country->name;
             $shippingAddress['state']       = @$address->state->name;
             $shippingAddress['city']        = @$address->city->name;
-            $shippingAddress['ward']        = $ward->name;
+            $shippingAddress['ward']        = @$ward->name;
             $shippingAddress['postal_code'] = $address->postal_code;
             $shippingAddress['phone']       = $address->phone;
             if ($address->latitude || $address->longitude) {
