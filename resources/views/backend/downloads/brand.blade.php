@@ -63,8 +63,8 @@
 				<td>
 					@if($logo != null)
 						<img src="{{ uploaded_asset($logo) }}" height="40" style="display:inline-block;">
-					@else
-						<img src="{{ static_asset('assets/img/logo.png') }}" height="40" style="display:inline-block;">
+					{{-- @else
+						<img src="{{ static_asset('assets/img/logo.png') }}" height="40" style="display:inline-block;"> --}}
 					@endif
 				</td>
 			</tr>

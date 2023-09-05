@@ -66,8 +66,8 @@
             <a href="{{ route('home') }}" class="d-block">
                 @if(get_setting('footer_logo',null,@$settings) != null)
                     <img class="lazyload" src="{{ static_asset('assets/img/placeholder-rect.jpg') }}" data-src="{{ uploaded_asset(get_setting('footer_logo',null,@$settings)) }}" alt="{{ env('APP_NAME') }}" height="44">
-                @else
-                    <img class="lazyload" src="{{ static_asset('assets/img/placeholder-rect.jpg') }}" data-src="{{ static_asset('assets/img/logo.png') }}" alt="{{ env('APP_NAME') }}" height="44">
+                {{-- @else
+                    <img class="lazyload" src="{{ static_asset('assets/img/placeholder-rect.jpg') }}" data-src="{{ static_asset('assets/img/logo.png') }}" alt="{{ env('APP_NAME') }}" height="44"> --}}
                 @endif
             </a>
         </div>
